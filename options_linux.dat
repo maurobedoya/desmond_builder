@@ -1,0 +1,45 @@
+[settings]
+workdir = 5yok_system
+file = 5yok.mae
+schrod_path = /datos/software/desmond/Desmond2020-4
+#schrod_path = /usr/local/Desmond2019-4
+#schrod_path = /datos/software/schrodinger/schrodinger2018-4
+
+[build_geometry]
+counterions = yes
+ions_away = yes
+ion_awaydistance = 1.5
+ion_awayfrom = protein and backbone
+#ion = Cl
+#number = neutralize_system
+#shape = orthorhombic
+#size = 10.0 10.0 15.0
+salt = yes
+concentration = 0.15
+#solvent = TIP3P
+
+[protocol]
+stage1 = yes
+stage2 = yes
+stage3 = yes
+stage4 = yes
+stage5 = yes
+stage5_restraint = protein and backbone
+stage5_restraint_force = 10.0
+production = yes
+
+production_time = 20
+production_restraint = protein and backbone
+production_restraint_force = 5.0
+production_traj_interval = 1
+
+additional_stages = 4
+additional_stage_times = 40,30,20,10
+additional_stage_temps = 300
+additional_stage_ensembles = NPT
+additional_stage_methods = Berendsen
+#additional_stage_thermostat_tau = 0.1,0.2,0.3
+additional_stage_restraints = protein and backbone,protein and backbone,protein and backbone,none
+additional_stage_restraints_forces = 8.0,1.0,0.5,0
+run_preparation = no
+run_protocols = no
