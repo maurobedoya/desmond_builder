@@ -38,7 +38,7 @@ Contains options for molecular dynamics protocols.
 * workdir < Working directory name >  
 Acceptable values: any name  
 Default values: md_run  
-It could be a directory o a subfolder "directory1/directory2".  
+It could be a directory or a subfolder "directory1/directory2".  
 
 * file < Specify the path to the input .mae file >  
 Acceptable values: .mae file  
