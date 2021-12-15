@@ -25,18 +25,18 @@ import random
 
 @dataclass
 class Args:
-    workdir: str
     input: str
     file: str
-    schrod_path: str
-    # file_path: os.PathLike
-    # output: str
+    desmond_path: str
+    workdir: str = "md_run"
 
 
 @dataclass
 class BuilderOptions:
     basename: Optional[str] = "None"
     counterions: Optional[str] = None
+    counterions_positive_ion = "Na"
+    counterions_negative_ion = "Cl"
     ion: Optional[str] = None
     number: Optional[str] = "neutralize_system"
 
@@ -44,37 +44,33 @@ class BuilderOptions:
     size: Optional[str] = "10.0 10.0 10.0"
     size_type: Optional[str] = "buffer"
 
-    # box: Optional[str] = True
-
     ions_away: Optional[str] = None
     ion_awaydistance: Optional[str] = "5.0"
     ion_awayfrom: Optional[str] = "protein"
 
     override_forcefield: Optional[str] = "OPLS_2005"
     rezero_system: Optional[str] = "true"
+    forcefield: Optional[str] = "OPLS_2005"
 
     salt: Optional[str] = "false"
     concentration: Optional[float] = 0.15
-    negative_ion: Optional[str] = "Cl"
     positive_ion: Optional[str] = "Na"
-
+    negative_ion: Optional[str] = "Cl"
     solvent: Optional[str] = "SPC"
-
-    forcefield: Optional[str] = "OPLS_2005"
 
     def __init__(
         self,
         opts: Dict[str, str],
         file: str,
         filename: str,
-        schrod_path: str,
+        desmond_path: str,
         file_path: str,
     ) -> None:
         self.opts = opts
         self.file = file
         self.filename = filename
         self.basename = str(filename).split(".")[0]
-        self.schrod_path = schrod_path
+        self.desmond_path = desmond_path
         self.file_path = file_path
         for key in self.opts:
             setattr(self, key, self.opts[key])
@@ -85,7 +81,6 @@ class BuilderOptions:
         return self.opts[item]
 
 
-# @dataclass
 class ProtocolOptions:
     stage1: Optional[bool] = True
     stage2: Optional[bool] = True
@@ -1059,7 +1054,7 @@ class Protocol:
             print(f"{outer_space}{'}'}", file=fd)
 
     def write_protocol_sh(self) -> None:
-        executable = os.path.join(self.builder_opts.schrod_path, "utilities/multisim")
+        executable = os.path.join(self.builder_opts.desmond_path, "utilities/multisim")
         path_preparation_sh = str(self.basename + "_md.sh")
         input_msj = str(self.basename + "_md.msj")
         input_cms = self.basename + "_preparation" + "-out.cms"
@@ -1086,7 +1081,7 @@ def parse_args(argv):
     )
     args, remaining_argv = conf_parser.parse_known_args()
 
-    defaults = {"schrod_path": "$SCHRODINGER"}
+    defaults = {"desmond_path": "$SCHRODINGER"}
 
     print(
         """
@@ -1131,7 +1126,7 @@ def parse_args(argv):
     build_opts.update(dict(config.items("build_geometry")))
     filename = vars(args)["file"].split("/")[-1]
     file = vars(args)["file"]
-    schrod_path = vars(args)["schrod_path"]
+    desmond_path = vars(args)["desmond_path"]
     file_path = os.path.abspath(vars(args)["file"])
 
     protocol_opts = {}
@@ -1139,7 +1134,7 @@ def parse_args(argv):
 
     return (
         Args(**vars(args)),
-        BuilderOptions(build_opts, file, filename, schrod_path, file_path),
+        BuilderOptions(build_opts, file, filename, desmond_path, file_path),
         file_path,
         ProtocolOptions(protocol_opts),
     )
@@ -1149,17 +1144,17 @@ def parse_args(argv):
 class maefile:
     file: str
     charge: int
-    schrod_path: str
+    desmond_path: str
 
 
 class ReadMaefile:
-    def __init__(self, file: str, schrod_path) -> None:
+    def __init__(self, file: str, desmond_path) -> None:
         self.file = os.path.relpath(file)
         self.charge: int = 0
-        self.schrod_path = schrod_path
+        self.desmond_path = desmond_path
 
     def get_charge(self):
-        executable = os.path.join(self.schrod_path, "run")
+        executable = os.path.join(self.desmond_path, "run")
         command = "schrod_script.py"
         arg1 = "-i"
         arg2 = "-get"
@@ -1171,7 +1166,7 @@ class ReadMaefile:
         return charge
 
     def get_atoms_number(self, file, asl):
-        executable = os.path.join(self.schrod_path, "run")
+        executable = os.path.join(self.desmond_path, "run")
         command = "schrod_script.py"
         arg1 = "-i"
         arg2 = "-get"
@@ -1205,7 +1200,7 @@ class Builder:
         self.charge = charge
         self.basename = options.basename
         self.file = options.file
-        self.schrod_path = options.schrod_path
+        self.desmond_path = options.desmond_path
         self.ions_away = options.ions_away
         self.atoms_number = atoms_number
 
@@ -1228,9 +1223,9 @@ class Builder:
             ):
                 print(f"{outer_space} {'add_counterion = {'}", file=fd)
                 if int(self.charge) < 0:
-                    self.options.ion = self.options.positive_ion
+                    self.options.ion = self.options.counterions_positive_ion
                 elif int(self.charge) > 0:
-                    self.options.ion = self.options.negative_ion
+                    self.options.ion = self.options.counterions_negative_ion
                 print(f"{inner_space} {'ion':<16}{eq}{self.options.ion}", file=fd)
                 print(f"{inner_space} {'number':<16}{eq}{self.options.number}", file=fd)
                 print(f"{outer_space} {'}'}", file=fd)
@@ -1297,7 +1292,7 @@ class Builder:
     def write_preparation_sh(self) -> None:
         q = '"'
         self.suffix_prep = "_preparation"
-        executable = os.path.join(self.schrod_path, "utilities/multisim")
+        executable = os.path.join(self.desmond_path, "utilities/multisim")
         path_preparation_sh = str(self.basename + f"{self.suffix_prep}.sh")
         path_preparation = str(self.basename + f"{self.suffix_prep}.msj")
         input_mae = self.options.file_path
@@ -1373,7 +1368,7 @@ def main(argv):
     check_folder_analysis(opts.workdir)
     file = file_path
     basename = os.path.basename(file).split(".")[0]
-    system = ReadMaefile(file, opts.schrod_path)
+    system = ReadMaefile(file, opts.desmond_path)
     write_schrod_script()
     charge = system.get_charge()
     if build_opts.ions_away.lower() in ["yes", "on", "true"]:
