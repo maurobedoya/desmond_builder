@@ -1,6 +1,6 @@
 [settings]
 workdir = 5yok_system
-file = ../archivos/file.mae
+file = 5yok.mae
 desmond_path = /path-to/Desmond-installation
 
 [build_geometry]
@@ -21,15 +21,8 @@ stage4 = yes
 stage5 = yes
 stage5_restraint = protein and backbone
 stage5_restraint_force = 25.0
-production = yes
 
-production_time = 200000
-#production_restraint = protein and backbone
-#production_restraint_force = 5.0
-#production_traj_interval = 1
-
-production_traj_interval = 50
-
+# Define additional equilibration stages
 additional_stages = 5
 additional_stage_times = 50000
 additional_stage_temps = 300
@@ -38,5 +31,14 @@ additional_stage_methods = Berendsen
 #additional_stage_thermostat_tau = 0.1
 additional_stage_restraints = protein and backbone
 additional_stage_restraints_forces = 12.5,6.25,3.0,1.5,0
+
+# Production settings
+production = yes
+production_time = 200000
+production_traj_interval = 100
+#production_restraint = protein and backbone
+#production_restraint_force = 10.0
+#production_traj_interval = 1
+
 run_preparation = yes
 run_protocols = yes
