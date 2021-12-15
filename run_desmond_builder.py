@@ -200,7 +200,7 @@ class ProtocolOptions:
 
     stage1_title: Optional[
         str
-    ] = f"{stage1_method} {stage1_ensemble}, T = {stage1_temp} K, restraints on {stage1_restraint} of {stage1_restraint_force} {stage1_time}ps"
+    ] = f"{stage1_method} {stage1_ensemble}, T = {stage1_temp} K, restraints on {stage1_restraint} of {stage1_restraint_force}, {stage1_time}ps"
     stage2_title: Optional[
         str
     ] = f"{stage2_method} {stage2_ensemble}, T = {stage2_temp} K, restraints on {stage2_restraint} of {stage2_restraint_force}, {stage2_time}ps"
@@ -669,7 +669,7 @@ class Protocol:
                     outer_space, inner_space = identation(0)
                     print(f"{outer_space}{'simulate':<20}{'{'}", file=fd)
                     print(
-                        f"{inner_space} {'title':<16}{eq}{q}Additional stage = {stage}, {q}",
+                        f"{inner_space} {'title':<16}{eq}{q}Additional stage = {stage}{q}",
                         file=fd,
                     )
                     gpu_text1 = '[["@*.*.annealing"] \'annealing = off temperature = "@*.*.temperature[0][0]"\''
