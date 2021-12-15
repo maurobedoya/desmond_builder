@@ -54,7 +54,7 @@ Acceptable values: yes, true, on or no, false, off
 Default values: no  
 If yes, the number of counterions will be calculated according to the
 total charge of the system.  
-The default positive ion is Na and the default negative ion is Cl.  
+The default positive ion is 'Na' and the default negative ion is 'Cl'.  
 The default options could be changed in the configuration file as:  
 * counterions_positive_ion < Positive ion >
 Acceptable values: Na, Li, K, Rb, Cs  
@@ -74,6 +74,53 @@ Default values: 5.0
 * ions_awayfrom < Add ions away from structure >
 Default values: protein  
 It should be an acceptable ASL selection.  
+
+* shape < Add box shape >
+Acceptable values: orthorhombic  
+Default values: orthorhombic  
+Different box shapes will be implemented in the future.  
+
+* size < Add box size >
+Acceptable values: Three numbers separated by blank spaces.  
+Default values: 10.0 10.0 10.0
+
+* size_type < Add box size type >
+Acceptable values: buffer, absolute  
+Default values: buffer  
+
+* salt < Add salt >
+Acceptable values: yes, true, on or no, false, off  
+Default values: no  
+If yes, it should be added the option: concentration.  
+
+* concentration < Salt concentration (M) >
+Default values: 0.15  
+
+Optional settings:  
+* positive_ion < Positive ion > 
+Acceptable values: Li, Na, K, Rb, Cs, Mg2, Ca2, Zn2, fe2, fe3  
+Default values: Na  
+
+* negative_ion < Negative ion >
+Acceptable values: Cl, F, Br, I  
+Default values: Cl  
+
+* solvent < Solvent >
+Acceptable values: SPC, TIP3P, TIP4P, TIP4PEW, TIP5P, TIP4PD, DMSO, METHANOL, OCTANOL  
+Default values: SPC  
+
+[protocol]
+
+The default protocols for desmond relaxation and the production are activated.
+To deactivate any step, the option should be set to 'no', 'off' or 'false'.  
+
+* stage1 < Relaxation stage 1 >
+Acceptable values: yes, true, on or no, false, off  
+Default values: yes  
+The same procedure applies to stage2, stage3, stage4, and stage5.  
+
+* stage1_time < Relaxation stage 1 time (ps) >
+Default values stage1: 100, stage2: 12, stage3: 12, stage4: 12, stage5: 24 and production_time: 100000ps = 100ns.  
 
 
 ## License
