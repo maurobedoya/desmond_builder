@@ -217,7 +217,7 @@ Default values: 1.01325
 Acceptable values: True, yes, on, or False, no, off.  
 Default values: False  
 
-* run_protocol < Run MD protocols >  
+* run_protocol < Run MD protocols? >  
 Acceptable values: True, yes, on, or False, no, off.  
 Default values: False  
 
