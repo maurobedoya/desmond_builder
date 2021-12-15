@@ -114,35 +114,35 @@ Default values: SPC
 The default protocols for desmond relaxation and the production are activated.
 To deactivate any step, the option should be set to 'no', 'off' or 'false'.  
 
-* stage1 < Relaxation stage 1 >
+* stage1 < Relaxation stage 1 >  
 Acceptable values: yes, true, on or no, false, off  
 Default values: yes  
 The same procedure applies to stage2, stage3, stage4, and stage5.  
 
-* stage1_time < Relaxation stage 1 time (ps) >
+* stage1_time < Relaxation stage 1 time (ps) >  
 Default values stage1: 100, stage2: 12, stage3: 12, stage4: 12, stage5: 24 and production_time: 100000ps = 100ns.  
 
-* production_timestep_bonded: < Production timestep bonded (ps) >
+* production_timestep_bonded: < Production timestep bonded (ps) >  
 Default values: 0.002  
 
-* production_timestep_near: < Production timestep near (ps) >
+* production_timestep_near: < Production timestep near (ps) >  
 Default values: 0.002  
 
-* production_timestep_far: < Production timestep far (ps) >
+* production_timestep_far: < Production timestep far (ps) >  
 Default values: 0.006  
 
-* stage1_temp < Relaxation stage 1 temperature (K) >
+* stage1_temp < Relaxation stage 1 temperature (K) >  
 Default values: 10.0  
 The default values for the other stages are:  
 stage1_temp: 10.0, stage2_temp: 10.0, stage3_temp: 10.0, stage4_temp: 300.0, stage5_temp: 300.0, production_temp: 10.0  
 
-* stage1_ensemble < Relaxation stage 1 ensemble >
+* stage1_ensemble < Relaxation stage 1 ensemble >  
 Acceptable values: NVE, NVT, NPT  
 Note, NPAT and NPYT will be implemented in the future.  
 Default values: stage1_ensemble: NVT, stage2_ensemble: NVT, stage3_ensemble: NPT, stage4_ensemble: NPT, stage5_ensemble: NPT, production_ensemble: NPT.  
 
-* stage1_method < Relaxation stage 1 method >
-Acceptable values: NVT, NPT
+* stage1_method < Relaxation stage 1 method >  
+Acceptable values: NVT, NPT  
 
 ## License
 
