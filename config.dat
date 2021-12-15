@@ -1,9 +1,7 @@
 [settings]
 workdir = 5yok_system
-file = 5yok.mae
-schrod_path = /datos/software/desmond/Desmond2020-4
-#schrod_path = /usr/local/Desmond2019-4
-#schrod_path = /datos/software/schrodinger/schrodinger2018-4
+file = file.mae
+desmond_path = /path-to/Desmond-installation
 
 [build_geometry]
 counterions = yes
