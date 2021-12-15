@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
 """
 Version: 1.0
-Prepare a system for MD simulation in desmond.
-1. Pass a configuration file to the script.
-2. Execute as: python run_schrod_mds.py -i options_file.dat
 "If this script is useful for you, consider giving acknowledgments comments in the publication."
 Contact: 
 Mauricio Bedoya
@@ -305,7 +302,8 @@ class Protocol:
                 )
                 print(f"{inner_space} {'annealing':<16}{eq}{'off'}", file=fd)
                 print(
-                    f"{inner_space} {'time':<16}{eq}{self.p_opts.stage1_time}", file=fd,
+                    f"{inner_space} {'time':<16}{eq}{self.p_opts.stage1_time}",
+                    file=fd,
                 )
                 print(
                     f"{inner_space} {'timestep':<16}{eq}{'['}{self.p_opts.stage1_timestep}{']'}",
@@ -359,7 +357,8 @@ class Protocol:
                 print(f"{inner_space} {'effect_if':<16}{eq}{gpu_text}", file=fd)
                 print(f"{inner_space} {'annealing':<16}{eq}{'off'}", file=fd)
                 print(
-                    f"{inner_space} {'time':<16}{eq}{self.p_opts.stage2_time}", file=fd,
+                    f"{inner_space} {'time':<16}{eq}{self.p_opts.stage2_time}",
+                    file=fd,
                 )
                 print(
                     f"{inner_space} {'timestep':<16}{eq}{'['}{self.p_opts.stage2_timestep}{']'}",
@@ -420,7 +419,8 @@ class Protocol:
                 print(f"{inner_space} {'effect_if':<16}{eq}{gpu_text}", file=fd)
                 print(f"{inner_space} {'annealing':<16}{eq}{'off'}", file=fd)
                 print(
-                    f"{inner_space} {'time':<16}{eq}{self.p_opts.stage3_time}", file=fd,
+                    f"{inner_space} {'time':<16}{eq}{self.p_opts.stage3_time}",
+                    file=fd,
                 )
                 print(
                     f"{inner_space} {'temperature':<16}{eq}{self.p_opts.stage3_temp}",
@@ -475,10 +475,12 @@ class Protocol:
                 print(file=fd)
                 print(f"{outer_space}{'solvate_pocket':<16}{'{'}", file=fd)
                 print(
-                    f"{inner_space} {'should_skip':<11} {eq}{'true'}", file=fd,
+                    f"{inner_space} {'should_skip':<11} {eq}{'true'}",
+                    file=fd,
                 )
                 print(
-                    f"{inner_space} {'ligand_file':<11} {eq}{'?'}", file=fd,
+                    f"{inner_space} {'ligand_file':<11} {eq}{'?'}",
+                    file=fd,
                 )
                 print(f"{outer_space}{'}'}", file=fd)
                 print(file=fd)
@@ -496,7 +498,8 @@ class Protocol:
                 print(f"{inner_space} {' ':<19}{gpu_text2}", file=fd)
 
                 print(
-                    f"{inner_space} {'time':<16}{eq}{self.p_opts.stage4_time}", file=fd,
+                    f"{inner_space} {'time':<16}{eq}{self.p_opts.stage4_time}",
+                    file=fd,
                 )
                 print(
                     f"{inner_space} {'temperature':<16}{eq}{self.p_opts.stage4_temp}",
@@ -559,7 +562,8 @@ class Protocol:
                 print(f"{inner_space} {'effect_if':<16}{eq}{gpu_text1}", file=fd)
                 print(f"{inner_space} {' ':<19}{gpu_text2}", file=fd)
                 print(
-                    f"{inner_space} {'time':<16}{eq}{self.p_opts.stage5_time}", file=fd,
+                    f"{inner_space} {'time':<16}{eq}{self.p_opts.stage5_time}",
+                    file=fd,
                 )
                 print(
                     f"{inner_space} {'temperature':<16}{eq}{self.p_opts.stage5_temp}",
@@ -1014,7 +1018,8 @@ class Protocol:
                 file=fd,
             )
             print(
-                f"{outer_space}{'time':<20}{eq}{self.p_opts.production_time}", file=fd,
+                f"{outer_space}{'time':<20}{eq}{self.p_opts.production_time}",
+                file=fd,
             )
             print(
                 f"{outer_space}{'timestep':<20}{eq}[{self.p_opts.production_timestep_bonded} {self.p_opts.production_timestep_near} {self.p_opts.production_timestep_far}]",
@@ -1190,7 +1195,10 @@ def check_folder_analysis(folder_name: str):
 
 class Builder:
     def __init__(
-        self, options: BuilderOptions, charge: int, atoms_number: Optional[str] = None,
+        self,
+        options: BuilderOptions,
+        charge: int,
+        atoms_number: Optional[str] = None,
     ) -> None:
         self.options = options
         self.counterions = options.counterions
