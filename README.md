@@ -34,7 +34,7 @@ Contains the options for building the system
 * [protocol]  
 Contains options for molecular dynamics protocols.
 
-[settings]
+# [settings]
 * workdir < Working directory name >  
 Acceptable values: any name  
 Default values: md_run  
@@ -48,7 +48,7 @@ Default values: None
 Acceptable values: any path  
 Default values: $SCHRODINGER  
 
-[build_geometry]
+# [build_geometry]
 * counterions < Add counterions? >  
 Acceptable values: yes, true, on or no, false, off  
 Default values: no  
@@ -109,7 +109,7 @@ Default values: Cl
 Acceptable values: SPC, TIP3P, TIP4P, TIP4PEW, TIP5P, TIP4PD, DMSO, METHANOL, OCTANOL  
 Default values: SPC  
 
-[protocol]  
+# [protocol]  
 
 The default protocols for desmond relaxation and the production are activated.  
 To deactivate any step, the option should be set to 'no', 'off' or 'false'.  
@@ -117,7 +117,7 @@ To deactivate any step, the option should be set to 'no', 'off' or 'false'.
 * stage1 < Relaxation stage 1 >  
 Acceptable values: yes, true, on or no, false, off  
 Default values: yes  
-The same procedure applies to stage2, stage3, stage4, and stage5.  
+The same procedure applies to stage2, stage3, stage4, stage5 and production.  
 
 * stage1_time < Relaxation stage 1 time (ps) >  
 Default values: stage1: 100, stage2: 12, stage3: 12, stage4: 12, stage5: 24 and production_time: 100000ps = 100ns.  
