@@ -56,62 +56,62 @@ If yes, the number of counterions will be calculated according to the
 total charge of the system.  
 The default positive ion is 'Na' and the default negative ion is 'Cl'.  
 The default options could be changed in the configuration file as:  
-* counterions_positive_ion < Positive ion >
+* counterions_positive_ion < Positive ion >  
 Acceptable values: Na, Li, K, Rb, Cs  
-* counterions_negative_ion < Negative ion >
+* counterions_negative_ion < Negative ion >  
 Acceptable values: Cl, F, Br, I.  
 Note: The available ions to be used as conterions are different to the ions
 to be used as Salt.  
 
-* ions_away < Add ions away from structure >
+* ions_away < Add ions away from structure >  
 Acceptable values: yes, true, on or no, false, off  
 Default values: no  
 If yes, it should be added the options: ions_awaydistance and ions_awayfrom.  
 
-* ions_awaydistance < Minimum distance between ions and structure >
+* ions_awaydistance < Minimum distance between ions and structure >  
 Default values: 5.0  
 
-* ions_awayfrom < Add ions away from structure >
+* ions_awayfrom < Add ions away from structure >  
 Default values: protein  
 It should be an acceptable ASL selection.  
 
-* shape < Add box shape >
+* shape < Add box shape >  
 Acceptable values: orthorhombic  
 Default values: orthorhombic  
 Different box shapes will be implemented in the future.  
 
-* size < Add box size >
+* size < Add box size >  
 Acceptable values: Three numbers separated by blank spaces.  
-Default values: 10.0 10.0 10.0
+Default values: 10.0 10.0 10.0  
 
-* size_type < Add box size type >
+* size_type < Add box size type >  
 Acceptable values: buffer, absolute  
 Default values: buffer  
 
-* salt < Add salt >
+* salt < Add salt >  
 Acceptable values: yes, true, on or no, false, off  
 Default values: no  
 If yes, it should be added the option: concentration.  
 
-* concentration < Salt concentration (M) >
+* concentration < Salt concentration (M) >  
 Default values: 0.15  
 
 Optional settings:  
-* positive_ion < Positive ion > 
+* positive_ion < Positive ion >  
 Acceptable values: Li, Na, K, Rb, Cs, Mg2, Ca2, Zn2, fe2, fe3  
 Default values: Na  
 
-* negative_ion < Negative ion >
+* negative_ion < Negative ion >  
 Acceptable values: Cl, F, Br, I  
 Default values: Cl  
 
-* solvent < Solvent >
+* solvent < Solvent >  
 Acceptable values: SPC, TIP3P, TIP4P, TIP4PEW, TIP5P, TIP4PD, DMSO, METHANOL, OCTANOL  
 Default values: SPC  
 
-[protocol]
+[protocol]  
 
-The default protocols for desmond relaxation and the production are activated.
+The default protocols for desmond relaxation and the production are activated.  
 To deactivate any step, the option should be set to 'no', 'off' or 'false'.  
 
 * stage1 < Relaxation stage 1 >  
@@ -143,7 +143,7 @@ Default values: stage1_thermostat_tau: 0.1, stage2_thermostat_tau: 0.1, stage3_t
 Default values: stage1_barostat_tau: None, stage2_barostat_tau: None, stage3_barostat_tau: 50.0, stage4_barostat_tau: 20.0, stage5_barostat_tau: 2.0, production_barostat_tau: 2.0.  
 
 * stage1_restraint < Relaxation stage 1 restraint (ASL) >  
-Default values: stage1_restraint: solute_heavy_atom, stage2_restraint: solute_heavy_atom, stage3_restraint: solute_heavy_atom, stage4_restraint: solute_heavy_atom, stage5_restraint: None, production_restraint: None.
+Default values: stage1_restraint: solute_heavy_atom, stage2_restraint: solute_heavy_atom, stage3_restraint: solute_heavy_atom, stage4_restraint: solute_heavy_atom, stage5_restraint: None, production_restraint: None.  
 
 * stage1_restraint_force < Relaxation stage 1 restraint_force (kcal·mol-1·Å-2) >  
 Default values: stage1_restraint_force: 50.0, stage2_restraint_force: 50.0, stage3_restraint_force: 50.0, stage4_restraint_force: 50.0, stage5_restraint_force: None, production_restraint_force: None.  
@@ -201,7 +201,7 @@ Default values: 0.002
 * production_timestep_near: < Production timestep near (ps) >  
 Default values: 0.002  
 
-* production_timestep_far: < Production timestep far (ps) >    
+* production_timestep_far: < Production timestep far (ps) >  
 Default values: 0.006  
 
 * production_traj_frames_per_file: < Production: frames per-file >  
