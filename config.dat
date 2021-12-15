@@ -6,15 +6,12 @@ desmond_path = /path-to/Desmond-installation
 [build_geometry]
 counterions = yes
 ions_away = yes
-ion_awaydistance = 1.5
-ion_awayfrom = protein and backbone
-#ion = Cl
-#number = neutralize_system
-#shape = orthorhombic
-#size = 10.0 10.0 15.0
+ion_awaydistance =5.0
+ion_awayfrom = protein
+size = 20.0 20.0 20.0
 salt = yes
 concentration = 0.15
-#solvent = TIP3P
+solvent = TIP3P
 
 [protocol]
 stage1 = yes
