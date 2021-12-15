@@ -25,13 +25,13 @@ python run_desmond_builder.py -i config.dat
 ## Options
 
 The configuration file must contain 3 headers:
-[settings]
+* [settings]
 Contains global settings.
 
-[build_geometry]
+* [build_geometry]
 Contains the options for building the system
 
-[protocol]
+* [protocol]
 Contains options for molecular dynamics protocols.
 
 [settings]
