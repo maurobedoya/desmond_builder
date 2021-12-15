@@ -105,8 +105,8 @@ class ProtocolOptions:
     stage1_temp: Optional[float] = 10.0
     stage2_temp: Optional[float] = 10.0
     stage3_temp: Optional[float] = 10.0
-    stage4_temp: Optional[float] = 300
-    stage5_temp: Optional[float] = 300
+    stage4_temp: Optional[float] = 300.0
+    stage5_temp: Optional[float] = 300.0
     production_temp: Optional[float] = 300.0
     production_temp_group: Optional[str] = "0"
 
