@@ -19,5 +19,5 @@ It does not require the paid version of Schrödinger but it can also be used.
 ## Usage
 
 ```
-python run_desmond_builder.py -top topology_file.xxx -traj trajectory_file.xxx -l "ligand_selection" -p "protein_selection" -o contact_surface_data
+python run_desmond_builder.py -i 
 ```
