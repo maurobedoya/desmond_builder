@@ -122,19 +122,10 @@ The same procedure applies to stage2, stage3, stage4, and stage5.
 * stage1_time < Relaxation stage 1 time (ps) >  
 Default values: stage1: 100, stage2: 12, stage3: 12, stage4: 12, stage5: 24 and production_time: 100000ps = 100ns.  
 
-* production_timestep_bonded: < Production timestep bonded (ps) >  
-Default values: 0.002  
-
-* production_timestep_near: < Production timestep near (ps) >  
-Default values: 0.002  
-
-* production_timestep_far: < Production timestep far (ps) >  
-Default values: 0.006  
-
 * stage1_temp < Relaxation stage 1 temperature (K) >  
 Default values: 10.0  
 The default values for the other stages are:  
-stage1_temp: 10.0, stage2_temp: 10.0, stage3_temp: 10.0, stage4_temp: 300.0, stage5_temp: 300.0, production_temp: 10.0  
+stage1_temp: 10.0, stage2_temp: 10.0, stage3_temp: 10.0, stage4_temp: 300.0, stage5_temp: 300.0, production_temp: 300.0  
 
 * stage1_ensemble < Relaxation stage 1 ensemble >  
 Acceptable values: NVE, NVT, NPT  
@@ -143,6 +134,92 @@ Default values: stage1_ensemble: NVT, stage2_ensemble: NVT, stage3_ensemble: NPT
 
 * stage1_method < Relaxation stage 1 method >  
 Acceptable values: NVT, NPT  
+Default values: stage1_method: Brownie, stage2_method: Berendsen, stage3_method: Berendsen, stage4_method: Berendsen, stage5_method: Berendsen, production_method: MTK.  
+
+* stage1_thermostat_tau < Relaxation stage 1 thermostat tau (ps) >  
+Default values: stage1_thermostat_tau: 0.1, stage2_thermostat_tau: 0.1, stage3_thermostat_tau: 0.1, stage4_thermostat_tau: 0.1, stage5_thermostat_tau: 0.1, production_thermostat_tau: 1.0.  
+
+* stage1_barostat_tau < Relaxation stage 1 barostat tau (ps) >  
+Default values: stage1_barostat_tau: None, stage2_barostat_tau: None, stage3_barostat_tau: 50.0, stage4_barostat_tau: 20.0, stage5_barostat_tau: 2.0, production_barostat_tau: 2.0.  
+
+* stage1_restraint < Relaxation stage 1 restraint (ASL) >  
+Default values: stage1_restraint: solute_heavy_atom, stage2_restraint: solute_heavy_atom, stage3_restraint: solute_heavy_atom, stage4_restraint: solute_heavy_atom, stage5_restraint: None, production_restraint: None.
+
+* stage1_restraint_force < Relaxation stage 1 restraint_force (kcal·mol-1·Å-2) >  
+Default values: stage1_restraint_force: 50.0, stage2_restraint_force: 50.0, stage3_restraint_force: 50.0, stage4_restraint_force: 50.0, stage5_restraint_force: None, production_restraint_force: None.  
+
+* additional_stages < Number of additional stages to run >  
+Acceptable values: integer number  
+Default values: None  
+
+* additional_stages_time < Time for additional stages (ps) >  
+Acceptable values: integer number in ps.  
+If only one value is given, it will be used for all stages, otherwise it should be a list of numbers separated by comma. The list of number should be the same length as the number of additional stages.
+Default values: None  
+
+* additional_stages_temp < Temperature for additional stages (K) >  
+Acceptable values: integer number in K.  
+If only one value is given, it will be used for all stages, otherwise it should be a list of numbers separated by comma. The list of number should be the same length as the number of additional stages.  
+Default values: None  
+
+* additional_stages_ensembles < Ensemble for additional stages >  
+Acceptable values: NVT, NPT  
+If only one value is given, it will be used for all stages, otherwise it should be a list of strings separated by comma. The list of strings should be the same length as the number of additional stages.  
+Default values: None  
+
+* additional_stages_methods < Method for additional stages >  
+Acceptable values: Berendsen, Langevin  
+If only one value is given, it will be used for all stages, otherwise it should be a list of strings separated by comma. The list of strings should be the same length as the number of additional stages.  
+Default values: None  
+
+* additional_stages_thermostat_tau < Thermostat tau for additional stages (ps) >  
+Acceptable values: integer number in ps.  
+If only one value is given, it will be used for all stages, otherwise it should be a list of numbers separated by comma. The list of number should be the same length as the number of additional stages.  
+Default values: 0.1  
+
+* additional_stages_barostat_tau < Barostat tau for additional stages (ps) >  
+Acceptable values: integer number in ps.  
+If only one value is given, it will be used for all stages, otherwise it should be a list of numbers separated by comma. The list of number should be the same length as the number of additional stages.  
+Default values: 2.0  
+
+* additional_stages_restraints < Restraints for additional stages (ASL) >  
+Acceptable values: any valid ASL separated by comma.  
+If only one value is given, it will be used for all stages, otherwise it should be a list of strings separated by comma. The list of strings should be the same length as the number of additional stages.  
+Default values: None  
+
+* additional_stages_restraints_forces < Restraint force for additional stages (kcal·mol-1·Å-2) >  
+Acceptable values: integer of float number.  
+If only one value is given, it will be used for all stages, otherwise it should be a list of numbers separated by comma. The list of number should be the same length as the number of additional stages.  
+Default values: None  
+
+* production_cutoff < Production cutoff (Å) >  
+Default values: production_cutoff: 9.0.  
+
+* production_timestep_bonded: < Production timestep bonded (ps) >  
+Default values: 0.002  
+
+* production_timestep_near: < Production timestep near (ps) >  
+Default values: 0.002  
+
+* production_timestep_far: < Production timestep far (ps) >    
+Default values: 0.006  
+
+* production_traj_frames_per_file: < Production: frames per-file >  
+Default values: 250  
+
+* production_traj_interval: < Recording interval for trajectory (ps) >  
+Default values: 50.0  
+
+* production_pressure: < Production pressure (atm) >  
+Default values: 1.01325  
+
+* run_preparation < Run preparation stage? >  
+Acceptable values: True, yes, on, or False, no, off.  
+Default values: False  
+
+* run_protocol < Run MD protocols >  
+Acceptable values: True, yes, on, or False, no, off.  
+Default values: False  
 
 ## License
 
