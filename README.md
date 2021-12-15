@@ -97,11 +97,11 @@ If yes, it should be added the option: concentration.
 Default values: 0.15  
 
 Optional settings:  
-* positive_ion < Positive ion >  
+* positive_ion < Positive ion for salt >  
 Acceptable values: Li, Na, K, Rb, Cs, Mg2, Ca2, Zn2, fe2, fe3  
 Default values: Na  
 
-* negative_ion < Negative ion >  
+* negative_ion < Negative ion for salt >  
 Acceptable values: Cl, F, Br, I  
 Default values: Cl  
 
