@@ -181,7 +181,7 @@ Note: For now there is only support for positional, distance, angle and improper
 
 Each type of restraint is defined with the preffix of "stage[x]_restraints" (for restraints from stage1 to stage5, x = 1,2,3,4,5) and for the restraints of additional stages the preffix "additional_stage_restraints" is used. The terminal of the name is the type of restraint: For "positional", "distance", "angle" or "improper" the terminals are "pos", "dist", "ang" and "imp" respectively.  
 
-* 'stage{x}_restraints_number_{type}' < number of restraints in stage "x" (x=1,2,3,4,5) and "type" (type = pos, dist, ang and imp)>  
+* ```stage{x}_restraints_number_{type}``` < number of restraints in stage "x" (x=1,2,3,4,5) and "type" (type = pos, dist, ang and imp)>  
 Default values:  
 stage[x]_restraints_number_pos      = 1 (for x=1,2,3,4)  
 stage5_restraints_number_pos        = 0  
