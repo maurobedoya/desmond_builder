@@ -14,11 +14,12 @@ from posix import sched_param
 import subprocess
 import sys
 import glob
+from typing_extensions import TypeAlias
 import numpy as np
 from os import path, PathLike, supports_fd, write
 
 from dataclasses import dataclass
-from typing import Dict, List, Optional, Set, Tuple
+from typing import Dict, List, Optional, Set, TextIO, Tuple
 import configparser
 import random
 
@@ -138,19 +139,100 @@ class ProtocolOptions:
     stage5_barostat_tau: Optional[float] = 2.0
     production_barostat_tau: Optional[float] = 2.0
 
-    stage1_restraint: Optional[str] = "solute_heavy_atom"
-    stage2_restraint: Optional[str] = "solute_heavy_atom"
-    stage3_restraint: Optional[str] = "solute_heavy_atom"
-    stage4_restraint: Optional[str] = "solute_heavy_atom"
-    stage5_restraint: Optional[str] = None
-    production_restraint: Optional[str] = None
+    stage1_restraints_number_pos: Optional[int] = 1
+    stage1_restraints_atoms_pos: Optional[str] = "solute_heavy_atom"
+    stage1_restraints_forces_pos: Optional[float] = 50.0
 
-    stage1_restraint_force: Optional[float] = 50.0
-    stage2_restraint_force: Optional[float] = 50.0
-    stage3_restraint_force: Optional[float] = 50.0
-    stage4_restraint_force: Optional[float] = 50.0
-    stage5_restraint_force: Optional[float] = None
-    production_restraint_force: Optional[float] = None
+    stage1_restraints_number_dist: Optional[int] = 0
+    stage1_restraints_atoms_dist: Optional[str] = None
+    stage1_restraints_forces_dist: Optional[float] = None
+    stage1_restraints_r0_dist: Optional[float] = None
+
+    stage1_restraints_number_ang: Optional[int] = 0
+    stage1_restraints_atoms_ang: Optional[str] = None
+    stage1_restraints_forces_ang: Optional[float] = None
+    stage1_restraints_theta0_ang: Optional[float] = None
+
+    stage1_restraints_number_imp: Optional[int] = 0
+    stage1_restraints_atoms_imp: Optional[str] = None
+    stage1_restraints_forces_imp: Optional[float] = None
+    stage1_restraints_phi0_imp: Optional[float] = None
+
+    stage2_restraints_number_pos: Optional[int] = 1
+    stage2_restraints_atoms_pos: Optional[str] = "solute_heavy_atom"
+    stage2_restraints_forces_pos: Optional[float] = 50.0
+
+    stage2_restraints_number_dist: Optional[int] = 0
+    stage2_restraints_atoms_dist: Optional[str] = None
+    stage2_restraints_forces_dist: Optional[float] = None
+    stage2_restraints_r0_dist: Optional[float] = None
+
+    stage2_restraints_number_ang: Optional[int] = 0
+    stage2_restraints_atoms_ang: Optional[str] = None
+    stage2_restraints_forces_ang: Optional[float] = None
+    stage2_restraints_theta0_ang: Optional[float] = None
+
+    stage2_restraints_number_imp: Optional[int] = 0
+    stage2_restraints_atoms_imp: Optional[str] = None
+    stage2_restraints_forces_imp: Optional[float] = None
+    stage2_restraints_phi0_imp: Optional[float] = None
+
+    stage3_restraints_number_pos: Optional[int] = 1
+    stage3_restraints_atoms_pos: Optional[str] = "solute_heavy_atom"
+    stage3_restraints_forces_pos: Optional[float] = 50.0
+
+    stage3_restraints_number_dist: Optional[int] = 0
+    stage3_restraints_atoms_dist: Optional[str] = None
+    stage3_restraints_forces_dist: Optional[float] = None
+    stage3_restraints_r0_dist: Optional[float] = None
+
+    stage3_restraints_number_ang: Optional[int] = 0
+    stage3_restraints_atoms_ang: Optional[str] = None
+    stage3_restraints_forces_ang: Optional[float] = None
+    stage3_restraints_theta0_ang: Optional[float] = None
+
+    stage3_restraints_number_imp: Optional[int] = 0
+    stage3_restraints_atoms_imp: Optional[str] = None
+    stage3_restraints_forces_imp: Optional[float] = None
+    stage3_restraints_phi0_imp: Optional[float] = None
+
+    stage4_restraints_number_pos: Optional[int] = 1
+    stage4_restraints_atoms_pos: Optional[str] = "solute_heavy_atom"
+    stage4_restraints_forces_pos: Optional[float] = 50.0
+
+    stage4_restraints_number_dist: Optional[int] = 0
+    stage4_restraints_atoms_dist: Optional[str] = None
+    stage4_restraints_forces_dist: Optional[float] = None
+    stage4_restraints_r0_dist: Optional[float] = None
+
+    stage4_restraints_number_ang: Optional[int] = 0
+    stage4_restraints_atoms_ang: Optional[str] = None
+    stage4_restraints_forces_ang: Optional[float] = None
+    stage4_restraints_theta0_ang: Optional[float] = None
+
+    stage4_restraints_number_imp: Optional[int] = 0
+    stage4_restraints_atoms_imp: Optional[str] = None
+    stage4_restraints_forces_imp: Optional[float] = None
+    stage4_restraints_phi0_imp: Optional[float] = None
+
+    stage5_restraints_number_pos: Optional[int] = 0
+    stage5_restraints_atoms_pos: Optional[str] = "solute_heavy_atom"
+    stage5_restraints_forces_pos: Optional[float] = None
+
+    stage5_restraints_number_dist: Optional[int] = 0
+    stage5_restraints_atoms_dist: Optional[str] = None
+    stage5_restraints_forces_dist: Optional[float] = None
+    stage5_restraints_r0_dist: Optional[float] = None
+
+    stage5_restraints_number_ang: Optional[int] = 0
+    stage5_restraints_atoms_ang: Optional[str] = None
+    stage5_restraints_forces_ang: Optional[float] = None
+    stage5_restraints_theta0_ang: Optional[float] = None
+
+    stage5_restraints_number_imp: Optional[int] = 0
+    stage5_restraints_atoms_imp: Optional[str] = None
+    stage5_restraints_forces_imp: Optional[float] = None
+    stage5_restraints_phi0_imp: Optional[float] = None
 
     production_bigger_rclone: Optional[str] = "false"
     production_checkpt_first: Optional[float] = 0.0
@@ -183,6 +265,30 @@ class ProtocolOptions:
     production_traj_periodicfix: Optional[str] = "true"
     production_traj_write_velocity: Optional[str] = "false"
 
+    production_restraints_number_pos: Optional[int] = 0
+    production_restraints_atoms_pos: Optional[str] = "solute_heavy_atom"
+    production_restraints_forces_pos: Optional[float] = None
+
+    production_restraints_number_dist: Optional[int] = 0
+    production_restraints_atoms_dist: Optional[str] = None
+    production_restraints_forces_dist: Optional[float] = None
+    production_restraints_r0_dist: Optional[float] = None
+
+    production_restraints_number_ang: Optional[int] = 0
+    production_restraints_atoms_ang: Optional[str] = None
+    production_restraints_forces_ang: Optional[float] = None
+    production_restraints_theta0_ang: Optional[float] = None
+
+    production_restraints_number_imp: Optional[int] = 0
+    production_restraints_atoms_imp: Optional[str] = None
+    production_restraints_forces_imp: Optional[float] = None
+    production_restraints_phi0_imp: Optional[float] = None
+
+    name_pos: Optional[str] = "posre_harm"
+    name_dist: Optional[str] = "stretch_harm"
+    name_ang: Optional[str] = "angle_harm"
+    name_imp: Optional[str] = "improper_harm"
+
     # Additional stages
     additional_stages: Optional[int] = None
     additional_stage_times: Optional[str] = None
@@ -191,31 +297,42 @@ class ProtocolOptions:
     additional_stage_methods: Optional[str] = None
     additional_stage_thermostat_tau: Optional[float] = 0.1
     additional_stage_barostat_tau: Optional[float] = 2.0
-    additional_stage_restraints: Optional[str] = None
-    additional_stage_restraints_forces: Optional[str] = None
+
+    additional_stage_restraints_number_pos: Optional[int] = 0
+    additional_stage_restraints_atoms_pos: Optional[str] = None
+    additional_stage_restraints_forces_pos: Optional[float] = None
+
+    additional_stage_restraints_number_dist: Optional[int] = 0
+    additional_stage_restraints_atoms_dist: Optional[str] = None
+    additional_stage_restraints_forces_dist: Optional[float] = None
+    additional_stage_restraints_r0_dist: Optional[float] = None
+
+    additional_stage_restraints_number_ang: Optional[int] = 0
+    additional_stage_restraints_atoms_ang: Optional[str] = None
+    additional_stage_restraints_forces_ang: Optional[float] = None
+    additional_stage_restraints_theta0_ang: Optional[float] = None
+
+    additional_stage_restraints_number_imp: Optional[int] = 0
+    additional_stage_restraints_atoms_imp: Optional[str] = None
+    additional_stage_restraints_forces_imp: Optional[float] = None
+    additional_stage_restraints_phi0_imp: Optional[float] = None
 
     # Run protocols
     run_preparation: Optional[str] = "false"
     run_protocols: Optional[str] = "false"
 
     stage1_title: Optional[
-        str
-    ] = f"{stage1_method} {stage1_ensemble}, T = {stage1_temp} K, restraints on {stage1_restraint} of {stage1_restraint_force}, {stage1_time}ps"
+        str] = f"{stage1_method} {stage1_ensemble}, T = {stage1_temp} K, {stage1_time}ps"
     stage2_title: Optional[
-        str
-    ] = f"{stage2_method} {stage2_ensemble}, T = {stage2_temp} K, restraints on {stage2_restraint} of {stage2_restraint_force}, {stage2_time}ps"
+        str] = f"{stage2_method} {stage2_ensemble}, T = {stage2_temp} K, {stage2_time}ps"
     stage3_title: Optional[
-        str
-    ] = f"{stage3_method} {stage3_ensemble}, T = {stage3_temp} K, restraints on {stage3_restraint} of {stage3_restraint_force}, {stage3_time}ps"
+        str] = f"{stage3_method} {stage3_ensemble}, T = {stage3_temp} K, {stage3_time}ps"
     stage4_title: Optional[
-        str
-    ] = f"{stage4_method} {stage4_ensemble}, T = {stage4_temp} K, restraints on {stage4_restraint} of {stage4_restraint_force}, {stage4_time}ps"
+        str] = f"{stage4_method} {stage4_ensemble}, T = {stage4_temp} K, {stage4_time}ps"
     stage5_title: Optional[
-        str
-    ] = f"{stage5_method} {stage5_ensemble}, T = {stage5_temp} K, restraints on {stage5_restraint} of {stage5_restraint_force}, {stage5_time}ps"
+        str] = f"{stage5_method} {stage5_ensemble}, T = {stage5_temp} K, {stage5_time}ps"
     production_title: Optional[
-        str
-    ] = f"Production run: {production_method} {production_ensemble}, T = {production_temp} K, restraints on {production_restraint} of {production_restraint_force}, {production_time}ps"
+        str] = f"Production run: {production_method} {production_ensemble}, T = {production_temp} K, {production_time}ps"
 
     def __init__(self, opts: Dict) -> None:
         self.opts = opts
@@ -276,12 +393,14 @@ class Protocol:
             print(file=fd)
             print(f"{outer_space}task {'{'}", file=fd)
             # outer_space, inner_space = identation(1)
-            print(f"{inner_space} {'task':<16}{eq}{q}{'desmond:auto'}{q}", file=fd)
+            print(f"{inner_space} {'task':<16}{eq}{q}{'desmond:auto'}{q}",
+                  file=fd)
             print(f"{inner_space} {'set_family':<16}{eq}{'{'}", file=fd)
 
             outer_space, inner_space = identation(2)
             print(f"{outer_space} {'desmond':<12}{eq}{'{'}", file=fd)
-            print(f"{inner_space} {'checkpt.write_last_step':<16}{eq}{'no'}", file=fd)
+            print(f"{inner_space} {'checkpt.write_last_step':<16}{eq}{'no'}",
+                  file=fd)
             print(f"{outer_space} {'}'}", file=fd)
             outer_space, inner_space = identation(0)
             print(f"{inner_space} {'}'}", file=fd)
@@ -324,22 +443,151 @@ class Protocol:
                 print(f"{outer_space} {'}'}", file=fd)
                 outer_space, inner_space = identation(1)
                 print(f"{outer_space} {'}'}", file=fd)
+                # ==============================================================
                 # Restraints block
-            if self.p_opts.stage1_restraint.lower() is not None:
-                outer_space, inner_space = identation(1)
-                print(f"{outer_space} {'restrain':<16}{eq}{'{'}", file=fd)
-                print(
-                    f"{inner_space} {'atom':<16} {eq}{q}{self.p_opts.stage1_restraint}{q}",
-                    file=fd,
-                )
-                print(
-                    f"{inner_space} {'force_constant':<16} {eq}{self.p_opts.stage1_restraint_force}",
-                    file=fd,
-                )
-                print(f"{outer_space} {'}'}", file=fd)
+                # ==============================================================
+                # Block for stage1 positional-restraints
+                if (int(self.p_opts.stage1_restraints_number_pos) != 0
+                        or int(self.p_opts.stage1_restraints_number_dist) != 0
+                        or int(self.p_opts.stage1_restraints_number_ang) != 0
+                        or int(self.p_opts.stage1_restraints_number_imp) != 0):
+                    outer_space, inner_space = identation(1)
+                    print(f"{outer_space} {'restraints.new':<16}{eq}{'['}",
+                          file=fd)
+                    if int(self.p_opts.stage1_restraints_number_pos) != 0:
+                        atoms, forces = self.set_restraint(
+                            "stage1",
+                            self.p_opts.stage1_restraints_number_pos,
+                            self.p_opts.stage1_restraints_atoms_pos,
+                            self.p_opts.stage1_restraints_forces_pos,
+                            "positional",
+                            None,
+                        )
+                        for i in range(
+                                int(self.p_opts.stage1_restraints_number_pos)):
+                            outer_space, inner_space = identation(2)
+                            print(f"{outer_space} {'{'}", file=fd)
+                            print(
+                                f"{inner_space} {'name':<11} {eq}{self.p_opts.name_pos}",
+                                file=fd)
+                            print(
+                                f"{inner_space} {'atoms':<11} {eq}[{q}{atoms[i]}{q}]",
+                                file=fd,
+                            )
+                            print(
+                                f"{inner_space} {'force_constants':<11} {eq}[{forces[i]} {forces[i]} {forces[i]}]",
+                                file=fd,
+                            )
+                            print(f"{outer_space} {'}'}", file=fd)
+
+                    if int(self.p_opts.stage1_restraints_number_dist) != 0:
+                        # Block for stage1 distance-restraints
+                        outer_space, inner_space = identation(1)
+                        atoms, forces, constants = self.set_restraint(
+                            "stage1",
+                            self.p_opts.stage1_restraints_number_dist,
+                            self.p_opts.stage1_restraints_atoms_dist,
+                            self.p_opts.stage1_restraints_forces_dist,
+                            "distance",
+                            self.p_opts.stage1_restraints_r0_dist,
+                        )
+                        j = 0
+                        for i in range(
+                                int(self.p_opts.stage1_restraints_number_dist)
+                        ):
+
+                            outer_space, inner_space = identation(2)
+                            print(f"{outer_space} {'{'}", file=fd)
+                            print(
+                                f"{inner_space} {'name':<11} {eq}{self.p_opts.name_dist}",
+                                file=fd)
+                            print(
+                                f"{inner_space} {'atoms':<11} {eq}[{q}{atoms[j]}{q} {q}{atoms[j+1]}{q}]",
+                                file=fd,
+                            )
+                            print(
+                                f"{inner_space} {'force_constants':<11} {eq}[{forces[i]}]",
+                                file=fd,
+                            )
+                            print(
+                                f"{inner_space} {'r0':<11} {eq}{constants[i]}",
+                                file=fd)
+                            print(f"{outer_space} {'}'}", file=fd)
+                            j += 2
+                    if int(self.p_opts.stage1_restraints_number_ang) != 0:
+                        # Block for stage1 angle-restraints
+                        outer_space, inner_space = identation(1)
+                        atoms, forces, constants = self.set_restraint(
+                            "stage1",
+                            self.p_opts.stage1_restraints_number_ang,
+                            self.p_opts.stage1_restraints_atoms_ang,
+                            self.p_opts.stage1_restraints_forces_ang,
+                            "angle",
+                            self.p_opts.stage1_restraints_theta0_ang,
+                        )
+                        j = 0
+                        for i in range(
+                                int(self.p_opts.stage1_restraints_number_ang)):
+                            outer_space, inner_space = identation(2)
+                            print(f"{outer_space} {'{'}", file=fd)
+                            print(
+                                f"{inner_space} {'name':<11} {eq}{self.p_opts.name_ang}",
+                                file=fd)
+                            print(
+                                f"{inner_space} {'atoms':<11} {eq}[{q}{atoms[j]}{q} {q}{atoms[j+1]}{q} {q}{atoms[j+2]}{q}]",
+                                file=fd,
+                            )
+                            print(
+                                f"{inner_space} {'force_constants':<11} {eq}[{forces[i]}]",
+                                file=fd,
+                            )
+                            print(
+                                f"{inner_space} {'theta0':<11} {eq}{constants[i]}",
+                                file=fd,
+                            )
+                            print(f"{outer_space} {'}'}", file=fd)
+                            j += 3
+                    if int(self.p_opts.stage1_restraints_number_imp) != 0:
+                        # Block for stage1 improper-restraints
+                        outer_space, inner_space = identation(1)
+                        atoms, forces, constants = self.set_restraint(
+                            "stage1",
+                            self.p_opts.stage1_restraints_number_imp,
+                            self.p_opts.stage1_restraints_atoms_imp,
+                            self.p_opts.stage1_restraints_forces_imp,
+                            "improper",
+                            self.p_opts.stage1_restraints_phi0_imp,
+                        )
+                        j = 0
+                        for i in range(
+                                int(self.p_opts.stage1_restraints_number_imp)):
+                            outer_space, inner_space = identation(2)
+                            print(f"{outer_space} {'{'}", file=fd)
+                            print(
+                                f"{inner_space} {'name':<11} {eq}{self.p_opts.name_imp}",
+                                file=fd)
+                            print(
+                                f"{inner_space} {'atoms':<11} {eq}[{q}{atoms[j]}{q} {q}{atoms[j+1]}{q} {q}{atoms[j+2]}{q} {q}{atoms[j+3]}{q}]",
+                                file=fd,
+                            )
+                            print(
+                                f"{inner_space} {'force_constants':<11} {eq}[{forces[i]}]",
+                                file=fd,
+                            )
+                            print(
+                                f"{inner_space} {'phi0':<11} {eq}{constants[i]}",
+                                file=fd,
+                            )
+                            print(f"{outer_space} {'}'}", file=fd)
+                            j += 4
+                    outer_space, inner_space = identation(1)
+                    print(f"{outer_space} {']'}", file=fd)
                 outer_space, inner_space = identation(0)
                 print(f"{outer_space}{'}'}", file=fd)
                 print(file=fd)
+            # ==============================================================
+            # Restraints block
+            # ==============================================================
             # Stage 2 block
             if self.p_opts.stage2.lower() in ["yes", "on", "true"]:
                 outer_space, inner_space = identation(0)
@@ -349,7 +597,8 @@ class Protocol:
                     file=fd,
                 )
                 gpu_text = '[["==" "-gpu" "@*.*.jlaunch_opt[-1]"] \'ensemble.method = Langevin\']'
-                print(f"{inner_space} {'effect_if':<16}{eq}{gpu_text}", file=fd)
+                print(f"{inner_space} {'effect_if':<16}{eq}{gpu_text}",
+                      file=fd)
                 print(f"{inner_space} {'annealing':<16}{eq}{'off'}", file=fd)
                 print(
                     f"{inner_space} {'time':<16}{eq}{self.p_opts.stage2_time}",
@@ -380,26 +629,159 @@ class Protocol:
                 outer_space, inner_space = identation(1)
                 print(f"{outer_space} {'}'}", file=fd)
                 # Restraints block
-            if self.p_opts.stage2_restraint.lower() is not None:
-                outer_space, inner_space = identation(1)
-                print(f"{outer_space} {'restrain':<16}{eq}{'{'}", file=fd)
-                print(
-                    f"{inner_space} {'atom':<16} {eq}{q}{self.p_opts.stage2_restraint}{q}",
-                    file=fd,
-                )
-                print(
-                    f"{inner_space} {'force_constant':<16} {eq}{self.p_opts.stage2_restraint_force}",
-                    file=fd,
-                )
-                print(f"{outer_space} {'}'}", file=fd)
-                outer_space, inner_space = identation(0)
+                # ==============================================================
+                # Restraints block
+                # ==============================================================
+                # Block for stage2 positional-restraints
+                if (int(self.p_opts.stage2_restraints_number_pos) != 0
+                        or int(self.p_opts.stage2_restraints_number_dist) != 0
+                        or int(self.p_opts.stage2_restraints_number_ang) != 0
+                        or int(self.p_opts.stage2_restraints_number_imp) != 0):
+                    outer_space, inner_space = identation(1)
+                    print(f"{outer_space} {'restraints.new':<16}{eq}{'['}",
+                          file=fd)
+                    if int(self.p_opts.stage2_restraints_number_pos) != 0:
+                        atoms, forces = self.set_restraint(
+                            "stage2",
+                            self.p_opts.stage2_restraints_number_pos,
+                            self.p_opts.stage2_restraints_atoms_pos,
+                            self.p_opts.stage2_restraints_forces_pos,
+                            "positional",
+                            None,
+                        )
+                        for i in range(
+                                int(self.p_opts.stage2_restraints_number_pos)):
+                            outer_space, inner_space = identation(2)
+                            print(f"{outer_space} {'{'}", file=fd)
+                            print(
+                                f"{inner_space} {'name':<11} {eq}{self.p_opts.name_pos}",
+                                file=fd)
+                            print(
+                                f"{inner_space} {'atoms':<11} {eq}[{q}{atoms[i]}{q}]",
+                                file=fd,
+                            )
+                            print(
+                                f"{inner_space} {'force_constants':<11} {eq}[{forces[i]} {forces[i]} {forces[i]}]",
+                                file=fd,
+                            )
+                            print(f"{outer_space} {'}'}", file=fd)
+
+                    if int(self.p_opts.stage2_restraints_number_dist) != 0:
+                        # Block for stage2 distance-restraints
+                        outer_space, inner_space = identation(1)
+                        atoms, forces, constants = self.set_restraint(
+                            "stage2",
+                            self.p_opts.stage2_restraints_number_dist,
+                            self.p_opts.stage2_restraints_atoms_dist,
+                            self.p_opts.stage2_restraints_forces_dist,
+                            "distance",
+                            self.p_opts.stage2_restraints_r0_dist,
+                        )
+                        j = 0
+                        for i in range(
+                                int(self.p_opts.stage2_restraints_number_dist)
+                        ):
+
+                            outer_space, inner_space = identation(2)
+                            print(f"{outer_space} {'{'}", file=fd)
+                            print(
+                                f"{inner_space} {'name':<11} {eq}{self.p_opts.name_dist}",
+                                file=fd)
+                            print(
+                                f"{inner_space} {'atoms':<11} {eq}[{q}{atoms[j]}{q} {q}{atoms[j+1]}{q}]",
+                                file=fd,
+                            )
+                            print(
+                                f"{inner_space} {'force_constants':<11} {eq}[{forces[i]}]",
+                                file=fd,
+                            )
+                            print(
+                                f"{inner_space} {'r0':<11} {eq}{constants[i]}",
+                                file=fd)
+                            print(f"{outer_space} {'}'}", file=fd)
+                            j += 2
+                    if int(self.p_opts.stage2_restraints_number_ang) != 0:
+                        # Block for stage2 angle-restraints
+                        outer_space, inner_space = identation(1)
+                        atoms, forces, constants = self.set_restraint(
+                            "stage2",
+                            self.p_opts.stage2_restraints_number_ang,
+                            self.p_opts.stage2_restraints_atoms_ang,
+                            self.p_opts.stage2_restraints_forces_ang,
+                            "angle",
+                            self.p_opts.stage2_restraints_theta0_ang,
+                        )
+                        j = 0
+                        for i in range(
+                                int(self.p_opts.stage2_restraints_number_ang)):
+                            outer_space, inner_space = identation(2)
+                            print(f"{outer_space} {'{'}", file=fd)
+                            print(
+                                f"{inner_space} {'name':<11} {eq}{self.p_opts.name_ang}",
+                                file=fd)
+                            print(
+                                f"{inner_space} {'atoms':<11} {eq}[{q}{atoms[j]}{q} {q}{atoms[j+1]}{q} {q}{atoms[j+2]}{q}]",
+                                file=fd,
+                            )
+                            print(
+                                f"{inner_space} {'force_constants':<11} {eq}[{forces[i]}]",
+                                file=fd,
+                            )
+                            print(
+                                f"{inner_space} {'theta0':<11} {eq}{constants[i]}",
+                                file=fd,
+                            )
+                            print(f"{outer_space} {'}'}", file=fd)
+                            j += 3
+                    if int(self.p_opts.stage2_restraints_number_imp) != 0:
+                        # Block for stage2 improper-restraints
+                        outer_space, inner_space = identation(1)
+                        atoms, forces, constants = self.set_restraint(
+                            "stage2",
+                            self.p_opts.stage2_restraints_number_imp,
+                            self.p_opts.stage2_restraints_atoms_imp,
+                            self.p_opts.stage2_restraints_forces_imp,
+                            "improper",
+                            self.p_opts.stage2_restraints_phi0_imp,
+                        )
+                        j = 0
+                        for i in range(
+                                int(self.p_opts.stage2_restraints_number_imp)):
+                            outer_space, inner_space = identation(2)
+                            print(f"{outer_space} {'{'}", file=fd)
+                            print(
+                                f"{inner_space} {'name':<11} {eq}{self.p_opts.name_imp}",
+                                file=fd)
+                            print(
+                                f"{inner_space} {'atoms':<11} {eq}[{q}{atoms[j]}{q} {q}{atoms[j+1]}{q} {q}{atoms[j+2]}{q} {q}{atoms[j+3]}{q}]",
+                                file=fd,
+                            )
+                            print(
+                                f"{inner_space} {'force_constants':<11} {eq}[{forces[i]}]",
+                                file=fd,
+                            )
+                            print(
+                                f"{inner_space} {'phi0':<11} {eq}{constants[i]}",
+                                file=fd,
+                            )
+                            print(f"{outer_space} {'}'}", file=fd)
+                            j += 4
+                    outer_space, inner_space = identation(1)
+                    print(f"{outer_space} {']'}", file=fd)
+                    # End of restrains block
                 print(file=fd)
+                # ==============================================================
+                # Restraints block END
+                # ==============================================================
+                outer_space, inner_space = identation(0)
                 print(
                     f"{inner_space} {'randomize_velocity.interval':<29} {eq}{'1.0'}",
                     file=fd,
                 )
-                print(f"{inner_space} {'eneseq.interval':<29} {eq}{'0.3'}", file=fd)
-                print(f"{inner_space} {'trajectory.center':<29} {eq}{'[]'}", file=fd)
+                print(f"{inner_space} {'eneseq.interval':<29} {eq}{'0.3'}",
+                      file=fd)
+                print(f"{inner_space} {'trajectory.center':<29} {eq}{'[]'}",
+                      file=fd)
                 print(f"{outer_space}{'}'}", file=fd)
                 print(file=fd)
             # Stage 3 block
@@ -411,7 +793,8 @@ class Protocol:
                     file=fd,
                 )
                 gpu_text = '[["==" "-gpu" "@*.*.jlaunch_opt[-1]"] \'ensemble.method = Langevin\']'
-                print(f"{inner_space} {'effect_if':<16}{eq}{gpu_text}", file=fd)
+                print(f"{inner_space} {'effect_if':<16}{eq}{gpu_text}",
+                      file=fd)
                 print(f"{inner_space} {'annealing':<16}{eq}{'off'}", file=fd)
                 print(
                     f"{inner_space} {'time':<16}{eq}{self.p_opts.stage3_time}",
@@ -441,30 +824,159 @@ class Protocol:
                 )
                 outer_space, inner_space = identation(1)
                 print(f"{outer_space} {'}'}", file=fd)
+                # ==============================================================
                 # Restraints block
-                if self.p_opts.stage3_restraint.lower() is not None:
+                # ==============================================================
+                # Block for stage3 positional-restraints
+                if (int(self.p_opts.stage3_restraints_number_pos) != 0
+                        or int(self.p_opts.stage3_restraints_number_dist) != 0
+                        or int(self.p_opts.stage3_restraints_number_ang) != 0
+                        or int(self.p_opts.stage3_restraints_number_imp) != 0):
                     outer_space, inner_space = identation(1)
-                    print(f"{outer_space} {'restrain':<16}{eq}{'{'}", file=fd)
-                    print(
-                        f"{inner_space} {'atom':<16} {eq}{q}{self.p_opts.stage3_restraint}{q}",
-                        file=fd,
-                    )
-                    print(
-                        f"{inner_space} {'force_constant':<16} {eq}{self.p_opts.stage3_restraint_force}",
-                        file=fd,
-                    )
-                    print(f"{outer_space} {'}'}", file=fd)
-                    outer_space, inner_space = identation(0)
-                    print(file=fd)
-                    print(
-                        f"{inner_space} {'randomize_velocity.interval':<29} {eq}{'1.0'}",
-                        file=fd,
-                    )
-                    print(f"{inner_space} {'eneseq.interval':<29} {eq}{'0.3'}", file=fd)
-                    print(
-                        f"{inner_space} {'trajectory.center':<29} {eq}{'[]'}", file=fd
-                    )
-                    print(f"{outer_space}{'}'}", file=fd)
+                    print(f"{outer_space} {'restraints.new':<16}{eq}{'['}",
+                          file=fd)
+                    if int(self.p_opts.stage3_restraints_number_pos) != 0:
+                        atoms, forces = self.set_restraint(
+                            "stage3",
+                            self.p_opts.stage3_restraints_number_pos,
+                            self.p_opts.stage3_restraints_atoms_pos,
+                            self.p_opts.stage3_restraints_forces_pos,
+                            "positional",
+                            None,
+                        )
+                        for i in range(
+                                int(self.p_opts.stage3_restraints_number_pos)):
+                            outer_space, inner_space = identation(2)
+                            print(f"{outer_space} {'{'}", file=fd)
+                            print(
+                                f"{inner_space} {'name':<11} {eq}{self.p_opts.name_pos}",
+                                file=fd)
+                            print(
+                                f"{inner_space} {'atoms':<11} {eq}[{q}{atoms[i]}{q}]",
+                                file=fd,
+                            )
+                            print(
+                                f"{inner_space} {'force_constants':<11} {eq}[{forces[i]} {forces[i]} {forces[i]}]",
+                                file=fd,
+                            )
+                            print(f"{outer_space} {'}'}", file=fd)
+
+                    if int(self.p_opts.stage3_restraints_number_dist) != 0:
+                        # Block for stage3 distance-restraints
+                        outer_space, inner_space = identation(1)
+                        atoms, forces, constants = self.set_restraint(
+                            "stage3",
+                            self.p_opts.stage3_restraints_number_dist,
+                            self.p_opts.stage3_restraints_atoms_dist,
+                            self.p_opts.stage3_restraints_forces_dist,
+                            "distance",
+                            self.p_opts.stage3_restraints_r0_dist,
+                        )
+                        j = 0
+                        for i in range(
+                                int(self.p_opts.stage3_restraints_number_dist)
+                        ):
+
+                            outer_space, inner_space = identation(2)
+                            print(f"{outer_space} {'{'}", file=fd)
+                            print(
+                                f"{inner_space} {'name':<11} {eq}{self.p_opts.name_dist}",
+                                file=fd)
+                            print(
+                                f"{inner_space} {'atoms':<11} {eq}[{q}{atoms[j]}{q} {q}{atoms[j+1]}{q}]",
+                                file=fd,
+                            )
+                            print(
+                                f"{inner_space} {'force_constants':<11} {eq}[{forces[i]}]",
+                                file=fd,
+                            )
+                            print(
+                                f"{inner_space} {'r0':<11} {eq}{constants[i]}",
+                                file=fd)
+                            print(f"{outer_space} {'}'}", file=fd)
+                            j += 2
+                    if int(self.p_opts.stage3_restraints_number_ang) != 0:
+                        # Block for stage3 angle-restraints
+                        outer_space, inner_space = identation(1)
+                        atoms, forces, constants = self.set_restraint(
+                            "stage3",
+                            self.p_opts.stage3_restraints_number_ang,
+                            self.p_opts.stage3_restraints_atoms_ang,
+                            self.p_opts.stage3_restraints_forces_ang,
+                            "angle",
+                            self.p_opts.stage3_restraints_theta0_ang,
+                        )
+                        j = 0
+                        for i in range(
+                                int(self.p_opts.stage3_restraints_number_ang)):
+                            outer_space, inner_space = identation(2)
+                            print(f"{outer_space} {'{'}", file=fd)
+                            print(
+                                f"{inner_space} {'name':<11} {eq}{self.p_opts.name_ang}",
+                                file=fd)
+                            print(
+                                f"{inner_space} {'atoms':<11} {eq}[{q}{atoms[j]}{q} {q}{atoms[j+1]}{q} {q}{atoms[j+2]}{q}]",
+                                file=fd,
+                            )
+                            print(
+                                f"{inner_space} {'force_constants':<11} {eq}[{forces[i]}]",
+                                file=fd,
+                            )
+                            print(
+                                f"{inner_space} {'theta0':<11} {eq}{constants[i]}",
+                                file=fd,
+                            )
+                            print(f"{outer_space} {'}'}", file=fd)
+                            j += 3
+                    if int(self.p_opts.stage3_restraints_number_imp) != 0:
+                        # Block for stage3 improper-restraints
+                        outer_space, inner_space = identation(1)
+                        atoms, forces, constants = self.set_restraint(
+                            "stage3",
+                            self.p_opts.stage3_restraints_number_imp,
+                            self.p_opts.stage3_restraints_atoms_imp,
+                            self.p_opts.stage3_restraints_forces_imp,
+                            "improper",
+                            self.p_opts.stage3_restraints_phi0_imp,
+                        )
+                        j = 0
+                        for i in range(
+                                int(self.p_opts.stage3_restraints_number_imp)):
+                            outer_space, inner_space = identation(2)
+                            print(f"{outer_space} {'{'}", file=fd)
+                            print(
+                                f"{inner_space} {'name':<11} {eq}{self.p_opts.name_imp}",
+                                file=fd)
+                            print(
+                                f"{inner_space} {'atoms':<11} {eq}[{q}{atoms[j]}{q} {q}{atoms[j+1]}{q} {q}{atoms[j+2]}{q} {q}{atoms[j+3]}{q}]",
+                                file=fd,
+                            )
+                            print(
+                                f"{inner_space} {'force_constants':<11} {eq}[{forces[i]}]",
+                                file=fd,
+                            )
+                            print(
+                                f"{inner_space} {'phi0':<11} {eq}{constants[i]}",
+                                file=fd,
+                            )
+                            print(f"{outer_space} {'}'}", file=fd)
+                            j += 4
+                    outer_space, inner_space = identation(1)
+                    print(f"{outer_space} {']'}", file=fd)
+                print(file=fd)
+                # ==============================================================
+                # Restraints block end
+                # ==============================================================
+                outer_space, inner_space = identation(0)
+                print(
+                    f"{inner_space} {'randomize_velocity.interval':<29} {eq}{'1.0'}",
+                    file=fd,
+                )
+                print(f"{inner_space} {'eneseq.interval':<29} {eq}{'0.3'}",
+                      file=fd)
+                print(f"{inner_space} {'trajectory.center':<29} {eq}{'[]'}",
+                      file=fd)
+                print(f"{outer_space}{'}'}", file=fd)
                 # solvate pocket block
                 outer_space, inner_space = identation(0)
                 print(file=fd)
@@ -489,7 +1001,8 @@ class Protocol:
                 )
                 gpu_text1 = '[["@*.*.annealing"] \'annealing = off temperature = "@*.*.temperature[0][0]"\''
                 gpu_text2 = '["==" "-gpu" "@*.*.jlaunch_opt[-1]"] \'ensemble.method = Langevin\']'
-                print(f"{inner_space} {'effect_if':<16}{eq}{gpu_text1}", file=fd)
+                print(f"{inner_space} {'effect_if':<16}{eq}{gpu_text1}",
+                      file=fd)
                 print(f"{inner_space} {' ':<19}{gpu_text2}", file=fd)
 
                 print(
@@ -520,30 +1033,160 @@ class Protocol:
                 )
                 outer_space, inner_space = identation(1)
                 print(f"{outer_space} {'}'}", file=fd)
+                # ==============================================================
                 # Restraints block
-                if self.p_opts.stage4_restraint.lower() is not None:
+                # ==============================================================
+                # Block for stage4 positional-restraints
+                if (int(self.p_opts.stage4_restraints_number_pos) != 0
+                        or int(self.p_opts.stage4_restraints_number_dist) != 0
+                        or int(self.p_opts.stage4_restraints_number_ang) != 0
+                        or int(self.p_opts.stage4_restraints_number_imp) != 0):
                     outer_space, inner_space = identation(1)
-                    print(f"{outer_space} {'restrain':<16}{eq}{'{'}", file=fd)
-                    print(
-                        f"{inner_space} {'atom':<16} {eq}{q}{self.p_opts.stage4_restraint}{q}",
-                        file=fd,
-                    )
-                    print(
-                        f"{inner_space} {'force_constant':<16} {eq}{self.p_opts.stage4_restraint_force}",
-                        file=fd,
-                    )
-                    print(f"{outer_space} {'}'}", file=fd)
-                outer_space, inner_space = identation(0)
+                    print(f"{outer_space} {'restraints.new':<16}{eq}{'['}",
+                          file=fd)
+                    if int(self.p_opts.stage4_restraints_number_pos) != 0:
+                        atoms, forces = self.set_restraint(
+                            "stage4",
+                            self.p_opts.stage4_restraints_number_pos,
+                            self.p_opts.stage4_restraints_atoms_pos,
+                            self.p_opts.stage4_restraints_forces_pos,
+                            "positional",
+                            None,
+                        )
+                        for i in range(
+                                int(self.p_opts.stage4_restraints_number_pos)):
+                            outer_space, inner_space = identation(2)
+                            print(f"{outer_space} {'{'}", file=fd)
+                            print(
+                                f"{inner_space} {'name':<11} {eq}{self.p_opts.name_pos}",
+                                file=fd)
+                            print(
+                                f"{inner_space} {'atoms':<11} {eq}[{q}{atoms[i]}{q}]",
+                                file=fd,
+                            )
+                            print(
+                                f"{inner_space} {'force_constants':<11} {eq}[{forces[i]} {forces[i]} {forces[i]}]",
+                                file=fd,
+                            )
+                            print(f"{outer_space} {'}'}", file=fd)
+
+                    if int(self.p_opts.stage4_restraints_number_dist) != 0:
+                        # Block for stage4 distance-restraints
+                        outer_space, inner_space = identation(1)
+                        atoms, forces, constants = self.set_restraint(
+                            "stage4",
+                            self.p_opts.stage4_restraints_number_dist,
+                            self.p_opts.stage4_restraints_atoms_dist,
+                            self.p_opts.stage4_restraints_forces_dist,
+                            "distance",
+                            self.p_opts.stage4_restraints_r0_dist,
+                        )
+                        j = 0
+                        for i in range(
+                                int(self.p_opts.stage4_restraints_number_dist)
+                        ):
+
+                            outer_space, inner_space = identation(2)
+                            print(f"{outer_space} {'{'}", file=fd)
+                            print(
+                                f"{inner_space} {'name':<11} {eq}{self.p_opts.name_dist}",
+                                file=fd)
+                            print(
+                                f"{inner_space} {'atoms':<11} {eq}[{q}{atoms[j]}{q} {q}{atoms[j+1]}{q}]",
+                                file=fd,
+                            )
+                            print(
+                                f"{inner_space} {'force_constants':<11} {eq}[{forces[i]}]",
+                                file=fd,
+                            )
+                            print(
+                                f"{inner_space} {'r0':<11} {eq}{constants[i]}",
+                                file=fd)
+                            print(f"{outer_space} {'}'}", file=fd)
+                            j += 2
+                    if int(self.p_opts.stage4_restraints_number_ang) != 0:
+                        # Block for stage4 angle-restraints
+                        outer_space, inner_space = identation(1)
+                        atoms, forces, constants = self.set_restraint(
+                            "stage4",
+                            self.p_opts.stage4_restraints_number_ang,
+                            self.p_opts.stage4_restraints_atoms_ang,
+                            self.p_opts.stage4_restraints_forces_ang,
+                            "angle",
+                            self.p_opts.stage4_restraints_theta0_ang,
+                        )
+                        j = 0
+                        for i in range(
+                                int(self.p_opts.stage4_restraints_number_ang)):
+                            outer_space, inner_space = identation(2)
+                            print(f"{outer_space} {'{'}", file=fd)
+                            print(
+                                f"{inner_space} {'name':<11} {eq}{self.p_opts.name_ang}",
+                                file=fd)
+                            print(
+                                f"{inner_space} {'atoms':<11} {eq}[{q}{atoms[j]}{q} {q}{atoms[j+1]}{q} {q}{atoms[j+2]}{q}]",
+                                file=fd,
+                            )
+                            print(
+                                f"{inner_space} {'force_constants':<11} {eq}[{forces[i]}]",
+                                file=fd,
+                            )
+                            print(
+                                f"{inner_space} {'theta0':<11} {eq}{constants[i]}",
+                                file=fd,
+                            )
+                            print(f"{outer_space} {'}'}", file=fd)
+                            j += 3
+                    if int(self.p_opts.stage4_restraints_number_imp) != 0:
+                        # Block for stage4 improper-restraints
+                        outer_space, inner_space = identation(1)
+                        atoms, forces, constants = self.set_restraint(
+                            "stage4",
+                            self.p_opts.stage4_restraints_number_imp,
+                            self.p_opts.stage4_restraints_atoms_imp,
+                            self.p_opts.stage4_restraints_forces_imp,
+                            "improper",
+                            self.p_opts.stage4_restraints_phi0_imp,
+                        )
+                        j = 0
+                        for i in range(
+                                int(self.p_opts.stage4_restraints_number_imp)):
+                            outer_space, inner_space = identation(2)
+                            print(f"{outer_space} {'{'}", file=fd)
+                            print(
+                                f"{inner_space} {'name':<11} {eq}{self.p_opts.name_imp}",
+                                file=fd)
+                            print(
+                                f"{inner_space} {'atoms':<11} {eq}[{q}{atoms[j]}{q} {q}{atoms[j+1]}{q} {q}{atoms[j+2]}{q} {q}{atoms[j+3]}{q}]",
+                                file=fd,
+                            )
+                            print(
+                                f"{inner_space} {'force_constants':<11} {eq}[{forces[i]}]",
+                                file=fd,
+                            )
+                            print(
+                                f"{inner_space} {'phi0':<11} {eq}{constants[i]}",
+                                file=fd,
+                            )
+                            print(f"{outer_space} {'}'}", file=fd)
+                            j += 4
+                    outer_space, inner_space = identation(1)
+                    print(f"{outer_space} {']'}", file=fd)
                 print(file=fd)
+                # ==============================================================
+                # Restraints block end
+                # ==============================================================
+                outer_space, inner_space = identation(0)
                 print(
                     f"{inner_space} {'randomize_velocity.interval':<29} {eq}{'1.0'}",
                     file=fd,
                 )
-                print(f"{inner_space} {'eneseq.interval':<29} {eq}{'0.3'}", file=fd)
-                print(f"{inner_space} {'trajectory.center':<29} {eq}{'[]'}", file=fd)
+                print(f"{inner_space} {'eneseq.interval':<29} {eq}{'0.3'}",
+                      file=fd)
+                print(f"{inner_space} {'trajectory.center':<29} {eq}{'[]'}",
+                      file=fd)
                 print(f"{outer_space}{'}'}", file=fd)
                 print(file=fd)
-
             # Stage 5 block
             if self.p_opts.stage5.lower() in ["yes", "on", "true"]:
                 outer_space, inner_space = identation(0)
@@ -554,7 +1197,8 @@ class Protocol:
                 )
                 gpu_text1 = '[["@*.*.annealing"] \'annealing = off temperature = "@*.*.temperature[0][0]"\''
                 gpu_text2 = '["==" "-gpu" "@*.*.jlaunch_opt[-1]"] \'ensemble.method = Langevin\']'
-                print(f"{inner_space} {'effect_if':<16}{eq}{gpu_text1}", file=fd)
+                print(f"{inner_space} {'effect_if':<16}{eq}{gpu_text1}",
+                      file=fd)
                 print(f"{inner_space} {' ':<19}{gpu_text2}", file=fd)
                 print(
                     f"{inner_space} {'time':<16}{eq}{self.p_opts.stage5_time}",
@@ -584,86 +1228,168 @@ class Protocol:
                 )
                 outer_space, inner_space = identation(1)
                 print(f"{outer_space} {'}'}", file=fd)
-                # Restraints block
-                if str(self.p_opts.stage5_restraint).lower() != "none":
+                ### Restraints block START ###
+                # Block for stage5 positional-restraints
+                if (int(self.p_opts.stage5_restraints_number_pos) != 0
+                        or int(self.p_opts.stage5_restraints_number_dist) != 0
+                        or int(self.p_opts.stage5_restraints_number_ang) != 0
+                        or int(self.p_opts.stage5_restraints_number_imp) != 0):
                     outer_space, inner_space = identation(1)
-                    print(f"{outer_space} {'restrain':<16}{eq}{'{'}", file=fd)
-                    print(
-                        f"{inner_space} {'atom':<16} {eq}{q}{self.p_opts.stage5_restraint}{q}",
-                        file=fd,
-                    )
-                    print(
-                        f"{inner_space} {'force_constant':<16} {eq}{self.p_opts.stage5_restraint_force}",
-                        file=fd,
-                    )
-                    print(f"{outer_space} {'}'}", file=fd)
-                outer_space, inner_space = identation(0)
+                    print(f"{outer_space} {'restraints.new':<16}{eq}{'['}",
+                          file=fd)
+                    if int(self.p_opts.stage5_restraints_number_pos) != 0:
+                        atoms, forces = self.set_restraint(
+                            "stage5",
+                            self.p_opts.stage5_restraints_number_pos,
+                            self.p_opts.stage5_restraints_atoms_pos,
+                            self.p_opts.stage5_restraints_forces_pos,
+                            "positional",
+                            None,
+                        )
+                        for i in range(
+                                int(self.p_opts.stage5_restraints_number_pos)):
+                            outer_space, inner_space = identation(2)
+                            print(f"{outer_space} {'{'}", file=fd)
+                            print(
+                                f"{inner_space} {'name':<11} {eq}{self.p_opts.name_pos}",
+                                file=fd)
+                            print(
+                                f"{inner_space} {'atoms':<11} {eq}[{q}{atoms[i]}{q}]",
+                                file=fd,
+                            )
+                            print(
+                                f"{inner_space} {'force_constants':<11} {eq}[{forces[i]} {forces[i]} {forces[i]}]",
+                                file=fd,
+                            )
+                            print(f"{outer_space} {'}'}", file=fd)
+                    if int(self.p_opts.stage5_restraints_number_dist) != 0:
+                        # Block for stage5 distance-restraints
+                        outer_space, inner_space = identation(1)
+                        atoms, forces, constants = self.set_restraint(
+                            "stage5",
+                            self.p_opts.stage5_restraints_number_dist,
+                            self.p_opts.stage5_restraints_atoms_dist,
+                            self.p_opts.stage5_restraints_forces_dist,
+                            "distance",
+                            self.p_opts.stage5_restraints_r0_dist,
+                        )
+                        j = 0
+                        for i in range(
+                                int(self.p_opts.stage5_restraints_number_dist)
+                        ):
+
+                            outer_space, inner_space = identation(2)
+                            print(f"{outer_space} {'{'}", file=fd)
+                            print(
+                                f"{inner_space} {'name':<11} {eq}{self.p_opts.name_dist}",
+                                file=fd)
+                            print(
+                                f"{inner_space} {'atoms':<11} {eq}[{q}{atoms[j]}{q} {q}{atoms[j+1]}{q}]",
+                                file=fd,
+                            )
+                            print(
+                                f"{inner_space} {'force_constants':<11} {eq}[{forces[i]}]",
+                                file=fd,
+                            )
+                            print(
+                                f"{inner_space} {'r0':<11} {eq}{constants[i]}",
+                                file=fd)
+                            print(f"{outer_space} {'}'}", file=fd)
+                            j += 2
+                    if int(self.p_opts.stage5_restraints_number_ang) != 0:
+                        # Block for stage5 angle-restraints
+                        outer_space, inner_space = identation(1)
+                        atoms, forces, constants = self.set_restraint(
+                            "stage5",
+                            self.p_opts.stage5_restraints_number_ang,
+                            self.p_opts.stage5_restraints_atoms_ang,
+                            self.p_opts.stage5_restraints_forces_ang,
+                            "angle",
+                            self.p_opts.stage5_restraints_theta0_ang,
+                        )
+                        j = 0
+                        for i in range(
+                                int(self.p_opts.stage5_restraints_number_ang)):
+                            outer_space, inner_space = identation(2)
+                            print(f"{outer_space} {'{'}", file=fd)
+                            print(
+                                f"{inner_space} {'name':<11} {eq}{self.p_opts.name_ang}",
+                                file=fd)
+                            print(
+                                f"{inner_space} {'atoms':<11} {eq}[{q}{atoms[j]}{q} {q}{atoms[j+1]}{q} {q}{atoms[j+2]}{q}]",
+                                file=fd,
+                            )
+                            print(
+                                f"{inner_space} {'force_constants':<11} {eq}[{forces[i]}]",
+                                file=fd,
+                            )
+                            print(
+                                f"{inner_space} {'theta0':<11} {eq}{constants[i]}",
+                                file=fd,
+                            )
+                            print(f"{outer_space} {'}'}", file=fd)
+                            j += 3
+                    if int(self.p_opts.stage5_restraints_number_imp) != 0:
+                        # Block for stage5 improper-restraints
+                        outer_space, inner_space = identation(1)
+                        atoms, forces, constants = self.set_restraint(
+                            "stage5",
+                            self.p_opts.stage5_restraints_number_imp,
+                            self.p_opts.stage5_restraints_atoms_imp,
+                            self.p_opts.stage5_restraints_forces_imp,
+                            "improper",
+                            self.p_opts.stage5_restraints_phi0_imp,
+                        )
+                        j = 0
+                        for i in range(
+                                int(self.p_opts.stage5_restraints_number_imp)):
+                            outer_space, inner_space = identation(2)
+                            print(f"{outer_space} {'{'}", file=fd)
+                            print(
+                                f"{inner_space} {'name':<11} {eq}{self.p_opts.name_imp}",
+                                file=fd)
+                            print(
+                                f"{inner_space} {'atoms':<11} {eq}[{q}{atoms[j]}{q} {q}{atoms[j+1]}{q} {q}{atoms[j+2]}{q} {q}{atoms[j+3]}{q}]",
+                                file=fd,
+                            )
+                            print(
+                                f"{inner_space} {'force_constants':<11} {eq}[{forces[i]}]",
+                                file=fd,
+                            )
+                            print(
+                                f"{inner_space} {'phi0':<11} {eq}{constants[i]}",
+                                file=fd,
+                            )
+                            print(f"{outer_space} {'}'}", file=fd)
+                            j += 4
+                    outer_space, inner_space = identation(1)
+                    print(f"{outer_space} {']'}", file=fd)
                 print(file=fd)
-                print(f"{inner_space} {'eneseq.interval':<29} {eq}{'0.3'}", file=fd)
+                ### Restraints block END ###
+                outer_space, inner_space = identation(0)
+                print(f"{inner_space} {'eneseq.interval':<29} {eq}{'0.3'}",
+                      file=fd)
                 print(
-                    f"{inner_space} {'trajectory.center':<29} {eq}{'solute'}", file=fd
-                )
+                    f"{inner_space} {'trajectory.center':<29} {eq}{'solute'}",
+                    file=fd)
                 print(f"{outer_space}{'}'}", file=fd)
                 print(file=fd)
             # Additional stages block
             if self.p_opts.additional_stages != None:
                 stages = int(self.p_opts.additional_stages)
-                stages_time = list(str(self.p_opts.additional_stage_times).split(","))
-                stages_temp = list(str(self.p_opts.additional_stage_temps).split(","))
+                stages_time = list(
+                    str(self.p_opts.additional_stage_times).split(","))
+                stages_temp = list(
+                    str(self.p_opts.additional_stage_temps).split(","))
                 stages_ensemble = list(
-                    str(self.p_opts.additional_stage_ensembles).split(",")
-                )
+                    str(self.p_opts.additional_stage_ensembles).split(","))
                 stages_method = list(
-                    str(self.p_opts.additional_stage_methods).split(",")
-                )
+                    str(self.p_opts.additional_stage_methods).split(","))
                 stages_thermostat_tau = list(
-                    str(self.p_opts.additional_stage_thermostat_tau).split(",")
-                )
+                    str(self.p_opts.additional_stage_thermostat_tau).split(
+                        ","))
                 stages_barostat_tau = list(
-                    str(self.p_opts.additional_stage_barostat_tau).split(",")
-                )
-                stages_restraint = list(
-                    str(self.p_opts.additional_stage_restraints).split(",")
-                )
-                stages_restraint_force = list(
-                    str(self.p_opts.additional_stage_restraints_forces).split(",")
-                )
-                if len(stages_time) >= 2 and stages != len(stages_time):
-                    raise ValueError(
-                        "The number of times in additional_stage_times must be one value or equal to the number of stages"
-                    )
-                if len(stages_temp) >= 2 and stages != len(stages_temp):
-                    raise ValueError(
-                        "The number of temperatures in additional_stage_temps must be one value or equal to the number of stages"
-                    )
-                if len(stages_ensemble) >= 2 and stages != len(stages_ensemble):
-                    raise ValueError(
-                        "The number of ensembles in additional_stage_ensembles must be one value or equal to the number of stages"
-                    )
-                if len(stages_method) >= 2 and stages != len(stages_method):
-                    raise ValueError(
-                        "The number of methods in additional_stage_methods must be one value or equal to the number of stages"
-                    )
-                if len(stages_restraint) >= 2 and stages != len(stages_restraint):
-                    raise ValueError(
-                        "The number of restraints in additional_stage_restraints must be one value or equal to the number of stages"
-                    )
-                if len(stages_restraint_force) >= 2 and stages != len(
-                    stages_restraint_force
-                ):
-                    raise ValueError(
-                        "The number of restraint_forces in additional_stage_restraints_forces must be one value or equal to the number of stages"
-                    )
-                print(file=fd)
-                print("Additional stages =", stages)
-                print("Additional stage times =", stages_time)
-                print("Additional stage temperatures =", stages_temp)
-                print("Additional stage ensembles =", stages_ensemble)
-                print("Additional stage methods =", stages_method)
-                print("Additional stage thermostat_tau =", stages_thermostat_tau)
-                print("Additional stage barostat_tau =", stages_barostat_tau)
-                print("Additional stage restraints =", stages_restraint)
-                print("Additional stage restraint_forces =", stages_restraint_force)
+                    str(self.p_opts.additional_stage_barostat_tau).split(","))
 
                 for stage in range(1, stages + 1):
                     outer_space, inner_space = identation(0)
@@ -674,36 +1400,29 @@ class Protocol:
                     )
                     gpu_text1 = '[["@*.*.annealing"] \'annealing = off temperature = "@*.*.temperature[0][0]"\''
                     gpu_text2 = '["==" "-gpu" "@*.*.jlaunch_opt[-1]"] \'ensemble.method = Langevin\']'
-                    print(f"{inner_space} {'effect_if':<16}{eq}{gpu_text1}", file=fd)
+                    print(f"{inner_space} {'effect_if':<16}{eq}{gpu_text1}",
+                          file=fd)
                     print(f"{inner_space} {' ':<19}{gpu_text2}", file=fd)
-                    if (
-                        self.p_opts.additional_stage_times != None
-                        and len(stages_time) == 1
-                    ):
+                    if (self.p_opts.additional_stage_times != None
+                            and len(stages_time) == 1):
                         print(
                             f"{inner_space} {'time':<16}{eq}{self.p_opts.additional_stage_times}",
                             file=fd,
                         )
-                    elif (
-                        self.p_opts.additional_stage_times != None
-                        and len(stages_time) == stages
-                    ):
+                    elif (self.p_opts.additional_stage_times != None
+                          and len(stages_time) == stages):
                         print(
                             f"{inner_space} {'time':<16}{eq}{stages_time[stage-1]}",
                             file=fd,
                         )
-                    if (
-                        self.p_opts.additional_stage_temps != None
-                        and len(stages_time) == 1
-                    ):
+                    if (self.p_opts.additional_stage_temps != None
+                            and len(stages_time) == 1):
                         print(
                             f"{inner_space} {'temperature':<16}{eq}{self.p_opts.additional_stage_temps}",
                             file=fd,
                         )
-                    elif (
-                        self.p_opts.additional_stage_temps != None
-                        and len(stages_temp) == stages
-                    ):
+                    elif (self.p_opts.additional_stage_temps != None
+                          and len(stages_temp) == stages):
                         print(
                             f"{inner_space} {'temperature':<16}{eq}{stages_temp[stage-1]}",
                             file=fd,
@@ -712,69 +1431,53 @@ class Protocol:
 
                     print(f"{outer_space} {'ensemble':<16}{eq}{'{'}", file=fd)
                     # Ensemble block
-                    if (
-                        self.p_opts.additional_stage_ensembles != None
-                        and len(stages_ensemble) == 1
-                    ):
+                    if (self.p_opts.additional_stage_ensembles != None
+                            and len(stages_ensemble) == 1):
                         print(
                             f"{inner_space} {'class':<11}{eq}{self.p_opts.additional_stage_ensembles}",
                             file=fd,
                         )
-                    elif (
-                        self.p_opts.additional_stage_ensembles != None
-                        and len(stages_ensemble) == stages
-                    ):
+                    elif (self.p_opts.additional_stage_ensembles != None
+                          and len(stages_ensemble) == stages):
                         print(
                             f"{inner_space} {'class':<11}{eq}{stages_ensemble[stage-1]}",
                             file=fd,
                         )
                     # Method block
-                    if (
-                        self.p_opts.additional_stage_methods != None
-                        and len(stages_method) == 1
-                    ):
+                    if (self.p_opts.additional_stage_methods != None
+                            and len(stages_method) == 1):
                         print(
                             f"{inner_space} {'method':<11}{eq}{self.p_opts.additional_stage_methods}",
                             file=fd,
                         )
-                    elif (
-                        self.p_opts.additional_stage_methods != None
-                        and len(stages_method) == stages
-                    ):
+                    elif (self.p_opts.additional_stage_methods != None
+                          and len(stages_method) == stages):
                         print(
                             f"{inner_space} {'method':<11}{eq}{stages_method[stage-1]}",
                             file=fd,
                         )
                     # Thermostat block
-                    if (
-                        self.p_opts.additional_stage_thermostat_tau != None
-                        and len(stages_thermostat_tau) == 1
-                    ):
+                    if (self.p_opts.additional_stage_thermostat_tau != None
+                            and len(stages_thermostat_tau) == 1):
                         print(
                             f"{inner_space} {'thermostat.tau':<15}{eq}{self.p_opts.additional_stage_thermostat_tau}",
                             file=fd,
                         )
-                    elif (
-                        self.p_opts.additional_stage_thermostat_tau != None
-                        and len(stages_thermostat_tau) == stages
-                    ):
+                    elif (self.p_opts.additional_stage_thermostat_tau != None
+                          and len(stages_thermostat_tau) == stages):
                         print(
                             f"{inner_space} {'thermostat.tau':<15}{eq}{stages_thermostat_tau[stage-1]}",
                             file=fd,
                         )
                     # Barostat block
-                    if (
-                        self.p_opts.additional_stage_barostat_tau != None
-                        and len(stages_barostat_tau) == 1
-                    ):
+                    if (self.p_opts.additional_stage_barostat_tau != None
+                            and len(stages_barostat_tau) == 1):
                         print(
                             f"{inner_space} {'barostat.tau':<15}{eq}{self.p_opts.additional_stage_barostat_tau}",
                             file=fd,
                         )
-                    elif (
-                        self.p_opts.additional_stage_barostat_tau != None
-                        and len(stages_barostat_tau) == stages
-                    ):
+                    elif (self.p_opts.additional_stage_barostat_tau != None
+                          and len(stages_barostat_tau) == stages):
                         print(
                             f"{inner_space} {'barostat.tau':<15}{eq}{stages_barostat_tau[stage-1]}",
                             file=fd,
@@ -782,52 +1485,190 @@ class Protocol:
 
                     outer_space, inner_space = identation(1)
                     print(f"{outer_space} {'}'}", file=fd)
-                    # Restraints block
-                    if (
-                        str(self.p_opts.additional_stage_restraints_forces).lower()
-                        != "none"
-                        and float(stages_restraint_force[stage - 1]) != 0.0
-                    ):
+                    ### Restraints block START ###
+                    if (self.p_opts.additional_stage_restraints_number_pos != 0
+                            or
+                            self.p_opts.additional_stage_restraints_number_dist
+                            != 0 or
+                            self.p_opts.additional_stage_restraints_number_ang
+                            != 0 or
+                            self.p_opts.additional_stage_restraints_number_imp
+                            != 0):
                         outer_space, inner_space = identation(1)
-                        print(f"{outer_space} {'restrain':<16}{eq}{'{'}", file=fd)
-                        # Atom block
-                        if (
-                            self.p_opts.additional_stage_restraints != None
-                            and len(stages_restraint) == 1
-                        ):
-                            print(
-                                f"{inner_space} {'atom':<16} {eq}{q}{self.p_opts.additional_stage_restraints}{q}",
-                                file=fd,
+                        stage = stage - 1
+                        header_rest = True
+                        if self.p_opts.additional_stage_restraints_number_pos != 0:
+                            atoms_pos, forces_pos, number_pos = self.set_restraint_multi(
+                                "additional_stage",
+                                self.p_opts.
+                                additional_stage_restraints_number_pos,
+                                self.p_opts.
+                                additional_stage_restraints_atoms_pos,
+                                self.p_opts.
+                                additional_stage_restraints_forces_pos,
+                                "positional",
+                                None,
                             )
-                        elif (
-                            self.p_opts.additional_stage_restraints != None
-                            and len(stages_restraint) == stages
-                        ):
-                            print(
-                                f"{inner_space} {'atom':<16} {eq}{q}{stages_restraint[stage-1]}{q}",
-                                file=fd,
+                            # Positional restraints variables
+                            long_pos = int(number_pos[stage])
+                            atoms_slice_pos = atoms_pos[0:long_pos]
+                            forces_slice_pos = forces_pos[0:long_pos]
+                            if long_pos != 0:
+                                if header_rest:
+                                    print(
+                                        f"{outer_space} {'restraints.new':<16}{eq}{'['}",
+                                        file=fd)
+                                    header_rest = False
+                                for r in range(long_pos):
+                                    print(f"{inner_space} {'{'}", file=fd)
+                                    print(
+                                        f"{inner_space} {'name':<16}{eq}{self.p_opts.name_pos}",
+                                        file=fd)
+                                    print(
+                                        f"{inner_space} {'atoms':<16}{eq}[{q}{atoms_slice_pos[r]}{q}]",
+                                        file=fd)
+                                    print(
+                                        f"{inner_space} {'force_constants':<16}{eq}[{forces_slice_pos[r]} {forces_slice_pos[r]} {forces_slice_pos[r]}]",
+                                        file=fd)
+                                    print(f"{inner_space} {'}'}", file=fd)
+                                    del atoms_pos[0]
+                                    del forces_pos[0]
+
+                        if self.p_opts.additional_stage_restraints_number_dist != 0:
+                            atoms_dist, forces_dist, number_dist, constants_dist = self.set_restraint_multi(
+                                "additional_stage",
+                                self.p_opts.
+                                additional_stage_restraints_number_dist,
+                                self.p_opts.
+                                additional_stage_restraints_atoms_dist,
+                                self.p_opts.
+                                additional_stage_restraints_forces_dist,
+                                "distance",
+                                self.p_opts.
+                                additional_stage_restraints_r0_dist,
                             )
-                        # Forces block
-                        if (
-                            self.p_opts.additional_stage_restraints_forces != None
-                            and len(stages_restraint_force) == 1
-                        ):
-                            print(
-                                f"{inner_space} {'force_constant':<16} {eq}{self.p_opts.additional_stage_restraints_forces}",
-                                file=fd,
+                            # Distance restraints variables
+                            long_dist = int(number_dist[stage])
+                            atoms_slice_dist = atoms_dist[0:long_dist]
+                            forces_slice_dist = forces_dist[0:long_dist]
+                            constants_slice_dist = constants_dist[0:long_dist]
+                            if long_dist != 0:
+                                if header_rest:
+                                    print(
+                                        f"{outer_space} {'restraints.new':<16}{eq}{'['}",
+                                        file=fd)
+                                    header_rest = False
+                                for r in range(long_dist):
+                                    print(f"{inner_space} {'{'}", file=fd)
+                                    print(
+                                        f"{inner_space} {'name':<16}{eq}{self.p_opts.name_dist}",
+                                        file=fd)
+                                    print(
+                                        f"{inner_space} {'atoms':<16}{eq}[{q}{atoms_slice_dist[r][0]}{q} {q}{atoms_slice_dist[r][1]}{q}]",
+                                        file=fd)
+                                    print(
+                                        f"{inner_space} {'force_constants':<16}{eq}[{forces_slice_dist[r]}]",
+                                        file=fd)
+                                    print(
+                                        f"{inner_space} {'r0':<16}{eq}{constants_slice_dist[r]}",
+                                        file=fd)
+                                    print(f"{inner_space} {'}'}", file=fd)
+                                    del atoms_dist[0]
+                                    del forces_dist[0]
+                                    del constants_dist[0]
+
+                        if self.p_opts.additional_stage_restraints_number_ang != 0:
+                            atoms_ang, forces_ang, number_ang, constants_ang = self.set_restraint_multi(
+                                "additional_stage",
+                                self.p_opts.
+                                additional_stage_restraints_number_ang,
+                                self.p_opts.
+                                additional_stage_restraints_atoms_ang,
+                                self.p_opts.
+                                additional_stage_restraints_forces_ang,
+                                "angle",
+                                self.p_opts.
+                                additional_stage_restraints_theta0_ang,
                             )
-                        elif (
-                            self.p_opts.additional_stage_restraints_forces != None
-                            and len(stages_restraint_force) == stages
-                        ):
-                            print(
-                                f"{inner_space} {'force_constant':<16} {eq}{stages_restraint_force[stage-1]}",
-                                file=fd,
+                            # Angle restraints variables
+                            long_ang = int(number_ang[stage])
+                            atoms_slice_ang = atoms_ang[0:long_ang]
+                            forces_slice_ang = forces_ang[0:long_ang]
+                            constants_slice_ang = constants_ang[0:long_ang]
+                            if long_ang != 0:
+                                if header_rest:
+                                    print(
+                                        f"{outer_space} {'restraints.new':<16}{eq}{'['}",
+                                        file=fd)
+                                    header_rest = False
+                                for r in range(long_ang):
+                                    print(f"{inner_space} {'{'}", file=fd)
+                                    print(
+                                        f"{inner_space} {'name':<16}{eq}{self.p_opts.name_ang}",
+                                        file=fd)
+                                    print(
+                                        f"{inner_space} {'atoms':<16}{eq}[{q}{atoms_slice_ang[r][0]}{q} {q}{atoms_slice_ang[r][1]}{q} {q}{atoms_slice_ang[r][2]}{q}]",
+                                        file=fd)
+                                    print(
+                                        f"{inner_space} {'force_constants':<16}{eq}[{forces_slice_ang[r]}]",
+                                        file=fd)
+                                    print(
+                                        f"{inner_space} {'theta0':<16}{eq}{constants_slice_ang[r]}",
+                                        file=fd)
+                                    print(f"{inner_space} {'}'}", file=fd)
+                                    del atoms_ang[0]
+                                    del forces_ang[0]
+                                    del constants_ang[0]
+
+                        if self.p_opts.additional_stage_restraints_number_imp != 0:
+                            atoms_imp, forces_imp, number_imp, constants_imp = self.set_restraint_multi(
+                                "additional_stage",
+                                self.p_opts.
+                                additional_stage_restraints_number_imp,
+                                self.p_opts.
+                                additional_stage_restraints_atoms_imp,
+                                self.p_opts.
+                                additional_stage_restraints_forces_imp,
+                                "improper",
+                                self.p_opts.
+                                additional_stage_restraints_phi0_imp,
                             )
-                        print(f"{outer_space} {'}'}", file=fd)
+                            #                        Improper restraints variables
+                            long_imp = int(number_imp[stage])
+                            atoms_slice_imp = atoms_imp[0:long_imp]
+                            forces_slice_imp = forces_imp[0:long_imp]
+                            constants_slice_imp = constants_imp[0:long_imp]
+
+                            if long_imp != 0:
+                                if header_rest:
+                                    print(
+                                        f"{outer_space} {'restraints.new':<16}{eq}{'['}",
+                                        file=fd)
+                                    header_rest = False
+                                for r in range(long_imp):
+                                    print(f"{inner_space} {'{'}", file=fd)
+                                    print(
+                                        f"{inner_space} {'name':<16}{eq}{self.p_opts.name_imp}",
+                                        file=fd)
+                                    print(
+                                        f"{inner_space} {'atoms':<16}{eq}[{q}{atoms_slice_imp[r][0]}{q} {q}{atoms_slice_imp[r][1]}{q} {q}{atoms_slice_imp[r][2]}{q} {q}{atoms_slice_imp[r][3]}{q}]",
+                                        file=fd)
+                                    print(
+                                        f"{inner_space} {'force_constants':<16}{eq}[{forces_slice_imp[r]}]",
+                                        file=fd)
+                                    print(
+                                        f"{inner_space} {'theta0':<16}{eq}{constants_slice_imp[r]}",
+                                        file=fd)
+                                    print(f"{inner_space} {'}'}", file=fd)
+                                    del atoms_imp[0]
+                                    del forces_imp[0]
+                                    del constants_imp[0]
+                        print(f"{outer_space} {']'}", file=fd)
+                        #### Restraints block end ####
                     outer_space, inner_space = identation(0)
                     print(file=fd)
-                    print(f"{inner_space} {'eneseq.interval':<29} {eq}{'0.3'}", file=fd)
+                    print(f"{inner_space} {'eneseq.interval':<29} {eq}{'0.3'}",
+                          file=fd)
                     print(
                         f"{inner_space} {'trajectory.center':<29} {eq}{'solute'}",
                         file=fd,
@@ -852,6 +1693,315 @@ class Protocol:
                 print(file=fd)
                 self.write_cfg_file()
 
+    def set_restraint_multi(
+        self,
+        stage_name: str,
+        stage_restraints_number: str,
+        stage_restraints_atoms: str,
+        stage_restraints_forces: str,
+        rest_type: str,
+        constant: Optional[str],
+    ) -> None:
+        stage_name = stage_name
+        number = list(str(stage_restraints_number).split(","))
+        list_atoms = list(str(stage_restraints_atoms).split(","))
+        list_forces = list(str(stage_restraints_forces).split(","))
+        rest_type = rest_type
+        list_constants = list(
+            str(constant).split(",")) if constant != None else None
+        list_number_long = sum(map(int, number))
+        # Block to check the number of restraints for positional restraints
+        if rest_type == "positional":
+            if len(list_forces) != list_number_long:
+                raise ValueError(
+                    f"The number of forces in the restraint ({stage_name}_restraints_forces_pos) must be equal to the number of {stage_name}_restraints_number_pos"
+                )
+            elif len(list_atoms) != list_number_long:
+                raise ValueError(
+                    f"The number of ASL in the restraint ({stage_name}_restraints_atoms_pos) must be equal to the number of {stage_name}_restraints_number_pos"
+                )
+
+            atoms = []
+            forces = []
+
+            for i in range(len(number)):
+                for j in range(int(number[i])):
+                    atoms.append(list_atoms[0])
+                    forces.append(list_forces[0])
+                    del list_atoms[0]
+                    del list_forces[0]
+            return atoms, forces, number
+        # Block to check the number of restraints for distance restraints
+        if rest_type == "distance":
+            if len(list_forces) != list_number_long:
+                raise ValueError(
+                    f"The number of forces in the restraint ({stage_name}_restraints_forces_dist) must be equal to the number of {stage_name}_restraints_number_dist"
+                )
+            elif len(list_atoms) != list_number_long * 2:
+                raise ValueError(
+                    f"The number of ASL in the restraint ({stage_name}_restraints_atoms_dist) must be twice the number of {stage_name}_restraints_number_dist"
+                )
+            elif len(list_constants) != list_number_long:
+                raise ValueError(
+                    f"The number of constants in the restraint ({stage_name}_restraints_r0_dist) must be equal to the number of {stage_name}_restraints_number_dist"
+                )
+
+            atoms = []
+            forces = []
+            constants = []
+
+            for i in range(len(number)):
+                for j in range(int(number[i])):
+                    atoms.append(list_atoms[0:2])
+                    forces.append(list_forces[0])
+                    constants.append(list_constants[0])
+                    del list_atoms[0:2]
+                    del list_forces[0]
+                    del list_constants[0]
+            return atoms, forces, number, constants
+
+        # Block to check the number of restraints for angle restraints
+        if rest_type == "angle":
+            if len(list_forces) != list_number_long:
+                raise ValueError(
+                    f"The number of forces in the restraint ({stage_name}_restraints_forces_ang) must be equal to the number of {stage_name}_restraints_number_ang"
+                )
+            elif len(list_atoms) != list_number_long * 3:
+                raise ValueError(
+                    f"The number of ASL in the restraint ({stage_name}_restraints_atoms_ang) must be three times the number of {stage_name}_restraints_number_ang"
+                )
+            elif len(list_constants) != list_number_long:
+                raise ValueError(
+                    f"The number of constants in the restraint ({stage_name}_restraints_r0_ang) must be equal to the number of {stage_name}_restraints_number_ang"
+                )
+
+            atoms = []
+            forces = []
+            constants = []
+
+            for i in range(len(number)):
+                for j in range(int(number[i])):
+                    atoms.append(list_atoms[0:3])
+                    forces.append(list_forces[0])
+                    constants.append(list_constants[0])
+                    del list_atoms[0:3]
+                    del list_forces[0]
+                    del list_constants[0]
+            return atoms, forces, number, constants
+
+        # Block to check the number of restraints for improper restraints
+        if rest_type == "improper":
+            if len(list_forces) != list_number_long:
+                raise ValueError(
+                    f"The number of forces in the restraint ({stage_name}_restraints_forces_imp) must be equal to the number of {stage_name}_restraints_number_imp"
+                )
+            elif len(list_atoms) != list_number_long * 4:
+                raise ValueError(
+                    f"The number of ASL in the restraint ({stage_name}_restraints_atoms_imp) must be four times the number of {stage_name}_restraints_number_imp"
+                )
+            elif len(list_constants) != list_number_long:
+                raise ValueError(
+                    f"The number of constants in the restraint ({stage_name}_restraints_r0_imp) must be equal to the number of {stage_name}_restraints_number_imp"
+                )
+
+            atoms = []
+            forces = []
+            constants = []
+
+            for i in range(len(number)):
+                for j in range(int(number[i])):
+                    atoms.append(list_atoms[0:4])
+                    forces.append(list_forces[0])
+                    constants.append(list_constants[0])
+                    del list_atoms[0:4]
+                    del list_forces[0]
+                    del list_constants[0]
+            return atoms, forces, number, constants
+
+    def set_restraint(
+        self,
+        stage_name: str,
+        stage_restraints_number: str,
+        stage_restraints_atoms: str,
+        stage_restraints_forces: str,
+        rest_type: str,
+        constant: Optional[str],
+    ) -> None:
+        stage_name = stage_name
+        stage_rest_number = int(stage_restraints_number)
+        stage_rest_atoms = list(str(stage_restraints_atoms).split(","))
+        stage_rest_forces = list(str(stage_restraints_forces).split(","))
+        rest_type = rest_type
+        constant = list(str(constant).split(",")) if constant != None else None
+        eq = "= "
+        q = '"'
+
+        # Block to check the number of restraints for positional restraints
+        if rest_type == "positional":
+            if len(stage_rest_forces) >= 2 and stage_rest_number != len(
+                    stage_rest_forces):
+                raise ValueError(
+                    f"The number of forces in the restraint ({stage_name}_restraints_forces_pos) must be one value or equal to the number of {stage_name}_restraints_number_pos"
+                )
+            elif len(stage_rest_atoms) >= 2 and stage_rest_number != len(
+                    stage_rest_atoms):
+                raise ValueError(
+                    f"The number of ASL in the restraint ({stage_name}_restraints_atoms_pos) must be one value or equal to the number of {stage_name}_restraints_number_pos"
+                )
+            # Block to set the restraints
+            atoms = []
+            forces = []
+            if stage_rest_number != 0 and len(stage_rest_atoms) != 1:
+                for rest in range(1, stage_rest_number + 1):
+                    atoms.append(stage_rest_atoms[rest - 1])
+
+            if stage_rest_number != 0 and len(stage_rest_forces) != 1:
+                for rest in range(1, stage_rest_number + 1):
+                    forces.append(stage_rest_forces[rest - 1])
+
+            if stage_rest_number != 0 and len(stage_rest_atoms) == 1:
+                for rest in range(1, stage_rest_number + 1):
+                    atoms.append(stage_rest_atoms[0])
+
+            if stage_rest_number != 0 and len(stage_rest_forces) == 1:
+                for rest in range(1, stage_rest_number + 1):
+                    forces.append(stage_rest_forces[0])
+
+            return atoms, forces
+
+        # Block to check the number of restraints for distance restraints
+        if rest_type == "distance":
+            if len(stage_rest_atoms) / 2 != stage_rest_number:
+                raise ValueError(
+                    f"The number of selections ({stage_name}_restraints_atoms_dist) should be twice the number of restraints. Check {stage_name}_restraints_number_dist and {stage_name}_restraints_atoms_dist"
+                )
+            elif len(stage_rest_forces) >= 2 and stage_rest_number != len(
+                    stage_rest_forces):
+                raise ValueError(
+                    f"The number of forces in the restraint ({stage_name}_restraints_forces_dist) must be one value or equal to the number of {stage_name}_restraints_number_dist"
+                )
+            elif len(constant) >= 2 and stage_rest_number != len(constant):
+                raise ValueError(
+                    f"The number of constants in the restraint ({stage_name}_restraints_r0_dist) must be one value or equal to the number of {stage_name}_restraints_number_dist"
+                )
+            # Block to set the restraints
+            atoms = []
+            forces = []
+            constants = []
+            if stage_rest_number != 0 and len(stage_rest_atoms) != 1:
+                for rest in range(1, stage_rest_number * 2 + 1):
+                    atoms.append(stage_rest_atoms[rest - 1])
+
+            if stage_rest_number != 0 and len(stage_rest_forces) != 1:
+                for rest in range(1, stage_rest_number + 1):
+                    forces.append(stage_rest_forces[rest - 1])
+
+            if stage_rest_number != 0 and len(constant) != 1:
+                for rest in range(1, stage_rest_number + 1):
+                    constants.append(constant[rest - 1])
+
+            if stage_rest_number != 0 and len(stage_rest_atoms) == 1:
+                for rest in range(1, stage_rest_number * 2 + 1):
+                    atoms.append(stage_rest_atoms[0])
+
+            if stage_rest_number != 0 and len(stage_rest_forces) == 1:
+                for rest in range(1, stage_rest_number + 1):
+                    forces.append(stage_rest_forces[0])
+
+            if stage_rest_number != 0 and len(constant) == 1:
+                for rest in range(1, stage_rest_number + 1):
+                    constants.append(constant[0])
+
+            return atoms, forces, constants
+        # Block to check the number of restraints for angle restraints
+        if rest_type == "angle":
+            if len(stage_rest_atoms) / 3 != stage_rest_number:
+                raise ValueError(
+                    f"The number of selections ({stage_name}_restraints_atoms_ang) should be three times the number of restraints. Check {stage_name}_restraints_number_ang and {stage_name}_restraints_atoms_ang"
+                )
+            elif len(stage_rest_forces) >= 2 and stage_rest_number != len(
+                    stage_rest_forces):
+                raise ValueError(
+                    f"The number of forces in the restraint ({stage_name}_restraints_forces_ang) must be one value or equal to the number of {stage_name}_restraints_number_ang"
+                )
+            elif len(constant) >= 2 and stage_rest_number != len(constant):
+                raise ValueError(
+                    f"The number of constants in the restraint ({stage_name}_restraints_theta0_ang) must be one value or equal to the number of {stage_name}_restraints_number_ang"
+                )
+            # Block to set the restraints
+            atoms = []
+            forces = []
+            constants = []
+            if stage_rest_number != 0 and len(stage_rest_atoms) != 1:
+                for rest in range(1, stage_rest_number * 3 + 1):
+                    atoms.append(stage_rest_atoms[rest - 1])
+
+            if stage_rest_number != 0 and len(stage_rest_forces) != 1:
+                for rest in range(1, stage_rest_number + 1):
+                    forces.append(stage_rest_forces[rest - 1])
+
+            if stage_rest_number != 0 and len(constant) != 1:
+                for rest in range(1, stage_rest_number + 1):
+                    constants.append(constant[rest - 1])
+
+            if stage_rest_number != 0 and len(stage_rest_atoms) == 1:
+                for rest in range(1, stage_rest_number * 3 + 1):
+                    atoms.append(stage_rest_atoms[0])
+
+            if stage_rest_number != 0 and len(stage_rest_forces) == 1:
+                for rest in range(1, stage_rest_number + 1):
+                    forces.append(stage_rest_forces[0])
+
+            if stage_rest_number != 0 and len(constant) == 1:
+                for rest in range(1, stage_rest_number + 1):
+                    constants.append(constant[0])
+
+            return atoms, forces, constants
+        # Block to check the number of restraints for improper restraints
+        if rest_type == "improper":
+            if len(stage_rest_atoms) / 4 != stage_rest_number:
+                raise ValueError(
+                    f"The number of selections ({stage_name}_restraints_atoms_imp) should be three times the number of restraints. Check {stage_name}_restraints_number_imp and {stage_name}_restraints_atoms_imp"
+                )
+            elif len(stage_rest_forces) >= 2 and stage_rest_number != len(
+                    stage_rest_forces):
+                raise ValueError(
+                    f"The number of forces in the restraint ({stage_name}_restraints_forces_imp) must be one value or equal to the number of {stage_name}_restraints_number_imp"
+                )
+            elif len(constant) >= 2 and stage_rest_number != len(constant):
+                raise ValueError(
+                    f"The number of constants in the restraint ({stage_name}_restraints_theta0_imp) must be one value or equal to the number of {stage_name}_restraints_number_imp"
+                )
+            # Block to set the restraints
+            atoms = []
+            forces = []
+            constants = []
+            if stage_rest_number != 0 and len(stage_rest_atoms) != 1:
+                for rest in range(1, stage_rest_number * 4 + 1):
+                    atoms.append(stage_rest_atoms[rest - 1])
+
+            if stage_rest_number != 0 and len(stage_rest_forces) != 1:
+                for rest in range(1, stage_rest_number + 1):
+                    forces.append(stage_rest_forces[rest - 1])
+
+            if stage_rest_number != 0 and len(constant) != 1:
+                for rest in range(1, stage_rest_number + 1):
+                    constants.append(constant[rest - 1])
+
+            if stage_rest_number != 0 and len(stage_rest_atoms) == 1:
+                for rest in range(1, stage_rest_number * 4 + 1):
+                    atoms.append(stage_rest_atoms[0])
+
+            if stage_rest_number != 0 and len(stage_rest_forces) == 1:
+                for rest in range(1, stage_rest_number + 1):
+                    forces.append(stage_rest_forces[0])
+
+            if stage_rest_number != 0 and len(constant) == 1:
+                for rest in range(1, stage_rest_number + 1):
+                    constants.append(constant[0])
+
+            return atoms, forces, constants
+
     def write_cfg_file(self) -> None:
         eq = "= "
         q = '"'
@@ -874,7 +2024,8 @@ class Protocol:
                 f"{inner_space} {'interval':<16}{eq}{self.p_opts.production_checkpt_interval}",
                 file=fd,
             )
-            print(f"{inner_space} {'name':<16}{eq}{q}{'$JOBNAME.cpt'}{q}", file=fd)
+            print(f"{inner_space} {'name':<16}{eq}{q}{'$JOBNAME.cpt'}{q}",
+                  file=fd)
             print(
                 f"{inner_space} {'write_last_step':<16}{eq}{self.p_opts.production_write_last_step}",
                 file=fd,
@@ -928,8 +2079,8 @@ class Protocol:
             outer_space, inner_space = identation(0)
             print(f"{outer_space}{'}'}", file=fd)
             print(
-                f"{outer_space}{'glue':<20}{eq}{self.p_opts.production_glue}", file=fd
-            )
+                f"{outer_space}{'glue':<20}{eq}{self.p_opts.production_glue}",
+                file=fd)
             print(f"{outer_space}{'maeff_output':<20}{eq}{'{'}", file=fd)
             print(
                 f"{inner_space} {'first':<16}{eq}{self.p_opts.production_maeff_first}",
@@ -949,8 +2100,8 @@ class Protocol:
             print(f"{inner_space} {'trjdir':<16}{eq}{name_trjdir}", file=fd)
             print(f"{outer_space}{'}'}", file=fd)
             print(
-                f"{outer_space}{'meta':<20}{eq}{self.p_opts.production_meta}", file=fd
-            )
+                f"{outer_space}{'meta':<20}{eq}{self.p_opts.production_meta}",
+                file=fd)
             print(f"{outer_space}{'meta_file':<20}{eq}{'?'}", file=fd)
             print(
                 f"{outer_space}{'pressure':<20}{eq}[{self.p_opts.production_pressure} {self.p_opts.production_pressure_type}]",
@@ -974,20 +2125,155 @@ class Protocol:
                 file=fd,
             )
             print(f"{outer_space}{'}'}", file=fd)
-            if str(self.p_opts.production_restraint).lower() != "none":
+            ### Restraints block START ###
+            # Block for production positional-restraints
+            if (int(self.p_opts.production_restraints_number_pos) != 0
+                    or int(self.p_opts.production_restraints_number_dist) != 0
+                    or int(self.p_opts.production_restraints_number_ang) != 0
+                    or int(self.p_opts.production_restraints_number_imp) != 0):
                 outer_space, inner_space = identation(0)
-                print(f"{outer_space}{'restrain':<20}{eq}{'{'}", file=fd)
-                print(
-                    f"{inner_space} {'atom':<15} {eq}{q}{self.p_opts.production_restraint}{q}",
-                    file=fd,
-                )
-                if self.p_opts.production_restraint_force is None:
-                    raise ValueError("You must set the force for the restraint")
-                print(
-                    f"{inner_space} {'force_constant':<15} {eq}{self.p_opts.production_restraint_force}",
-                    file=fd,
-                )
-                print(f"{outer_space}{'}'}", file=fd)
+                print(f"{outer_space}{'restraints.new':<16}{eq}{'['}", file=fd)
+                if int(self.p_opts.production_restraints_number_pos) != 0:
+                    atoms, forces = self.set_restraint(
+                        "production",
+                        self.p_opts.production_restraints_number_pos,
+                        self.p_opts.production_restraints_atoms_pos,
+                        self.p_opts.production_restraints_forces_pos,
+                        "positional",
+                        None,
+                    )
+                    for i in range(
+                            int(self.p_opts.production_restraints_number_pos)):
+                        outer_space, inner_space = identation(1)
+                        print(f"{outer_space}{'{'}", file=fd)
+                        print(
+                            f"{inner_space}{'name':<11} {eq}{self.p_opts.name_pos}",
+                            file=fd)
+                        print(
+                            f"{inner_space}{'atoms':<11} {eq}[{q}{atoms[i]}{q}]",
+                            file=fd,
+                        )
+                        print(
+                            f"{inner_space}{'force_constants':<11} {eq}[{forces[i]} {forces[i]} {forces[i]}]",
+                            file=fd,
+                        )
+                        print(f"{outer_space} {'}'}", file=fd)
+                if int(self.p_opts.production_restraints_number_dist) != 0:
+                    # Block for production distance-restraints
+                    outer_space, inner_space = identation(0)
+                    atoms, forces, constants = self.set_restraint(
+                        "production",
+                        self.p_opts.production_restraints_number_dist,
+                        self.p_opts.production_restraints_atoms_dist,
+                        self.p_opts.production_restraints_forces_dist,
+                        "distance",
+                        self.p_opts.production_restraints_r0_dist,
+                    )
+                    j = 0
+                    for i in range(
+                            int(self.p_opts.production_restraints_number_dist)
+                    ):
+                        outer_space, inner_space = identation(1)
+                        print(f"{outer_space}{'{'}", file=fd)
+                        print(
+                            f"{inner_space}{'name':<11} {eq}{self.p_opts.name_dist}",
+                            file=fd)
+                        print(
+                            f"{inner_space}{'atoms':<11} {eq}[{q}{atoms[j]}{q} {q}{atoms[j+1]}{q}]",
+                            file=fd,
+                        )
+                        print(
+                            f"{inner_space}{'force_constants':<11} {eq}[{forces[i]}]",
+                            file=fd,
+                        )
+                        print(f"{inner_space}{'r0':<11} {eq}{constants[i]}",
+                              file=fd)
+                        print(f"{outer_space}{'}'}", file=fd)
+                        j += 2
+                if int(self.p_opts.production_restraints_number_ang) != 0:
+                    # Block for production angle-restraints
+                    outer_space, inner_space = identation(0)
+                    atoms, forces, constants = self.set_restraint(
+                        "production",
+                        self.p_opts.production_restraints_number_ang,
+                        self.p_opts.production_restraints_atoms_ang,
+                        self.p_opts.production_restraints_forces_ang,
+                        "angle",
+                        self.p_opts.production_restraints_theta0_ang,
+                    )
+                    j = 0
+                    for i in range(
+                            int(self.p_opts.production_restraints_number_ang)):
+                        outer_space, inner_space = identation(1)
+                        print(f"{outer_space}{'{'}", file=fd)
+                        print(
+                            f"{inner_space}{'name':<11} {eq}{self.p_opts.name_ang}",
+                            file=fd)
+                        print(
+                            f"{inner_space}{'atoms':<11} {eq}[{q}{atoms[j]}{q} {q}{atoms[j+1]}{q} {q}{atoms[j+2]}{q}]",
+                            file=fd,
+                        )
+                        print(
+                            f"{inner_space}{'force_constants':<11} {eq}[{forces[i]}]",
+                            file=fd,
+                        )
+                        print(
+                            f"{inner_space}{'theta0':<11} {eq}{constants[i]}",
+                            file=fd,
+                        )
+                        print(f"{outer_space}{'}'}", file=fd)
+                        j += 3
+                if int(self.p_opts.production_restraints_number_imp) != 0:
+                    # Block for production improper-restraints
+                    outer_space, inner_space = identation(0)
+                    atoms, forces, constants = self.set_restraint(
+                        "production",
+                        self.p_opts.production_restraints_number_imp,
+                        self.p_opts.production_restraints_atoms_imp,
+                        self.p_opts.production_restraints_forces_imp,
+                        "improper",
+                        self.p_opts.production_restraints_phi0_imp,
+                    )
+                    j = 0
+                    for i in range(
+                            int(self.p_opts.production_restraints_number_imp)):
+                        outer_space, inner_space = identation(1)
+                        print(f"{outer_space}{'{'}", file=fd)
+                        print(
+                            f"{inner_space}{'name':<11} {eq}{self.p_opts.name_imp}",
+                            file=fd)
+                        print(
+                            f"{inner_space}{'atoms':<11} {eq}[{q}{atoms[j]}{q} {q}{atoms[j+1]}{q} {q}{atoms[j+2]}{q} {q}{atoms[j+3]}{q}]",
+                            file=fd,
+                        )
+                        print(
+                            f"{inner_space}{'force_constants':<11} {eq}[{forces[i]}]",
+                            file=fd,
+                        )
+                        print(
+                            f"{inner_space}{'phi0':<11} {eq}{constants[i]}",
+                            file=fd,
+                        )
+                        print(f"{outer_space}{'}'}", file=fd)
+                        j += 4
+                print(f"{outer_space}{']'}", file=fd)
+            print(file=fd)
+            ### Restraints block END ###
+
+            ##print(f"{outer_space}{'restrain':<20}{eq}{'{'}", file=fd)
+            ##print(
+            ##    f"{inner_space} {'atom':<15} {eq}{q}{self.p_opts.production_restraint}{q}",
+            ##    file=fd,
+            ##)
+            ##if self.p_opts.production_restraint_force is None:
+            ##    raise ValueError(
+            ##        "You must set the force for the restraint")
+            ##print(
+            ##    f"{inner_space} {'force_constant':<15} {eq}{self.p_opts.production_restraint_force}",
+            ##    file=fd,
+            ##)
+            ##print(f"{outer_space}{'}'}", file=fd)
+            outer_space, inner_space = identation(0)
             print(f"{outer_space}{'simbox':<20}{eq}{'{'}", file=fd)
             print(
                 f"{inner_space} {'first':<16}{eq}{self.p_opts.production_simbox_first}",
@@ -1054,14 +2340,15 @@ class Protocol:
             print(f"{outer_space}{'}'}", file=fd)
 
     def write_protocol_sh(self) -> None:
-        executable = os.path.join(self.builder_opts.desmond_path, "utilities/multisim")
+        executable = os.path.join(self.builder_opts.desmond_path,
+                                  "utilities/multisim")
         path_preparation_sh = str(self.basename + "_md.sh")
         input_msj = str(self.basename + "_md.msj")
         input_cms = self.basename + "_preparation" + "-out.cms"
         input_cfg = self.basename + "_md.cfg"
         gpu_opts = 'stage[1].set_family.md.jlaunch_opt=["-gpu"]'
         args1 = f"-HOST localhost -JOBNAME {self.basename}_md -maxjob 1 -cpu 1 -m {input_msj} -c {input_cfg} {input_cms}"
-        args2 = f"-mode umbrella -set '{gpu_opts}' -o {self.basename}_md-out.cms"
+        args2 = f"-mode umbrella -set '{gpu_opts}' -o {self.basename}_md-out.cms -LOCAL"
         with open(path_preparation_sh, "w", encoding="utf8") as fd:
             print(executable, args1, args2, file=fd)
 
@@ -1076,15 +2363,15 @@ def parse_args(argv):
         formatter_class=argparse.RawDescriptionHelpFormatter,
         add_help=False,
     )
-    conf_parser.add_argument(
-        "-i", "--input", help="Specify a configuration file", metavar="FILE"
-    )
+    conf_parser.add_argument("-i",
+                             "--input",
+                             help="Specify a configuration file",
+                             metavar="FILE")
     args, remaining_argv = conf_parser.parse_known_args()
 
     defaults = {"desmond_path": "$SCHRODINGER"}
 
-    print(
-        """
+    print("""
     █▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█
     █   ┌┬┐┌─┐┌─┐┌┬┐┌─┐┌┐┌┌┬┐  ┌┐ ┬ ┬┬┬  ┌┬┐┌─┐┬─┐       █
     █    ││├┤ └─┐││││ ││││ ││  ├┴┐│ │││   ││├┤ ├┬┘       █
@@ -1102,8 +2389,7 @@ def parse_args(argv):
     Mauricio Bedoya
     maurobedoyat@gmail.com"
     
-    """
-    )
+    """)
 
     try:
         if args.input:
@@ -1118,8 +2404,7 @@ def parse_args(argv):
     # Don't suppress add_help here so it will handle -h
     parser = argparse.ArgumentParser(
         # Inherit options from config_parser
-        parents=[conf_parser]
-    )
+        parents=[conf_parser])
     parser.set_defaults(**defaults)
     args = parser.parse_args(remaining_argv)
     build_opts = {}
@@ -1182,7 +2467,8 @@ class ReadMaefile:
 
 def check_folder_analysis(folder_name: str):
     if path.isdir(folder_name):
-        raise ValueError(f"Folder '{folder_name}' exists, remove it before to continue")
+        raise ValueError(
+            f"Folder '{folder_name}' exists, remove it before to continue")
     else:
         os.makedirs(folder_name)
         os.chdir(folder_name)
@@ -1217,25 +2503,27 @@ class Builder:
             print(f"{outer_space}build_geometry {'{'}", file=fd)
             # add_counterions block
             outer_space, inner_space = identation(1)
-            if (
-                self.counterions.lower() in ["yes", "on", "true"]
-                and int(self.charge) != 0
-            ):
+            if (self.counterions.lower() in ["yes", "on", "true"]
+                    and int(self.charge) != 0):
                 print(f"{outer_space} {'add_counterion = {'}", file=fd)
                 if int(self.charge) < 0:
                     self.options.ion = self.options.counterions_positive_ion
                 elif int(self.charge) > 0:
                     self.options.ion = self.options.counterions_negative_ion
-                print(f"{inner_space} {'ion':<16}{eq}{self.options.ion}", file=fd)
-                print(f"{inner_space} {'number':<16}{eq}{self.options.number}", file=fd)
+                print(f"{inner_space} {'ion':<16}{eq}{self.options.ion}",
+                      file=fd)
+                print(f"{inner_space} {'number':<16}{eq}{self.options.number}",
+                      file=fd)
                 print(f"{outer_space} {'}'}", file=fd)
             # box block (mandatory)
             print(f"{outer_space} {'box = {'}", file=fd)
-            print(f"{inner_space} {'shape':<16}{eq}{self.options.shape}", file=fd)
-            print(f"{inner_space} {'size':<16}{eq}[{self.options.size}]", file=fd)
+            print(f"{inner_space} {'shape':<16}{eq}{self.options.shape}",
+                  file=fd)
+            print(f"{inner_space} {'size':<16}{eq}[{self.options.size}]",
+                  file=fd)
             print(
-                f"{inner_space} {'size_type':<16}{eq}{self.options.size_type}", file=fd
-            )
+                f"{inner_space} {'size_type':<16}{eq}{self.options.size_type}",
+                file=fd)
             print(f"{outer_space} {'}'}", file=fd)
             outer_space, inner_space = identation(0)
             # ions_away block
@@ -1277,7 +2565,8 @@ class Builder:
                 print(f"{outer_space} {'}'}", file=fd)
             # solvent block
             outer_space, inner_space = identation(0)
-            print(f"{inner_space} {'solvent':<20}{eq}{self.options.solvent}", file=fd)
+            print(f"{inner_space} {'solvent':<20}{eq}{self.options.solvent}",
+                  file=fd)
             print(f"{outer_space}{'}'}", file=fd)
             print(file=fd)
             # assign_forcefield block
@@ -1383,7 +2672,8 @@ def main(argv):
     # Run the preparation
     if str(protocol_opts.run_preparation).lower() in ["yes", "on", "true"]:
         builder.run_preparation()
-    output_name_builder = os.path.join(opts.workdir, basename + "_system-out.cms")
+    output_name_builder = os.path.join(opts.workdir,
+                                       basename + "_system-out.cms")
     # Simulation protocol
     protocol = Protocol(output_name_builder, build_opts, protocol_opts)
     protocol.write()
