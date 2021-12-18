@@ -6,7 +6,7 @@
 It allows to prepare a system for molecular dynamics simulation using the
 Desmond engine. The input file it should be a .mae file that contains proteins
 and/or molecules as ligands, cofactors, metals, etc.
-the script receives a configuration file with the options to consider to build 
+The script receives a configuration file with the options to consider to build 
 the system and to carry out the equilibration and MD protocols.
 
 ## Requirements
@@ -190,19 +190,19 @@ Default values:
 * ``stage{x}_restraints_atoms_{type}``: < atoms (ASL) in stage "x" (x=1,2,3,4,5) and "type" (type = pos, dist, ang and imp) >  
 Default values:  
 ``stage{x}_restraints_atoms_pos``       = solute_heavy_atom (for for x=1,2,3,4,5)  
-``stage{x}_restraints_atoms_{type}``    = "None" (for x=1,2,3,4,5 and type = dist, ang and imp)  
+``stage{x}_restraints_atoms_{type}``    = None (for x=1,2,3,4,5 and type = dist, ang and imp)  
 
 * ``stage{x}_restraints_forces_{type}``: < Restraint_force (kcal·mol-1·Å-2) in stage "x" (x = 1,2,3,4,5) and "type" (type = pos, dist, ang and imp) >  
 Default values:  
 ``stage{x}_restraint_forces_pos``      = 50.0 (for x=1,2,3,4)   
 ``stage5_restraints_forces_pos``       = 0.0  
-``stage{x}_restraints_forces_{type}``  = "None" (for x=1,2,3,4,5 and type = dist, ang and imp)  
+``stage{x}_restraints_forces_{type}``  = None (for x=1,2,3,4,5 and type = dist, ang and imp)  
 
 * ``stage{x}_restraints__{c}_{type}``: < Equilibrium constant in stage "x" (x = 1,2,3,4,5), "c" (r0, theta0, phi0) and "type" (type = pos, dist, ang and imp) >  
 Default values:  
-``stage{x}_restraint_r0_dist``       = "None" (for x=1,2,3,4,5)  
-``stage{x}_restraints_theta0_ang``   = "None" (for x=1,2,3,4,5)  
-``stage{x}_restraints_phi0_imp``     = "None" (for x=1,2,3,4,5)  
+``stage{x}_restraint_r0_dist``       = None (for x=1,2,3,4,5)  
+``stage{x}_restraints_theta0_ang``   = None (for x=1,2,3,4,5)  
+``stage{x}_restraints_phi0_imp``     = None (for x=1,2,3,4,5)  
 
 ### Additional stages
 
@@ -253,18 +253,18 @@ e.g. ``additional_stage_restraints_number_dist`` = 1,2,1
 * ``additional_stages_restraints_number_{type}``: < Number of restraints for additional stages (int) for "type" (type = pos, dist, ang and imp) >  
 Acceptable values: Any int number sepparated by comma according to number of "additional_stages".  
 Default values:  
-``additional_stages_restraints_number_{type}`` = "None"  
+``additional_stages_restraints_number_{type}`` = None  
 
 * ``additional_stages_restraints_forces_{type}``: < atoms (ASL) for additional stages (kcal·mol-1·Å-2) for "type" (type = pos, dist, ang and imp) >  
 Acceptable values: Float number sepparated by comma according to number of "additional_stages".  
 Note: The number of selections depends on the type of restraint. "pos" requires one atom selection, "dist" requires two atom selections, "ang" requires three atom selections and "imp" requires four atom selections.
 Default values: 
-``additional_stages_restraints_forces_{type}`` = "None"
+``additional_stages_restraints_forces_{type}`` = None
 
 * ``additional_stages_restraints_forces_{type}``: < Restraint forces for additional stages (kcal·mol-1·Å-2) for "type" (type = pos, dist, ang and imp) >  
 Acceptable values: Float number sepparated by comma according to number of "additional_stages".  
 Default values: 
-``additional_stages_restraints_forces_{type}`` = "None"
+``additional_stages_restraints_forces_{type}`` = None
 
 * ``production_cutoff``: < Production cutoff (Å) >  
 Default values: 9.0  
