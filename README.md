@@ -257,7 +257,7 @@ additional_stages_restraints_number_{type} = "None"
 
 * additional_stages_restraints_forces_{type} < atoms (ASL) for additional stages (kcal·mol-1·Å-2) for "type" (type = pos, dist, ang and imp) >  
 Acceptable values: Float number sepparated by comma according to number of "additional_stages".  
-Note: The number of selections depends on the type of restraint. "pos" requires one atom selection, "dist" requires two atom selections, "ang" requires three atom selections and "imp" require four atom selections.
+Note: The number of selections depends on the type of restraint. "pos" requires one atom selection, "dist" requires two atom selections, "ang" requires three atom selections and "imp" requires four atom selections.
 Default values: 
 additional_stages_restraints_forces_{type} = "None"
 
