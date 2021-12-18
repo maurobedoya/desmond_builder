@@ -128,12 +128,12 @@ stage5_time = 24
 production_time = 100000 ps.   
 
 * stage{x}_temp < Relaxation stage temperature (K) for x=1,2,3,4,5 and production_temp >  
-Default values: 
-stage1_temp = 10.0
-stage2_temp = 10.0
-stage3_temp = 10.0
-stage4_temp = 300.0
-stage5_temp = 300.0
+Default values:  
+stage1_temp = 10.0  
+stage2_temp = 10.0  
+stage3_temp = 10.0  
+stage4_temp = 300.0  
+stage5_temp = 300.0  
 production_temp = 300.0  
 
 * stage{x}_ensemble < Relaxation stage ensemble for x=1,2,3,4,5 and production_ensemble >  
@@ -177,9 +177,9 @@ production_barostat_tau = 2.0
 
 ### Restraints
 
-Note: For now there is only support for positional, distance, angle and improper harmonic restraints. Flat-bottomed restraints are not currently supported.
+Note: For now there is only support for positional, distance, angle and improper harmonic restraints. Flat-bottomed restraints are not currently supported.  
 
-Each type of restraint is defined with the preffix of "stage{x}_restraints" (for restraints from stage1 to stage5, x = 1,2,3,4,5) and for the restraints of additional stages the preffix "additional_stage_restraints" is used. The terminal of the name is the type of restraint: For "positional", "distance", "angle" or "improper" the terminals are "pos", "dist", "ang" and "imp" respectively.
+Each type of restraint is defined with the preffix of "stage{x}_restraints" (for restraints from stage1 to stage5, x = 1,2,3,4,5) and for the restraints of additional stages the preffix "additional_stage_restraints" is used. The terminal of the name is the type of restraint: For "positional", "distance", "angle" or "improper" the terminals are "pos", "dist", "ang" and "imp" respectively.  
 
 * stage{x}_restraints_number_{type} < number of restraints in stage "x" (x=1,2,3,4,5) and "type" (type = pos, dist, ang and imp)>  
 Default values:  
@@ -193,16 +193,16 @@ stage{x}_restraints_atoms_pos       = solute_heavy_atom (for for x=1,2,3,4,5)
 stage{x}_restraints_atoms_{type}    = "None" (for x=1,2,3,4,5 and type = dist, ang and imp)  
 
 * stage{x}_restraints_forces_{type} < Restraint_force (kcal·mol-1·Å-2) in stage "x" (x = 1,2,3,4,5) and "type" (type = pos, dist, ang and imp) >  
-Default values: 
+Default values:  
 stage{x}_restraint_forces_pos       = 50.0 (for x=1,2,3,4)   
 stage5_restraints_forces_pos        = 0.0  
 stage{x}_restraints_forces_{type}   = "None" (for x=1,2,3,4,5 and type = dist, ang and imp)  
 
-* stage{x}_restraints_{c}_{type} < Equilibrium constant in stage "x" (x = 1,2,3,4,5), "c" (r0, theta0, phi0) and "type" (type = pos, dist, ang and imp) >
-Default values: 
+* stage{x}_restraints__{c}_{type} < Equilibrium constant in stage "x" (x = 1,2,3,4,5), "c" (r0, theta0, phi0) and "type" (type = pos, dist, ang and imp) >  
+Default values:  
 stage{x}_restraint_r0_dist       = "None" (for x=1,2,3,4,5)  
-stage{x}_restraints_theta0_ang   = "None" (for x=1,2,3,4,5)
-stage{x}_restraints_phi0_imp     = "None" (for x=1,2,3,4,5)
+stage{x}_restraints_theta0_ang   = "None" (for x=1,2,3,4,5)  
+stage{x}_restraints_phi0_imp     = "None" (for x=1,2,3,4,5)  
 
 ### Additional stages
 
