@@ -12,9 +12,9 @@ the system and to carry out the equilibration and MD protocols.
 ## Requirements
 
 * Python 3.0 or higher versions.
-
+* typing-extensions: ```pip install typing-extensions```
 * Desmond software. 
-It does not require the paid version of Schrödinger but it can also be used.
+It does not require the Schrödinger´s full version but it can also be used.
 
 ## Usage
 
@@ -44,7 +44,7 @@ It could be a directory or a subfolder "directory1/directory2".
 Acceptable values: .mae file  
 Default values: None  
 
-* desmond_path < Specify the path to the schrodinger installation >  
+* desmond_path < Specify the path to the Desmond installation >  
 Acceptable values: any path  
 Default values: $SCHRODINGER  
 
@@ -114,39 +114,97 @@ Default values: SPC
 The default protocols for desmond relaxation and the production are activated.  
 To deactivate any step, the option should be set to 'no', 'off' or 'false'.  
 
-* stage1 < Relaxation stage 1 >  
+* stage{x} < Relaxation stage for x=1,2,3,4,5 >  
 Acceptable values: yes, true, on or no, false, off  
 Default values: yes  
-The same procedure applies to stage2, stage3, stage4, stage5 and production.  
 
-* stage1_time < Relaxation stage 1 time (ps) >  
-Default values: stage1: 100, stage2: 12, stage3: 12, stage4: 12, stage5: 24 and production_time: 100000ps = 100ns.  
+* stage{x}_time < Relaxation stage time (ps) for x=1,2,3,4,5 and production_time >  
+Default values:  
+stage1_time = 100  
+stage2_time = 12  
+stage3_time = 12  
+stage4_time = 12  
+stage5_time = 24  
+production_time = 100000 ps.   
 
-* stage1_temp < Relaxation stage 1 temperature (K) >  
-Default values: 10.0  
-The default values for the other stages are:  
-stage1_temp: 10.0, stage2_temp: 10.0, stage3_temp: 10.0, stage4_temp: 300.0, stage5_temp: 300.0, production_temp: 300.0  
+* stage{x}_temp < Relaxation stage temperature (K) for x=1,2,3,4,5 and production_temp >  
+Default values: 
+stage1_temp = 10.0
+stage2_temp = 10.0
+stage3_temp = 10.0
+stage4_temp = 300.0
+stage5_temp = 300.0
+production_temp = 300.0  
 
-* stage1_ensemble < Relaxation stage 1 ensemble >  
+* stage{x}_ensemble < Relaxation stage ensemble for x=1,2,3,4,5 and production_ensemble >  
 Acceptable values: NVE, NVT, NPT  
 Note: NPAT and NPYT will be implemented in the future.  
-Default values: stage1_ensemble: NVT, stage2_ensemble: NVT, stage3_ensemble: NPT, stage4_ensemble: NPT, stage5_ensemble: NPT, production_ensemble: NPT.  
+Default values:  
+stage1_ensemble = NVT  
+stage2_ensemble = NVT  
+stage3_ensemble = NPT  
+stage4_ensemble = NPT  
+stage5_ensemble = NPT  
+production_ensemble = NPT  
 
-* stage1_method < Relaxation stage 1 method >  
+* stage{x}_method < Relaxation stage method for x=1,2,3,4,5 and production_method >  
 Acceptable values: NVT, NPT  
-Default values: stage1_method: Brownie, stage2_method: Berendsen, stage3_method: Berendsen, stage4_method: Berendsen, stage5_method: Berendsen, production_method: MTK.  
+Default values:  
+stage1_method = Brownie  
+stage2_method = Berendsen  
+stage3_method = Berendsen  
+stage4_method = Berendsen  
+stage5_method = Berendsen  
+production_method = MTK  
 
-* stage1_thermostat_tau < Relaxation stage 1 thermostat tau (ps) >  
-Default values: stage1_thermostat_tau: 0.1, stage2_thermostat_tau: 0.1, stage3_thermostat_tau: 0.1, stage4_thermostat_tau: 0.1, stage5_thermostat_tau: 0.1, production_thermostat_tau: 1.0.  
+* stage{x}_thermostat_tau < Relaxation stage thermostat tau (ps) for x=1,2,3,4,5 and production_thermostat_tau >  
+Default values:  
+stage1_thermostat_tau = 0.1  
+stage2_thermostat_tau = 0.1  
+stage3_thermostat_tau = 0.1  
+stage4_thermostat_tau = 0.1  
+stage5_thermostat_tau = 0.1  
+production_thermostat_tau = 1.0  
 
-* stage1_barostat_tau < Relaxation stage 1 barostat tau (ps) >  
-Default values: stage1_barostat_tau: None, stage2_barostat_tau: None, stage3_barostat_tau: 50.0, stage4_barostat_tau: 20.0, stage5_barostat_tau: 2.0, production_barostat_tau: 2.0.  
+* stage{x}_barostat_tau < Relaxation stage barostat tau (ps) for x=1,2,3,4,5 and production_barostat_tau >  
+Default values:  
+stage1_barostat_tau     = None  
+stage2_barostat_tau     = None  
+stage3_barostat_tau     = 50.0  
+stage4_barostat_tau     = 20.0  
+stage5_barostat_tau     = 2.0  
+production_barostat_tau = 2.0  
 
-* stage1_restraint < Relaxation stage 1 restraint (ASL) >  
-Default values: stage1_restraint: solute_heavy_atom, stage2_restraint: solute_heavy_atom, stage3_restraint: solute_heavy_atom, stage4_restraint: solute_heavy_atom, stage5_restraint: None, production_restraint: None.  
+### Restraints
 
-* stage1_restraint_force < Relaxation stage 1 restraint_force (kcal·mol-1·Å-2) >  
-Default values: stage1_restraint_force: 50.0, stage2_restraint_force: 50.0, stage3_restraint_force: 50.0, stage4_restraint_force: 50.0, stage5_restraint_force: None, production_restraint_force: None.  
+Note: For now there is only support for positional, distance, angle and improper harmonic restraints. Flat-bottomed restraints are not currently supported.
+
+Each type of restraint is defined with the preffix of "stage{x}_restraints" (for restraints from stage1 to stage5, x = 1,2,3,4,5) and for the restraints of additional stages the preffix "additional_stage_restraints" is used. The terminal of the name is the type of restraint: For "positional", "distance", "angle" or "improper" the terminals are "pos", "dist", "ang" and "imp" respectively.
+
+* stage{x}_restraints_number_{type} < number of restraints in stage "x" (x=1,2,3,4,5) and "type" (type = pos, dist, ang and imp)>  
+Default values:  
+stage{x}_restraints_number_pos      = 1 (for x=1,2,3,4)  
+stage5_restraints_number_pos        = 0  
+stage{x}_restraints_number_{type}   = 0 (for x=1,2,3,4,5 and type = dist, ang and imp)  
+
+* stage{x}_restraints_atoms_{type} < atoms (ASL) in stage "x" (x=1,2,3,4,5) and "type" (type = pos, dist, ang and imp) >  
+Default values:  
+stage{x}_restraints_atoms_pos       = solute_heavy_atom (for for x=1,2,3,4,5)  
+stage{x}_restraints_atoms_{type}    = "None" (for x=1,2,3,4,5 and type = dist, ang and imp)  
+
+* stage{x}_restraints_forces_{type} < Restraint_force (kcal·mol-1·Å-2) in stage "x" (x = 1,2,3,4,5) and "type" (type = pos, dist, ang and imp) >  
+Default values: 
+stage{x}_restraint_forces_pos       = 50.0 (for x=1,2,3,4)   
+stage5_restraints_forces_pos        = 0.0  
+stage{x}_restraints_forces_{type}   = "None" (for x=1,2,3,4,5 and type = dist, ang and imp)  
+
+* stage{x}_restraints_{c}_{type} < Equilibrium constant in stage "x" (x = 1,2,3,4,5), "c" (r0, theta0, phi0) and "type" (type = pos, dist, ang and imp) >
+Default values: 
+stage{x}_restraint_r0_dist       = "None" (for x=1,2,3,4,5)  
+stage{x}_restraints_theta0_ang   = "None" (for x=1,2,3,4,5)
+stage{x}_restraints_phi0_imp     = "None" (for x=1,2,3,4,5)
+
+### Additional stages
 
 * additional_stages < Number of additional stages to run >  
 Acceptable values: integer number  
@@ -182,15 +240,31 @@ Acceptable values: integer number in ps.
 If only one value is given, it will be used for all stages, otherwise it should be a list of numbers separated by comma. The list of number should be the same length as the number of additional stages.  
 Default values: 2.0  
 
-* additional_stages_restraints < Restraints for additional stages (ASL) >  
-Acceptable values: any valid ASL separated by comma.  
-If only one value is given, it will be used for all stages, otherwise it should be a list of strings separated by comma. The list of strings should be the same length as the number of additional stages.  
-Default values: None  
+### Additional stages restraints
+Note: The notation for the additional stages restraints are similar to the stage{x} restraints. See above.
+The difference with respect to the restraints of the stages is that in this case lists of restraints must be passed in the option: "additional_stage_restraints_number_{type}" according to the amount of "additional_stages" defined.
+If three additional stages are defined and are required two positional restraints in each additional step and in the last step just one positional restraint, it should be added like this:  
+additional_stages = 3  
+additional_stage_restraints_number_pos = 2,2,1  
 
-* additional_stages_restraints_forces < Restraint force for additional stages (kcal·mol-1·Å-2) >  
-Acceptable values: integer of float number.  
-If only one value is given, it will be used for all stages, otherwise it should be a list of numbers separated by comma. The list of number should be the same length as the number of additional stages.  
-Default values: None  
+Additionally, it could be added the different type of restraints for each additional stage:  
+e.g. additional_stage_restraints_number_dist = 1,2,1  
+
+* additional_stages_restraints_number_{type} < Number of restraints for additional stages (int) for "type" (type = pos, dist, ang and imp) >  
+Acceptable values: Any int number sepparated by comma according to number of "additional_stages".  
+Default values:  
+additional_stages_restraints_number_{type} = "None"  
+
+* additional_stages_restraints_forces_{type} < atoms (ASL) for additional stages (kcal·mol-1·Å-2) for "type" (type = pos, dist, ang and imp) >  
+Acceptable values: Float number sepparated by comma according to number of "additional_stages".  
+Note: The number of selections depends on the type of restraint. "pos" requires one atom selection, "dist" requires two atom selections, "ang" requires three atom selections and "imp" require four atom selections.
+Default values: 
+additional_stages_restraints_forces_{type} = "None"
+
+* additional_stages_restraints_forces_{type} < Restraint forces for additional stages (kcal·mol-1·Å-2) for "type" (type = pos, dist, ang and imp) >  
+Acceptable values: Float number sepparated by comma according to number of "additional_stages".  
+Default values: 
+additional_stages_restraints_forces_{type} = "None"
 
 * production_cutoff < Production cutoff (Å) >  
 Default values: production_cutoff: 9.0.  
