@@ -19,7 +19,7 @@ It does not require the Schrödinger´s full version but it can also be used.
 ## Usage
 
 ```
-python run_desmond_builder.py -i config.dat
+python3 run_desmond_builder.py -i config.dat
 ```
 
 ## Options
