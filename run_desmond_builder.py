@@ -1,5 +1,5 @@
 """
-Version: 1.0
+Version: 1.1
 "If this script is useful for you, consider giving acknowledgments comments in the publication."
 Contact: 
 Mauricio Bedoya
@@ -1700,7 +1700,8 @@ class Protocol:
                                     del atoms_imp[0]
                                     del forces_imp[0]
                                     del constants_imp[0]
-                        print(f"{outer_space} {']'}", file=fd)
+                        if header_rest == False:
+                            print(f"{outer_space} {']'}", file=fd)
                         #### Restraints block end ####
                     outer_space, inner_space = identation(0)
                     print(file=fd)
