@@ -1,6 +1,8 @@
 # Desmond Builder
  Prepare a system for MD simulation in desmond starting from a .mae file
 
+## Note: *This script is under development. Drastic changes and bug fixes are expected.
+
 ## Features
 
 It allows to prepare a system for molecular dynamics simulation using the
