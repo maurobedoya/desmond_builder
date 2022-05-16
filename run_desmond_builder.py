@@ -2620,12 +2620,10 @@ class Protocol:
                     file=fd,
                 )
             # Block for production positional-restraints
-            if (
-                int(self.p_opts.production_restraints_number_pos) != 0
-                or int(self.p_opts.production_restraints_number_dist) != 0
-                or int(self.p_opts.production_restraints_number_ang) != 0
-                or int(self.p_opts.production_restraints_number_imp) != 0
-            ):
+            if (int(self.p_opts.production_restraints_number_pos) != 0
+                    or int(self.p_opts.production_restraints_number_dist) != 0
+                    or int(self.p_opts.production_restraints_number_ang) != 0
+                    or int(self.p_opts.production_restraints_number_imp) != 0):
                 outer_space, inner_space = identation(0)
                 print(f"{outer_space}{'restraints.new':<16}{eq}{'['}", file=fd)
                 if int(self.p_opts.production_restraints_number_pos) != 0:
@@ -2637,7 +2635,8 @@ class Protocol:
                         "positional",
                         None,
                     )
-                    for i in range(int(self.p_opts.production_restraints_number_pos)):
+                    for i in range(
+                            int(self.p_opts.production_restraints_number_pos)):
                         outer_space, inner_space = identation(1)
                         print(f"{outer_space}{'{'}", file=fd)
                         print(
@@ -2665,7 +2664,9 @@ class Protocol:
                         self.p_opts.production_restraints_r0_dist,
                     )
                     j = 0
-                    for i in range(int(self.p_opts.production_restraints_number_dist)):
+                    for i in range(
+                            int(self.p_opts.production_restraints_number_dist)
+                    ):
                         outer_space, inner_space = identation(1)
                         print(f"{outer_space}{'{'}", file=fd)
                         print(
@@ -2680,7 +2681,8 @@ class Protocol:
                             f"{inner_space}{'force_constants':<11} {eq}[{forces[i]}]",
                             file=fd,
                         )
-                        print(f"{inner_space}{'r0':<11} {eq}{constants[i]}", file=fd)
+                        print(f"{inner_space}{'r0':<11} {eq}{constants[i]}",
+                              file=fd)
                         print(f"{outer_space}{'}'}", file=fd)
                         j += 2
                 if int(self.p_opts.production_restraints_number_ang) != 0:
@@ -2695,7 +2697,8 @@ class Protocol:
                         self.p_opts.production_restraints_theta0_ang,
                     )
                     j = 0
-                    for i in range(int(self.p_opts.production_restraints_number_ang)):
+                    for i in range(
+                            int(self.p_opts.production_restraints_number_ang)):
                         outer_space, inner_space = identation(1)
                         print(f"{outer_space}{'{'}", file=fd)
                         print(
@@ -2728,7 +2731,8 @@ class Protocol:
                         self.p_opts.production_restraints_phi0_imp,
                     )
                     j = 0
-                    for i in range(int(self.p_opts.production_restraints_number_imp)):
+                    for i in range(
+                            int(self.p_opts.production_restraints_number_imp)):
                         outer_space, inner_space = identation(1)
                         print(f"{outer_space}{'{'}", file=fd)
                         print(
@@ -2752,20 +2756,6 @@ class Protocol:
                 print(f"{outer_space}{']'}", file=fd)
             print(file=fd)
             ### Restraints block END ###
-
-            ##print(f"{outer_space}{'restrain':<20}{eq}{'{'}", file=fd)
-            ##print(
-            ##    f"{inner_space} {'atom':<15} {eq}{q}{self.p_opts.production_restraint}{q}",
-            ##    file=fd,
-            ##)
-            ##if self.p_opts.production_restraint_force is None:
-            ##    raise ValueError(
-            ##        "You must set the force for the restraint")
-            ##print(
-            ##    f"{inner_space} {'force_constant':<15} {eq}{self.p_opts.production_restraint_force}",
-            ##    file=fd,
-            ##)
-            ##print(f"{outer_space}{'}'}", file=fd)
             outer_space, inner_space = identation(0)
             print(f"{outer_space}{'simbox':<20}{eq}{'{'}", file=fd)
             print(
@@ -2864,15 +2854,15 @@ def parse_args(argv):
         formatter_class=argparse.RawDescriptionHelpFormatter,
         add_help=False,
     )
-    conf_parser.add_argument(
-        "-i", "--input", help="Specify a configuration file", metavar="FILE"
-    )
+    conf_parser.add_argument("-i",
+                             "--input",
+                             help="Specify a configuration file",
+                             metavar="FILE")
     args, remaining_argv = conf_parser.parse_known_args()
 
     defaults = {"desmond_path": "$SCHRODINGER"}
 
-    print(
-        """
+    print("""
     █▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█
     █   ┌┬┐┌─┐┌─┐┌┬┐┌─┐┌┐┌┌┬┐  ┌┐ ┬ ┬┬┬  ┌┬┐┌─┐┬─┐       █
     █    ││├┤ └─┐││││ ││││ ││  ├┴┐│ │││   ││├┤ ├┬┘       █
