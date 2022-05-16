@@ -25,6 +25,8 @@ import random
 
 @dataclass
 class Args:
+    """Argument parser for overall settings."""
+
     input: str
     file: str
     desmond_path: str
@@ -33,6 +35,8 @@ class Args:
 
 @dataclass
 class BuilderOptions:
+    """Variables for Builder settings."""
+
     basename: Optional[str] = "None"
     counterions: Optional[str] = None
     counterions_positive_ion = "Na"
@@ -81,7 +85,10 @@ class BuilderOptions:
         return self.opts[item]
 
 
+@dataclass
 class ProtocolOptions:
+    """Variables for Protocol settings."""
+
     stage1: Optional[bool] = True
     stage2: Optional[bool] = True
     stage3: Optional[bool] = True
