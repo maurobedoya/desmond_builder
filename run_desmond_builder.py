@@ -2557,8 +2557,8 @@ class Protocol:
             outer_space, inner_space = identation(0)
             print(f"{outer_space}{'}'}", file=fd)
             print(
-                f"{outer_space}{'glue':<20}{eq}{self.p_opts.production_glue}", file=fd
-            )
+                f"{outer_space}{'glue':<20}{eq}{self.p_opts.production_glue}",
+                file=fd)
             print(f"{outer_space}{'maeff_output':<20}{eq}{'{'}", file=fd)
             print(
                 f"{inner_space} {'first':<16}{eq}{self.p_opts.production_maeff_first}",
@@ -2578,8 +2578,8 @@ class Protocol:
             print(f"{inner_space} {'trjdir':<16}{eq}{name_trjdir}", file=fd)
             print(f"{outer_space}{'}'}", file=fd)
             print(
-                f"{outer_space}{'meta':<20}{eq}{self.p_opts.production_meta}", file=fd
-            )
+                f"{outer_space}{'meta':<20}{eq}{self.p_opts.production_meta}",
+                file=fd)
             print(f"{outer_space}{'meta_file':<20}{eq}{'?'}", file=fd)
             print(
                 f"{outer_space}{'pressure':<20}{eq}[{self.p_opts.production_pressure} {self.p_opts.production_pressure_type}]",
