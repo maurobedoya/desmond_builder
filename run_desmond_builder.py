@@ -2311,14 +2311,12 @@ class Protocol:
         # Block to check the number of restraints for positional restraints
         if rest_type == "positional":
             if len(stage_rest_forces) >= 2 and stage_rest_number != len(
-                stage_rest_forces
-            ):
+                    stage_rest_forces):
                 raise ValueError(
                     f"The number of forces in the restraint ({stage_name}_restraints_forces_pos) must be one value or equal to the number of {stage_name}_restraints_number_pos"
                 )
             elif len(stage_rest_atoms) >= 2 and stage_rest_number != len(
-                stage_rest_atoms
-            ):
+                    stage_rest_atoms):
                 raise ValueError(
                     f"The number of ASL in the restraint ({stage_name}_restraints_atoms_pos) must be one value or equal to the number of {stage_name}_restraints_number_pos"
                 )
@@ -2350,8 +2348,7 @@ class Protocol:
                     f"The number of selections ({stage_name}_restraints_atoms_dist) should be twice the number of restraints. Check {stage_name}_restraints_number_dist and {stage_name}_restraints_atoms_dist"
                 )
             elif len(stage_rest_forces) >= 2 and stage_rest_number != len(
-                stage_rest_forces
-            ):
+                    stage_rest_forces):
                 raise ValueError(
                     f"The number of forces in the restraint ({stage_name}_restraints_forces_dist) must be one value or equal to the number of {stage_name}_restraints_number_dist"
                 )
@@ -2395,8 +2392,7 @@ class Protocol:
                     f"The number of selections ({stage_name}_restraints_atoms_ang) should be three times the number of restraints. Check {stage_name}_restraints_number_ang and {stage_name}_restraints_atoms_ang"
                 )
             elif len(stage_rest_forces) >= 2 and stage_rest_number != len(
-                stage_rest_forces
-            ):
+                    stage_rest_forces):
                 raise ValueError(
                     f"The number of forces in the restraint ({stage_name}_restraints_forces_ang) must be one value or equal to the number of {stage_name}_restraints_number_ang"
                 )
@@ -2440,8 +2436,7 @@ class Protocol:
                     f"The number of selections ({stage_name}_restraints_atoms_imp) should be three times the number of restraints. Check {stage_name}_restraints_number_imp and {stage_name}_restraints_atoms_imp"
                 )
             elif len(stage_rest_forces) >= 2 and stage_rest_number != len(
-                stage_rest_forces
-            ):
+                    stage_rest_forces):
                 raise ValueError(
                     f"The number of forces in the restraint ({stage_name}_restraints_forces_imp) must be one value or equal to the number of {stage_name}_restraints_number_imp"
                 )
@@ -2501,7 +2496,8 @@ class Protocol:
                 f"{inner_space} {'interval':<16}{eq}{self.p_opts.production_checkpt_interval}",
                 file=fd,
             )
-            print(f"{inner_space} {'name':<16}{eq}{q}{'$JOBNAME.cpt'}{q}", file=fd)
+            print(f"{inner_space} {'name':<16}{eq}{q}{'$JOBNAME.cpt'}{q}",
+                  file=fd)
             print(
                 f"{inner_space} {'write_last_step':<16}{eq}{self.p_opts.production_write_last_step}",
                 file=fd,
