@@ -1410,7 +1410,8 @@ class Protocol:
                 )
                 gpu_text1 = '[["@*.*.annealing"] \'annealing = off temperature = "@*.*.temperature[0][0]"\''
                 gpu_text2 = '["==" "-gpu" "@*.*.jlaunch_opt[-1]"] \'ensemble.method = Langevin\']'
-                print(f"{inner_space} {'effect_if':<16}{eq}{gpu_text1}", file=fd)
+                print(f"{inner_space} {'effect_if':<16}{eq}{gpu_text1}",
+                      file=fd)
                 print(f"{inner_space} {' ':<19}{gpu_text2}", file=fd)
 
                 print(
@@ -1445,14 +1446,13 @@ class Protocol:
                 # Restraints block
                 # ==============================================================
                 # Block for stage4 positional-restraints
-                if (
-                    int(self.p_opts.stage4_restraints_number_pos) != 0
-                    or int(self.p_opts.stage4_restraints_number_dist) != 0
-                    or int(self.p_opts.stage4_restraints_number_ang) != 0
-                    or int(self.p_opts.stage4_restraints_number_imp) != 0
-                ):
+                if (int(self.p_opts.stage4_restraints_number_pos) != 0
+                        or int(self.p_opts.stage4_restraints_number_dist) != 0
+                        or int(self.p_opts.stage4_restraints_number_ang) != 0
+                        or int(self.p_opts.stage4_restraints_number_imp) != 0):
                     outer_space, inner_space = identation(1)
-                    print(f"{outer_space} {'restraints.new':<16}{eq}{'['}", file=fd)
+                    print(f"{outer_space} {'restraints.new':<16}{eq}{'['}",
+                          file=fd)
                     if int(self.p_opts.stage4_restraints_number_pos) != 0:
                         atoms, forces = self.set_restraint(
                             "stage4",
