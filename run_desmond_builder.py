@@ -1374,12 +1374,17 @@ class Protocol:
                 # Restraints block end
                 # ==============================================================
                 outer_space, inner_space = identation(0)
+
+                if self.p_opts.stage3_ensemble != "NVT":
+                    print(
+                        f"{inner_space} {'randomize_velocity.interval':<29} {eq}{'1.0'}",
+                        file=fd,
+                    )
+                print(f"{inner_space} {'eneseq.interval':<29} {eq}{'0.3'}",
+                      file=fd)
                 print(
-                    f"{inner_space} {'randomize_velocity.interval':<29} {eq}{'1.0'}",
-                    file=fd,
-                )
-                print(f"{inner_space} {'eneseq.interval':<29} {eq}{'0.3'}", file=fd)
-                print(f"{inner_space} {'trajectory.center':<29} {eq}{'[]'}", file=fd)
+                    f"{inner_space} {'trajectory.center':<29} {eq}{self.p_opts.stage3_traj_center}",
+                    file=fd)
                 print(f"{outer_space}{'}'}", file=fd)
                 ### solvate pocket block
                 ##outer_space, inner_space = identation(0)
