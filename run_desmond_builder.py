@@ -1929,9 +1929,9 @@ class Protocol:
                                 stage_restraints_constants=None,
                             )
                             # Positional restraints variables
-                            long_pos = int(number_pos[stage])
-                            atoms_slice_pos = atoms_pos[0:long_pos]
-                            forces_slice_pos = forces_pos[0:long_pos]
+                            long_pos = int(pos_object.number)
+                            atoms_slice_pos = pos_object.atoms
+                            forces_slice_pos = pos_object.forces
                             if long_pos != 0:
                                 if header_rest:
                                     print(
@@ -1954,8 +1954,6 @@ class Protocol:
                                         file=fd,
                                     )
                                     print(f"{inner_space} {'}'}", file=fd)
-                                    del atoms_pos[0]
-                                    del forces_pos[0]
 
                         if self.p_opts.additional_stage_restraints_number_dist != 0:
                             (
