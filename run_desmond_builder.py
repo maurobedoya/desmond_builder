@@ -2581,10 +2581,16 @@ class Protocol:
                 f"{outer_space}{'meta':<20}{eq}{self.p_opts.production_meta}",
                 file=fd)
             print(f"{outer_space}{'meta_file':<20}{eq}{'?'}", file=fd)
-            print(
-                f"{outer_space}{'pressure':<20}{eq}[{self.p_opts.production_pressure} {self.p_opts.production_pressure_type}]",
-                file=fd,
-            )
+            if self.p_opts.production_ensemble != "NVT":
+                print(
+                    f"{outer_space}{'pressure':<20}{eq}[{self.p_opts.production_pressure} {self.p_opts.production_pressure_type}]",
+                    file=fd,
+                )
+            else:
+                print(
+                    f"{outer_space}{'pressure':<20}{eq}{self.p_opts.production_pressure}",
+                    file=fd,
+                )
             print(f"{outer_space}{'randomize_velocity':<20}{eq}{'{'}", file=fd)
             print(
                 f"{inner_space} {'first':<16}{eq}{self.p_opts.production_randomize_vel_first}",
