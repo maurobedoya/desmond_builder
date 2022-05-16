@@ -2098,7 +2098,8 @@ class Protocol:
                         #### Restraints block end ####
                     outer_space, inner_space = identation(0)
                     print(file=fd)
-                    print(f"{inner_space} {'eneseq.interval':<29} {eq}{'0.3'}", file=fd)
+                    print(f"{inner_space} {'eneseq.interval':<29} {eq}{'0.3'}",
+                          file=fd)
                     print(
                         f"{inner_space} {'trajectory.center':<29} {eq}{'solute'}",
                         file=fd,
