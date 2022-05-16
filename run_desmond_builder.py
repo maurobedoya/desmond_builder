@@ -1090,7 +1090,8 @@ class Protocol:
                             self.p_opts.stage2_restraints_theta0_ang,
                         )
                         j = 0
-                        for i in range(int(self.p_opts.stage2_restraints_number_ang)):
+                        for i in range(
+                                int(self.p_opts.stage2_restraints_number_ang)):
                             outer_space, inner_space = identation(2)
                             print(f"{outer_space} {'{'}", file=fd)
                             print(
@@ -1123,7 +1124,8 @@ class Protocol:
                             self.p_opts.stage2_restraints_phi0_imp,
                         )
                         j = 0
-                        for i in range(int(self.p_opts.stage2_restraints_number_imp)):
+                        for i in range(
+                                int(self.p_opts.stage2_restraints_number_imp)):
                             outer_space, inner_space = identation(2)
                             print(f"{outer_space} {'{'}", file=fd)
                             print(
@@ -1156,8 +1158,13 @@ class Protocol:
                     f"{inner_space} {'randomize_velocity.interval':<29} {eq}{'1.0'}",
                     file=fd,
                 )
-                print(f"{inner_space} {'eneseq.interval':<29} {eq}{'0.3'}", file=fd)
-                print(f"{inner_space} {'trajectory.center':<29} {eq}{'[]'}", file=fd)
+                print(f"{inner_space} {'eneseq.interval':<29} {eq}{'0.3'}",
+                      file=fd)
+
+                print(
+                    f"{inner_space} {'trajectory.center':<29} {eq}{self.p_opts.stage2_traj_center}",
+                    file=fd)
+
                 print(f"{outer_space}{'}'}", file=fd)
                 print(file=fd)
             # Stage 3 block
