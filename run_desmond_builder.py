@@ -2124,6 +2124,19 @@ class Protocol:
                 print(file=fd)
                 self.write_cfg_file()
 
+    class PositionalRest:
+        def __init__(self, number, atoms, forces):
+            self.number: int = number
+            self.atoms: List[str] = atoms
+            self.forces: List[float] = forces
+
+    class DistanceRest:
+        def __init__(self, number, atoms, forces, constants):
+            self.number: int = number
+            self.atoms: List[str] = atoms
+            self.forces: List[float] = forces
+            self.constants: List[float] = constants
+
     def set_restraint_multi(
         self,
         stage_name: str,
