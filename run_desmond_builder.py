@@ -1386,18 +1386,18 @@ class Protocol:
                     f"{inner_space} {'trajectory.center':<29} {eq}{self.p_opts.stage3_traj_center}",
                     file=fd)
                 print(f"{outer_space}{'}'}", file=fd)
-                ### solvate pocket block
+                # solvate pocket block
                 ##outer_space, inner_space = identation(0)
-                ##print(file=fd)
+                # print(file=fd)
                 ##print(f"{outer_space}{'solvate_pocket':<16}{'{'}", file=fd)
-                ##print(
+                # print(
                 ##    f"{inner_space} {'should_skip':<11} {eq}{'true'}",
-                ##    file=fd,
-                ##)
-                ##print(
+                # file=fd,
+                # )
+                # print(
                 ##    f"{inner_space} {'ligand_file':<11} {eq}{'?'}",
-                ##    file=fd,
-                ##)
+                # file=fd,
+                # )
                 ##print(f"{outer_space}{'}'}", file=fd)
                 print(file=fd)
             # Stage 4 block
