@@ -148,6 +148,12 @@ class ProtocolOptions:
     stage5_barostat_tau: Optional[float] = 2.0
     production_barostat_tau: Optional[float] = 2.0
 
+    stage1_traj_center: Optional[str] = "[]"
+    stage2_traj_center: Optional[str] = "[]"
+    stage3_traj_center: Optional[str] = "[]"
+    stage4_traj_center: Optional[str] = "[]"
+    stage5_traj_center: Optional[str] = "solute"
+
     stage1_restraints_number_pos: Optional[int] = 1
     stage1_restraints_atoms_pos: Optional[str] = "solute_heavy_atom"
     stage1_restraints_forces_pos: Optional[float] = 50.0
@@ -275,7 +281,7 @@ class ProtocolOptions:
     production_traj_write_velocity: Optional[str] = "false"
 
     production_restraints_number_pos: Optional[int] = 0
-    production_restraints_atoms_pos: Optional[str] = "solute_heavy_atom"
+    production_restraints_atoms_pos: Optional[str] = None
     production_restraints_forces_pos: Optional[float] = None
 
     production_restraints_number_dist: Optional[int] = 0
@@ -299,11 +305,11 @@ class ProtocolOptions:
     name_imp: Optional[str] = "improper_harm"
 
     # Additional stages
-    additional_stages: Optional[int] = None
-    additional_stage_times: Optional[str] = None
-    additional_stage_temps: Optional[str] = None
-    additional_stage_ensembles: Optional[str] = None
-    additional_stage_methods: Optional[str] = None
+    additional_stages: Optional[int] = 0
+    additional_stage_times: Optional[str] = 0
+    additional_stage_temps: Optional[str] = 0
+    additional_stage_ensembles: Optional[str] = 0
+    additional_stage_methods: Optional[str] = 0
     additional_stage_thermostat_tau: Optional[float] = 0.1
     additional_stage_barostat_tau: Optional[float] = 2.0
 
@@ -326,6 +332,7 @@ class ProtocolOptions:
     additional_stage_restraints_forces_imp: Optional[float] = None
     additional_stage_restraints_phi0_imp: Optional[float] = None
 
+    additional_stage_traj_center: Optional[str] = "solute"
     # Run protocols
     run_preparation: Optional[str] = "false"
     run_protocols: Optional[str] = "false"
