@@ -2610,6 +2610,15 @@ class Protocol:
             )
             print(f"{outer_space}{'}'}", file=fd)
             ### Restraints block START ###
+            if int(self.p_opts.production_restraints_number_pos) == 0 and int(
+                    self.p_opts.production_restraints_number_dist
+            ) == 0 and int(
+                    self.p_opts.production_restraints_number_ang) == 0 and int(
+                        self.p_opts.production_restraints_number_imp) == 0:
+                print(
+                    f"{outer_space}{'restrain':<20}{eq}{'none'}",
+                    file=fd,
+                )
             # Block for production positional-restraints
             if (
                 int(self.p_opts.production_restraints_number_pos) != 0
