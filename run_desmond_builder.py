@@ -342,6 +342,29 @@ class ProtocolOptions:
         for key in self.opts:
             setattr(self, key, self.opts[key])
 
+        input_names = [opt.name for opt in fields(ProtocolOptions)]
+        for key in self.opts:
+            try:
+                if key not in input_names:
+                    raise InputError(key)
+            except InputError as e_rror:
+                print(f"Error: {e_rror.args[0]}")
+                print("Please check the input file.")
+                sys.exit()
+        # Define title for stages
+        self.stage1_title: Optional[
+            str] = f"{getattr(self, 'stage1_method')} {getattr(self, 'stage1_ensemble')}, T = {getattr(self, 'stage1_temp')} K, {getattr(self, 'stage1_time')}ps"
+        self.stage2_title: Optional[
+            str] = f"{getattr(self, 'stage2_method')} {getattr(self, 'stage2_ensemble')}, T = {getattr(self, 'stage2_temp')} K, {getattr(self, 'stage2_time')}ps"
+        self.stage3_title: Optional[
+            str] = f"{getattr(self, 'stage3_method')} {getattr(self, 'stage3_ensemble')}, T = {getattr(self, 'stage3_temp')} K, {getattr(self, 'stage3_time')}ps"
+        self.stage4_title: Optional[
+            str] = f"{getattr(self, 'stage4_method')} {getattr(self, 'stage4_ensemble')}, T = {getattr(self, 'stage4_temp')} K, {getattr(self, 'stage4_time')}ps"
+        self.stage5_title: Optional[
+            str] = f"{getattr(self, 'stage5_method')} {getattr(self, 'stage5_ensemble')}, T = {getattr(self, 'stage5_temp')} K, {getattr(self, 'stage5_time')}ps"
+        self.production_title: Optional[
+            str] = f"{getattr(self, 'production_method')} {getattr(self, 'production_ensemble')}, T = {getattr(self, 'production_temp')} K, {getattr(self, 'production_time')}ps"
+
 
 
 def identation(indentvar: int = 0) -> Tuple[str, str]:
