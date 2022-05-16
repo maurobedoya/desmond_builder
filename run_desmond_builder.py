@@ -1219,10 +1219,11 @@ class Protocol:
                     f"{inner_space} {'thermostat.tau':<11} {eq}{self.p_opts.stage3_thermostat_tau}",
                     file=fd,
                 )
-                print(
-                    f"{inner_space} {'barostat.tau':<11} {eq}{self.p_opts.stage3_barostat_tau}",
-                    file=fd,
-                )
+                if self.p_opts.stage3_ensemble != "NVT":
+                    print(
+                        f"{inner_space} {'barostat.tau':<11} {eq}{self.p_opts.stage3_barostat_tau}",
+                        file=fd,
+                    )
                 outer_space, inner_space = identation(1)
                 print(f"{outer_space} {'}'}", file=fd)
                 # ==============================================================
