@@ -1204,10 +1204,7 @@ class Protocol:
                     f"{inner_space} {'time':<16}{eq}{self.p_opts.stage3_time}",
                     file=fd,
                 )
-                print(
-                    f"{inner_space} {'temperature':<16}{eq}{self.p_opts.stage3_temp}",
-                    file=fd,
-                )
+
                 outer_space, inner_space = identation(1)
                 print(f"{outer_space} {'ensemble':<16}{eq}{'{'}", file=fd)
                 print(
