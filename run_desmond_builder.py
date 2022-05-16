@@ -973,7 +973,8 @@ class Protocol:
                     file=fd,
                 )
                 gpu_text = '[["==" "-gpu" "@*.*.jlaunch_opt[-1]"] \'ensemble.method = Langevin\']'
-                print(f"{inner_space} {'effect_if':<16}{eq}{gpu_text}", file=fd)
+                print(f"{inner_space} {'effect_if':<16}{eq}{gpu_text}",
+                      file=fd)
                 print(f"{inner_space} {'annealing':<16}{eq}{'off'}", file=fd)
                 print(
                     f"{inner_space} {'time':<16}{eq}{self.p_opts.stage2_time}",
