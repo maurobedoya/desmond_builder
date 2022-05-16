@@ -765,12 +765,14 @@ class Protocol:
             print(file=fd)
             print(f"{outer_space}task {'{'}", file=fd)
             # outer_space, inner_space = identation(1)
-            print(f"{inner_space} {'task':<16}{eq}{q}{'desmond:auto'}{q}", file=fd)
+            print(f"{inner_space} {'task':<16}{eq}{q}{'desmond:auto'}{q}",
+                  file=fd)
             print(f"{inner_space} {'set_family':<16}{eq}{'{'}", file=fd)
 
             outer_space, inner_space = identation(2)
             print(f"{outer_space} {'desmond':<12}{eq}{'{'}", file=fd)
-            print(f"{inner_space} {'checkpt.write_last_step':<16}{eq}{'no'}", file=fd)
+            print(f"{inner_space} {'checkpt.write_last_step':<16} {eq}{'no'}",
+                  file=fd)
             print(f"{outer_space} {'}'}", file=fd)
             outer_space, inner_space = identation(0)
             print(f"{inner_space} {'}'}", file=fd)
@@ -817,14 +819,13 @@ class Protocol:
                 # Restraints block
                 # ==============================================================
                 # Block for stage1 positional-restraints
-                if (
-                    int(self.p_opts.stage1_restraints_number_pos) != 0
-                    or int(self.p_opts.stage1_restraints_number_dist) != 0
-                    or int(self.p_opts.stage1_restraints_number_ang) != 0
-                    or int(self.p_opts.stage1_restraints_number_imp) != 0
-                ):
+                if (int(self.p_opts.stage1_restraints_number_pos) != 0
+                        or int(self.p_opts.stage1_restraints_number_dist) != 0
+                        or int(self.p_opts.stage1_restraints_number_ang) != 0
+                        or int(self.p_opts.stage1_restraints_number_imp) != 0):
                     outer_space, inner_space = identation(1)
-                    print(f"{outer_space} {'restraints.new':<16}{eq}{'['}", file=fd)
+                    print(f"{outer_space} {'restraints.new':<16}{eq}{'['}",
+                          file=fd)
                     if int(self.p_opts.stage1_restraints_number_pos) != 0:
                         atoms, forces = self.set_restraint(
                             "stage1",
@@ -834,7 +835,8 @@ class Protocol:
                             "positional",
                             None,
                         )
-                        for i in range(int(self.p_opts.stage1_restraints_number_pos)):
+                        for i in range(
+                                int(self.p_opts.stage1_restraints_number_pos)):
                             outer_space, inner_space = identation(2)
                             print(f"{outer_space} {'{'}", file=fd)
                             print(
@@ -863,7 +865,9 @@ class Protocol:
                             self.p_opts.stage1_restraints_r0_dist,
                         )
                         j = 0
-                        for i in range(int(self.p_opts.stage1_restraints_number_dist)):
+                        for i in range(
+                                int(self.p_opts.stage1_restraints_number_dist)
+                        ):
 
                             outer_space, inner_space = identation(2)
                             print(f"{outer_space} {'{'}", file=fd)
@@ -880,8 +884,8 @@ class Protocol:
                                 file=fd,
                             )
                             print(
-                                f"{inner_space} {'r0':<11} {eq}{constants[i]}", file=fd
-                            )
+                                f"{inner_space} {'r0':<11} {eq}{constants[i]}",
+                                file=fd)
                             print(f"{outer_space} {'}'}", file=fd)
                             j += 2
                     if int(self.p_opts.stage1_restraints_number_ang) != 0:
@@ -896,7 +900,8 @@ class Protocol:
                             self.p_opts.stage1_restraints_theta0_ang,
                         )
                         j = 0
-                        for i in range(int(self.p_opts.stage1_restraints_number_ang)):
+                        for i in range(
+                                int(self.p_opts.stage1_restraints_number_ang)):
                             outer_space, inner_space = identation(2)
                             print(f"{outer_space} {'{'}", file=fd)
                             print(
@@ -929,7 +934,8 @@ class Protocol:
                             self.p_opts.stage1_restraints_phi0_imp,
                         )
                         j = 0
-                        for i in range(int(self.p_opts.stage1_restraints_number_imp)):
+                        for i in range(
+                                int(self.p_opts.stage1_restraints_number_imp)):
                             outer_space, inner_space = identation(2)
                             print(f"{outer_space} {'{'}", file=fd)
                             print(
