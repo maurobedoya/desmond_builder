@@ -1055,7 +1055,9 @@ class Protocol:
                             self.p_opts.stage2_restraints_r0_dist,
                         )
                         j = 0
-                        for i in range(int(self.p_opts.stage2_restraints_number_dist)):
+                        for i in range(
+                                int(self.p_opts.stage2_restraints_number_dist)
+                        ):
 
                             outer_space, inner_space = identation(2)
                             print(f"{outer_space} {'{'}", file=fd)
@@ -1072,8 +1074,8 @@ class Protocol:
                                 file=fd,
                             )
                             print(
-                                f"{inner_space} {'r0':<11} {eq}{constants[i]}", file=fd
-                            )
+                                f"{inner_space} {'r0':<11} {eq}{constants[i]}",
+                                file=fd)
                             print(f"{outer_space} {'}'}", file=fd)
                             j += 2
                     if int(self.p_opts.stage2_restraints_number_ang) != 0:
