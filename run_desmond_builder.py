@@ -2525,6 +2525,11 @@ class Protocol:
                 f"{inner_space} {'interval':<16}{eq}{self.p_opts.production_eneseq_interval}",
                 file=fd,
             )
+            name_eneseq = "JOBNAME$[_replica$REPLICA$].ene"
+            print(
+                f"{inner_space} {'name':<16}{eq}{q}{name_eneseq}{q}",
+                file=fd,
+            )
             print(f"{outer_space}{'}'}", file=fd)
             print(f"{outer_space}{'ensemble':<20}{eq}{'{'}", file=fd)
             outer_space, inner_space = identation(1)
@@ -2536,6 +2541,7 @@ class Protocol:
                 f"{outer_space} {'method':<16}{eq}{self.p_opts.production_method}",
                 file=fd,
             )
+
             print(f"{outer_space} {'barostat':<16}{eq}{'{'}", file=fd)
             print(
                 f"{inner_space} {'tau':<12}{eq}{self.p_opts.production_barostat_tau}",
