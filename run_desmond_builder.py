@@ -337,25 +337,6 @@ class ProtocolOptions:
     run_preparation: Optional[str] = "false"
     run_protocols: Optional[str] = "false"
 
-    stage1_title: Optional[
-        str
-    ] = f"{stage1_method} {stage1_ensemble}, T = {stage1_temp} K, {stage1_time}ps"
-    stage2_title: Optional[
-        str
-    ] = f"{stage2_method} {stage2_ensemble}, T = {stage2_temp} K, {stage2_time}ps"
-    stage3_title: Optional[
-        str
-    ] = f"{stage3_method} {stage3_ensemble}, T = {stage3_temp} K, {stage3_time}ps"
-    stage4_title: Optional[
-        str
-    ] = f"{stage4_method} {stage4_ensemble}, T = {stage4_temp} K, {stage4_time}ps"
-    stage5_title: Optional[
-        str
-    ] = f"{stage5_method} {stage5_ensemble}, T = {stage5_temp} K, {stage5_time}ps"
-    production_title: Optional[
-        str
-    ] = f"Production run: {production_method} {production_ensemble}, T = {production_temp} K, {production_time}ps"
-
     def __init__(self, opts: Dict) -> None:
         self.opts = opts
         for key in self.opts:
