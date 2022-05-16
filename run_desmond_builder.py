@@ -1916,17 +1916,17 @@ class Protocol:
                         stage = stage - 1
                         header_rest = True
                         if self.p_opts.additional_stage_restraints_number_pos != 0:
-                            (
-                                atoms_pos,
-                                forces_pos,
-                                number_pos,
-                            ) = self.set_restraint_multi(
-                                "additional_stage",
-                                self.p_opts.additional_stage_restraints_number_pos,
-                                self.p_opts.additional_stage_restraints_atoms_pos,
-                                self.p_opts.additional_stage_restraints_forces_pos,
-                                "positional",
-                                None,
+                            pos_object = self.set_restraint_multi(
+                                stage=stage,
+                                stage_name="additional_stage",
+                                stage_restraints_number=self.p_opts.
+                                additional_stage_restraints_number_pos,
+                                stage_restraints_atoms=self.p_opts.
+                                additional_stage_restraints_atoms_pos,
+                                stage_restraints_forces=self.p_opts.
+                                additional_stage_restraints_forces_pos,
+                                rest_type="positional",
+                                stage_restraints_constants=None,
                             )
                             # Positional restraints variables
                             long_pos = int(number_pos[stage])
