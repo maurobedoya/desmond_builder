@@ -17,7 +17,7 @@ from typing_extensions import TypeAlias
 import numpy as np
 from os import path, PathLike, supports_fd, write
 
-from dataclasses import dataclass
+from dataclasses import dataclass, fields
 from typing import Dict, List, Optional, Set, TextIO, Tuple
 import configparser
 import random
