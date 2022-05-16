@@ -1,8 +1,6 @@
 # Desmond Builder
  Prepare a system for MD simulation in desmond starting from a .mae file
 
-## Note: *This script is under development. Drastic changes and bug fixes are expected.
-
 ## Features
 
 It allows to prepare a system for molecular dynamics simulation using the
@@ -21,8 +19,37 @@ It does not require the Schrödinger´s full version but it can also be used.
 ## Usage
 
 ```
-python3 run_desmond_builder.py -i config.dat
+python3 desmond_builder.py -i config.dat
 ```
+
+## Examples
+
+The [examples](examples/) folder contains a set of example files.
+
+1. The [NPT](examples/config_NPT_ter_nose_bar_MTK.dat) shows how to prepare a 
+system for MD simulation using the default NPT relaxation protocol from Maestro 
+with 5 stages using the Nose-Hoover thermostat and the Martyna Tobias Klein 
+barostat.
+
+2. The [NPT](examples/config_NPT_ter_langevin_bar_langevin.dat) shows how to
+prepare a system for MD simulation using the default NPT relaxation protocol from
+Maestro with 5 stages using the Langevin thermostat/barostat.
+
+3. The [NPT](examples/config_NPT_ter_nose_bar_MTK_add_4stages.dat) shows how to
+prepare a system for MD simulation using the default NPT relaxation protocol from
+Maestro with 5 stages using the Nose-Hoover thermostat and the Martyna Tobias
+Klein barostat. Then, 4 additional stages (100 ps each) are added to the default 
+protocol using positional restraints for the 1st, 2nd and 3rd stages with forces 
+of 25, 5.0 and 1.0 kJ/mol*A^2 on the protein.
+
+4. The [NPT](examples/config_NVT_ter_nose_bar_none.dat) shows how to prepare a
+system for MD simulation using the default NVT protocol from Maestro with 3
+stages using the Nose-Hoover thermostat and no barostat.
+
+5. The [NPT](examples/config_NVT_ter_langevin_bar_none.dat) shows how to prepare
+a system for MD simulation using the default NVT protocol from Maestro with 3
+stages using the Langevin thermostat and no barostat.
+
 
 ## Options
 
@@ -202,7 +229,7 @@ Default values:
 
 * ``stage{x}_restraints__{c}_{type}``: < Equilibrium constant in stage "x" (x = 1,2,3,4,5), "c" (r0, theta0, phi0) and "type" (type = pos, dist, ang and imp) >  
 Default values:  
-``stage{x}_restraint_r0_dist``       = None (for x=1,2,3,4,5)  
+``stage{x}_restraints_r0_dist``       = None (for x=1,2,3,4,5)  
 ``stage{x}_restraints_theta0_ang``   = None (for x=1,2,3,4,5)  
 ``stage{x}_restraints_phi0_imp``     = None (for x=1,2,3,4,5)  
 
