@@ -1009,12 +1009,10 @@ class Protocol:
                 # Restraints block
                 # ==============================================================
                 # Block for stage2 positional-restraints
-                if (
-                    int(self.p_opts.stage2_restraints_number_pos) != 0
-                    or int(self.p_opts.stage2_restraints_number_dist) != 0
-                    or int(self.p_opts.stage2_restraints_number_ang) != 0
-                    or int(self.p_opts.stage2_restraints_number_imp) != 0
-                ):
+                if (int(self.p_opts.stage2_restraints_number_pos) != 0
+                        or int(self.p_opts.stage2_restraints_number_dist) != 0
+                        or int(self.p_opts.stage2_restraints_number_ang) != 0
+                        or int(self.p_opts.stage2_restraints_number_imp) != 0):
                     outer_space, inner_space = identation(1)
                     print(f"{outer_space} {'restraints.new':<16}{eq}{'['}", file=fd)
                     if int(self.p_opts.stage2_restraints_number_pos) != 0:
