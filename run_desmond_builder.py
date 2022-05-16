@@ -2871,7 +2871,7 @@ def parse_args(argv):
 
     Prepare a system for MD simulation in desmond starting from a .mae file.
     1. Pass a configuration file to the script.
-    2. Execute as: python run_schrod_mds.py -i options_file.dat
+    2. Execute as: python desmond_builder.py -i options_file.dat
     3. The full list of configuration file options can be found at: 
     https://github.com/maurobedoya/desmond_builder
 
