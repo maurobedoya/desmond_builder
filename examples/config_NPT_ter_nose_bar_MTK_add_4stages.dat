@@ -1,0 +1,47 @@
+[settings]
+workdir = 5yok_NPT_ter_nose_bar_MTK_add_4stages
+file = 5yok.mae
+
+# Linux
+desmond_path = /path-to-desmond-in-linux
+# Windows
+#desmond_path = /path-to-desmond-in-windows
+#windows = yes
+
+[build_geometry]
+counterions = yes
+ions_away = yes
+ion_awaydistance = 5.0
+ion_awayfrom = protein
+size = 20.0 20.0 20.0
+salt = yes
+concentration = 0.15
+solvent = TIP3P
+
+[protocol]
+stage1 = yes
+stage2 = yes
+stage3 = yes
+stage4 = yes
+stage5 = yes
+
+additional_stages = 4
+additional_stage_times = 100
+additional_stage_temps = 300
+additional_stage_ensembles = NPT,NPT,NPT,NPT
+additional_stage_methods = Berendsen
+additional_stage_barostat_tau = 2.0
+additional_stage_thermostat_tau = 0.1
+
+additional_stage_restraints_number_pos = 1,1,1,0
+additional_stage_restraints_atoms_pos = protein,protein,protein
+additional_stage_restraints_forces_pos = 25.0,5.0,1.0
+
+# Production settings
+production = yes
+production_time = 100
+production_traj_interval = 10
+
+
+run_preparation = yes
+run_protocols = no

@@ -1,0 +1,42 @@
+[settings]
+workdir = 5yok_NVT_ter_nose_bar_none
+file = 5yok.mae
+
+# Linux
+desmond_path = /path-to-desmond-in-linux
+# Windows
+#desmond_path = /path-to-desmond-in-windows
+#windows = yes
+
+[build_geometry]
+counterions = yes
+ions_away = yes
+ion_awaydistance = 5.0
+ion_awayfrom = protein
+size = 20.0 20.0 20.0
+salt = yes
+concentration = 0.15
+solvent = TIP3P
+
+[protocol]
+stage1 = yes
+stage2 = yes
+stage3 = yes
+stage2_traj_center = solute
+stage3_ensemble = NVT
+stage3_time = 24
+stage3_restraints_number_pos = 0
+stage3_traj_center = solute
+stage4 = no
+stage5 = no
+
+# Production settings
+production = yes
+production_time = 100
+production_traj_interval = 10
+production_ensemble = NVT
+production_method = NH
+
+
+run_preparation = yes
+run_protocols = no
