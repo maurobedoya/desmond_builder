@@ -2139,19 +2139,21 @@ class Protocol:
 
     def set_restraint_multi(
         self,
+        stage: int,
         stage_name: str,
         stage_restraints_number: str,
         stage_restraints_atoms: str,
         stage_restraints_forces: str,
         rest_type: str,
-        constant: Optional[str],
+        stage_restraints_constants: Optional[str],
     ) -> None:
         stage_name = stage_name
         number = list(str(stage_restraints_number).split(","))
         list_atoms = list(str(stage_restraints_atoms).split(","))
         list_forces = list(str(stage_restraints_forces).split(","))
         rest_type = rest_type
-        list_constants = list(str(constant).split(",")) if constant != None else None
+        list_constants = (list(str(stage_restraints_constants).split(","))
+                          if stage_restraints_constants != None else None)
         list_number_long = sum(map(int, number))
         # Block to check the number of restraints for positional restraints
         if rest_type == "positional":
@@ -2163,17 +2165,25 @@ class Protocol:
                 raise ValueError(
                     f"The number of ASL in the restraint ({stage_name}_restraints_atoms_pos) must be equal to the number of {stage_name}_restraints_number_pos"
                 )
-
-            atoms = []
-            forces = []
-
+            # Initialize the objects list to store the PositionalRest objects for every restraint.
+            objects = []
             for i in range(len(number)):
+                atoms = []
+                forces = []
                 for j in range(int(number[i])):
                     atoms.append(list_atoms[0])
                     forces.append(list_forces[0])
                     del list_atoms[0]
                     del list_forces[0]
-            return atoms, forces, number
+
+                object_pos = self.PositionalRest(
+                    number=number[i],
+                    atoms=atoms,
+                    forces=forces,
+                )
+                objects.append(object_pos)
+
+            return objects[stage]
         # Block to check the number of restraints for distance restraints
         if rest_type == "distance":
             if len(list_forces) != list_number_long:
@@ -2189,11 +2199,11 @@ class Protocol:
                     f"The number of constants in the restraint ({stage_name}_restraints_r0_dist) must be equal to the number of {stage_name}_restraints_number_dist"
                 )
 
-            atoms = []
-            forces = []
-            constants = []
-
+            objects = []
             for i in range(len(number)):
+                atoms = []
+                forces = []
+                constants = []
                 for j in range(int(number[i])):
                     atoms.append(list_atoms[0:2])
                     forces.append(list_forces[0])
@@ -2201,8 +2211,14 @@ class Protocol:
                     del list_atoms[0:2]
                     del list_forces[0]
                     del list_constants[0]
-            return atoms, forces, number, constants
-
+                object_dist = self.DistanceRest(
+                    number=number[i],
+                    atoms=atoms,
+                    forces=forces,
+                    constants=constants,
+                )
+                objects.append(object_dist)
+            return objects[stage]
         # Block to check the number of restraints for angle restraints
         if rest_type == "angle":
             if len(list_forces) != list_number_long:
@@ -2218,11 +2234,11 @@ class Protocol:
                     f"The number of constants in the restraint ({stage_name}_restraints_r0_ang) must be equal to the number of {stage_name}_restraints_number_ang"
                 )
 
-            atoms = []
-            forces = []
-            constants = []
-
+            objects = []
             for i in range(len(number)):
+                atoms = []
+                forces = []
+                constants = []
                 for j in range(int(number[i])):
                     atoms.append(list_atoms[0:3])
                     forces.append(list_forces[0])
@@ -2230,8 +2246,14 @@ class Protocol:
                     del list_atoms[0:3]
                     del list_forces[0]
                     del list_constants[0]
-            return atoms, forces, number, constants
-
+                object_dist = self.DistanceRest(
+                    number=number[i],
+                    atoms=atoms,
+                    forces=forces,
+                    constants=constants,
+                )
+                objects.append(object_dist)
+            return objects[stage]
         # Block to check the number of restraints for improper restraints
         if rest_type == "improper":
             if len(list_forces) != list_number_long:
@@ -2247,11 +2269,11 @@ class Protocol:
                     f"The number of constants in the restraint ({stage_name}_restraints_r0_imp) must be equal to the number of {stage_name}_restraints_number_imp"
                 )
 
-            atoms = []
-            forces = []
-            constants = []
-
+            objects = []
             for i in range(len(number)):
+                atoms = []
+                forces = []
+                constants = []
                 for j in range(int(number[i])):
                     atoms.append(list_atoms[0:4])
                     forces.append(list_forces[0])
@@ -2259,7 +2281,14 @@ class Protocol:
                     del list_atoms[0:4]
                     del list_forces[0]
                     del list_constants[0]
-            return atoms, forces, number, constants
+                object_dist = self.DistanceRest(
+                    number=number[i],
+                    atoms=atoms,
+                    forces=forces,
+                    constants=constants,
+                )
+                objects.append(object_dist)
+            return objects[stage]
 
     def set_restraint(
         self,
