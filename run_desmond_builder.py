@@ -75,7 +75,7 @@ class BuilderOptions:
         self.opts = opts
         self.file = file
         self.filename = filename
-        self.basename = str(filename).split(".")[0]
+        self.basename = str(filename).split(".", maxsplit=1)[0]
         self.desmond_path = desmond_path
         self.windows = windows
         self.file_path = file_path
