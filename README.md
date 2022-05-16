@@ -329,5 +329,5 @@ Default values: False
 Licensed under the MIT license, see the separate LICENSE file.
 
 ## Citing
-* Mauricio Bedoya. (2022, May 15). Desmond Builder: v1.0 (Version 1.0). Zenodo. 
+* Mauricio Bedoya. (2022, May 15). Desmond Builder: v1.0 (Version 1.0). Zenodo. http://doi.org/10.5281/zenodo.6551870
 * [![DOI](https://zenodo.org/badge/438494442.svg)](https://zenodo.org/badge/latestdoi/438494442)
