@@ -1345,7 +1345,8 @@ class Protocol:
                             self.p_opts.stage3_restraints_phi0_imp,
                         )
                         j = 0
-                        for i in range(int(self.p_opts.stage3_restraints_number_imp)):
+                        for i in range(
+                                int(self.p_opts.stage3_restraints_number_imp)):
                             outer_space, inner_space = identation(2)
                             print(f"{outer_space} {'{'}", file=fd)
                             print(
