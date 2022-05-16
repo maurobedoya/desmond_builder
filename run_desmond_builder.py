@@ -365,6 +365,356 @@ class ProtocolOptions:
         self.production_title: Optional[
             str] = f"{getattr(self, 'production_method')} {getattr(self, 'production_ensemble')}, T = {getattr(self, 'production_temp')} K, {getattr(self, 'production_time')}ps"
 
+        # TO:DO Check if all required options are set here.
+        # To check type and number of additional positional restraints
+        # TO:DO Add check for missing constants variables. r0, theta0, phi0.
+        # TO:DO Add check for length of ensembles and methods, bug if not equal or long variables
+
+        # To check type of stages 1-5 restraints
+        for stage in range(1, 6):
+            for restraint in ["pos", "dist", "ang", "imp"]:
+                if getattr(self,
+                           f"stage{stage}_restraints_number_{restraint}") != 0:
+                    try:
+                        value = getattr(
+                            self,
+                            f"stage{stage}_restraints_number_{restraint}")
+                        # print(value)
+                        value = int(value)
+                    except ValueError as e_rror:
+                        print(f"Error: {e_rror.args[0]}")
+                        print(
+                            f"stage{stage}_restraints_number_{restraint} must be an integer, not '{value}'"
+                        )
+                        print("Please check the input file.")
+                        sys.exit()
+        # To check length of stages 1-5 restraints atoms, forces and constants.
+        for stage in range(1, 6):
+            for restraint in ["pos", "dist", "ang", "imp"]:
+                if restraint == "pos":
+                    factor = 1
+                if restraint == "dist":
+                    constant = "r0"
+                    factor = 2
+                elif restraint == "ang":
+                    constant = "theta0"
+                    factor = 3
+                elif restraint == "imp":
+                    constant = "phi0"
+                    factor = 4
+                if int(
+                        getattr(self,
+                                f"stage{stage}_restraints_number_{restraint}")
+                ) != 0:
+                    try:
+                        len1 = int(
+                            getattr(
+                                self,
+                                f"stage{stage}_restraints_number_{restraint}"))
+
+                        len2a = getattr(
+                            self, f"stage{stage}_restraints_atoms_{restraint}")
+                        len2 = len(list(str(len2a).split(",")))
+                        len3a = getattr(
+                            self,
+                            f"stage{stage}_restraints_forces_{restraint}")
+                        len3 = len(list(str(len3a).split(",")))
+                        if (restraint == "dist" or restraint == "ang"
+                                or restraint == "imp"):
+                            len4a = getattr(
+                                self,
+                                f"stage{stage}_restraints_{constant}_{restraint}",
+                            )
+                            len4 = len(list(str(len4a).split(",")))
+                            if len1 != len4:  # or len1 != len3 or len1 != len4:
+                                raise LenError(
+                                    f"stage{stage}_restraints_number_{restraint}",
+                                    len1,
+                                    f"stage{stage}_restraints_{constant}_{restraint}",
+                                    len4,
+                                    len4a,
+                                )
+                        if len1 != len2 / factor:  # or len1 != len3 or len1 != len4:
+                            raise LenError2(
+                                f"stage{stage}_restraints_number_{restraint}",
+                                len1,
+                                f"stage{stage}_restraints_atoms_{restraint}",
+                                len2,
+                                len2a,
+                            )
+                        if len1 != len3:
+                            raise LenError(
+                                f"stage{stage}_restraints_number_{restraint}",
+                                len1,
+                                f"stage{stage}_restraints_forces_{restraint}",
+                                len3,
+                                len3a,
+                            )
+                    except LenError as e_rror:
+                        print(f"Error: {e_rror.args[0]}")
+                        # print(
+                        #    f"Length of stage{stage}_restraints_atoms_{restraint} and stage{stage}_restraints_forces_{restraint} and stage{stage}_restraints_constants_{restraint} must be equal to stage{stage}_restraints_number_{restraint}"
+                        # )
+                        print("Please check the input file.")
+                        sys.exit()
+                    except LenError2 as e_rror:
+                        print(f"Error: {e_rror.args[0]}")
+                        # print(
+                        #    f"Length of stage{stage}_restraints_atoms_{restraint} and stage{stage}_restraints_forces_{restraint} and stage{stage}_restraints_constants_{restraint} must be equal to stage{stage}_restraints_number_{restraint}"
+                        # )
+                        print("Please check the input file.")
+                        sys.exit()
+        # To check lenght of stage_times, temps, ensembles, methods, barostat_tau and thermostat_tau.
+        if self.additional_stages != 0:
+            add_stages = int(self.additional_stages)
+            try:
+                len1 = int(self.additional_stages)
+                len2 = len(list(str(self.additional_stage_times).split(",")))
+                len3 = len(list(str(self.additional_stage_temps).split(",")))
+                len4 = len(
+                    list(str(self.additional_stage_ensembles).split(",")))
+                len5 = len(list(str(self.additional_stage_methods).split(",")))
+                len6 = len(
+                    list(str(self.additional_stage_barostat_tau).split(",")))
+                len7 = len(
+                    list(str(self.additional_stage_thermostat_tau).split(",")))
+
+                if len1 != len2 and len2 != 1:
+                    raise LenError3(
+                        "additional_stages",
+                        len1,
+                        "additional_stage_times",
+                        len2,
+                        self.additional_stage_times,
+                    )
+                if len1 != len3 and len3 != 1:
+                    raise LenError3(
+                        "additional_stages",
+                        len1,
+                        "additional_stage_temps",
+                        len3,
+                        self.additional_stage_temps,
+                    )
+                if len1 != len4 and len4 != 1:
+                    raise LenError3(
+                        "additional_stages",
+                        len1,
+                        "additional_stage_ensembles",
+                        len4,
+                        self.additional_stage_ensembles,
+                    )
+                if len1 != len5 and len5 != 1:
+                    raise LenError3(
+                        "additional_stages",
+                        len1,
+                        "additional_stage_methods",
+                        len5,
+                        self.additional_stage_methods,
+                    )
+                if len1 != len6 and len6 != 1:
+                    raise LenError3(
+                        "additional_stages",
+                        len1,
+                        "additional_stage_barostat_tau",
+                        len6,
+                        self.additional_stage_barostat_tau,
+                    )
+                if len1 != len7 and len7 != 1:
+                    raise LenError3(
+                        "additional_stages",
+                        len1,
+                        "additional_stage_thermostat_tau",
+                        len7,
+                        self.additional_stage_thermostat_tau,
+                    )
+            except LenError3 as e_rror:
+                print(f"Error: {e_rror.args[0]}")
+                print("Please check the input file.")
+                sys.exit()
+        # To check type and number of additional positional restraints
+        if self.additional_stage_restraints_number_pos != 0:
+            add_number = self.additional_stage_restraints_number_pos.split(",")
+            add_stages = int(self.additional_stages)
+            try:
+                if len(add_number) != add_stages:
+                    raise LenError(
+                        "additional_stages",
+                        add_stages,
+                        "additional_stage_restraints_number_pos",
+                        len(add_number),
+                        add_number,
+                    )
+            except LenError as e_rror:
+                print(f"Error: {e_rror.args[0]}")
+                sys.exit()
+            for value in self.additional_stage_restraints_number_pos.split(
+                    ","):
+                try:
+                    value = int(value)
+                except ValueError as e_rror:
+                    print(f"Error: {e_rror.args[0]}")
+                    print(
+                        "Please check the values of 'additional_stage_restraints_number_pos'."
+                    )
+                    sys.exit()
+        # To check type and number of additional distance restraints
+        if self.additional_stage_restraints_number_dist != 0:
+            add_number = self.additional_stage_restraints_number_dist.split(
+                ",")
+            add_stages = int(self.additional_stages)
+            try:
+                if len(add_number) != add_stages:
+                    raise LenError(
+                        "additional_stages",
+                        add_stages,
+                        "additional_stage_restraints_number_dist",
+                        len(add_number),
+                        add_number,
+                    )
+            except LenError as e_rror:
+                print(f"Error: {e_rror.args[0]}")
+                sys.exit()
+            for value in self.additional_stage_restraints_number_dist.split(
+                    ","):
+                try:
+                    value = int(value)
+                except ValueError as e_rror:
+                    print(f"Error: {e_rror.args[0]}")
+                    print(
+                        "Please check the values of 'additional_stage_restraints_number_dist'."
+                    )
+                    sys.exit()
+
+        # To check type and number of additional angle restraints
+        if self.additional_stage_restraints_number_ang != 0:
+            add_number = self.additional_stage_restraints_number_ang.split(",")
+            add_stages = int(self.additional_stages)
+            try:
+                if len(add_number) != add_stages:
+                    raise LenError(
+                        "additional_stages",
+                        add_stages,
+                        "additional_stage_restraints_number_ang",
+                        len(add_number),
+                        add_number,
+                    )
+            except LenError as e_rror:
+                print(f"Error: {e_rror.args[0]}")
+                sys.exit()
+            for value in self.additional_stage_restraints_number_ang.split(
+                    ","):
+                try:
+                    value = int(value)
+                except ValueError as e_rror:
+                    print(f"Error: {e_rror.args[0]}")
+                    print(
+                        "Please check the values of 'additional_stage_restraints_number_ang'."
+                    )
+                    sys.exit()
+        # To check type and number of additional improper restraints
+        if self.additional_stage_restraints_number_imp != 0:
+            add_number = self.additional_stage_restraints_number_imp.split(",")
+            add_stages = int(self.additional_stages)
+            try:
+                if len(add_number) != add_stages:
+                    raise LenError(
+                        "additional_stages",
+                        add_stages,
+                        "additional_stage_restraints_number_imp",
+                        len(add_number),
+                        add_number,
+                    )
+            except LenError as e_rror:
+                print(f"Error: {e_rror.args[0]}")
+                sys.exit()
+            for value in self.additional_stage_restraints_number_imp.split(
+                    ","):
+                try:
+                    value = int(value)
+                except ValueError as e_rror:
+                    print(f"Error: {e_rror.args[0]}")
+                    print(
+                        "Please check the values of 'additional_stage_restraints_number_imp'."
+                    )
+                    sys.exit()
+
+
+class Error(Exception):
+    """Base class for other exceptions"""
+
+    pass
+
+
+class InputError(Error):
+    """
+    Custom error class for wrong option in the input."""
+    def __init__(self, key, message="Unknown option "):
+        self.key = key
+        self.message = f"{message}'{key}'"
+        super().__init__(self.message)
+
+
+class LenError(Error):
+    """
+    Custom error class for wrong number of values in the input."""
+    def __init__(self,
+                 var1,
+                 len1,
+                 var2,
+                 len2,
+                 passed,
+                 err1="Wrong length of values."):
+        self.var1 = var1
+        self.var2 = var2
+        self.len1 = len1
+        self.len2 = len2
+        self.passed = passed
+        self.message1 = f"{err1}"
+        self.message2 = f"'{var2}' option should have '{len1}' values as '{var1}' option, but it has '{len2}' values: '[{passed}]'."
+        self.message = f"{self.message1} {self.message2}"
+        super().__init__(self.message)
+
+
+class LenError2(Error):
+    """
+    Custom error class for wrong number of values in the input."""
+    def __init__(self,
+                 var1,
+                 len1,
+                 var2,
+                 len2,
+                 passed,
+                 err1="Wrong length of values."):
+        self.var1 = var1
+        self.var2 = var2
+        self.len1 = len1
+        self.len2 = len2
+        self.passed = passed
+        self.message1 = f"{err1}"
+        self.message2 = f"'{var2}' option should have '{len1}' pairs of values as ['{var1}']x2, but it has '{len2}' values: '[{passed}]'."
+        self.message = f"{self.message1} {self.message2}"
+        super().__init__(self.message)
+
+
+class LenError3(Error):
+    """
+    Custom error class for wrong number of values in the input. When the accepted values are 1 or the length of the list."""
+    def __init__(self,
+                 var1,
+                 len1,
+                 var2,
+                 len2,
+                 passed,
+                 err1="Wrong length of values."):
+        self.var1 = var1
+        self.var2 = var2
+        self.len1 = len1
+        self.len2 = len2
+        self.passed = passed
+        self.message1 = f"{err1}"
+        self.message2 = f"'{var2}' option should have '{len1}' values as '{var1}' option or only one value, but it has '{len2}' values: '[{passed}]'."
+        self.message = f"{self.message1} {self.message2}"
+        super().__init__(self.message)
 
 
 def identation(indentvar: int = 0) -> Tuple[str, str]:
