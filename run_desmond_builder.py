@@ -342,10 +342,6 @@ class ProtocolOptions:
         for key in self.opts:
             setattr(self, key, self.opts[key])
 
-    def __getattr__(self, item):
-        if item not in self.opts:
-            return None
-        return self.opts[item]
 
 
 def identation(indentvar: int = 0) -> Tuple[str, str]:
