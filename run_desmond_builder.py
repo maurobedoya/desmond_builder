@@ -30,6 +30,7 @@ class Args:
     input: str
     file: str
     desmond_path: str
+    windows: str = "false"
     workdir: str = "md_run"
 
 
@@ -69,12 +70,14 @@ class BuilderOptions:
         filename: str,
         desmond_path: str,
         file_path: str,
+        windows: str,
     ) -> None:
         self.opts = opts
         self.file = file
         self.filename = filename
         self.basename = str(filename).split(".")[0]
         self.desmond_path = desmond_path
+        self.windows = windows
         self.file_path = file_path
         for key in self.opts:
             setattr(self, key, self.opts[key])
@@ -2387,7 +2390,16 @@ class Protocol:
             print(f"{outer_space}{'}'}", file=fd)
 
     def write_protocol_sh(self) -> None:
-        executable = os.path.join(self.builder_opts.desmond_path, "utilities/multisim")
+        if self.builder_opts.windows.lower() in [
+                "yes",
+                "on",
+                "true",
+        ]:
+            executable = os.path.join(self.builder_opts.desmond_path,
+                                      "utilities/multisim.exe")
+        else:
+            executable = os.path.join(self.builder_opts.desmond_path,
+                                      "utilities/multisim")
         path_preparation_sh = str(self.basename + "_md.sh")
         input_msj = str(self.basename + "_md.msj")
         input_cms = self.basename + "_preparation" + "-out.cms"
@@ -2461,13 +2473,18 @@ def parse_args(argv):
     file = vars(args)["file"]
     desmond_path = vars(args)["desmond_path"]
     file_path = os.path.abspath(vars(args)["file"])
+    if "windows" in vars(args):
+        windows = vars(args)["windows"]
+    else:
+        windows = "false"
 
     protocol_opts = {}
     protocol_opts.update(dict(config.items("protocol")))
 
     return (
         Args(**vars(args)),
-        BuilderOptions(build_opts, file, filename, desmond_path, file_path),
+        BuilderOptions(build_opts, file, filename, desmond_path, file_path,
+                       windows),
         file_path,
         ProtocolOptions(protocol_opts),
     )
@@ -2481,13 +2498,21 @@ class maefile:
 
 
 class ReadMaefile:
-    def __init__(self, file: str, desmond_path) -> None:
+    def __init__(self, file: str, desmond_path, windows: str) -> None:
         self.file = os.path.relpath(file)
         self.charge: int = 0
         self.desmond_path = desmond_path
+        self.windows = windows
 
     def get_charge(self):
-        executable = os.path.join(self.desmond_path, "run")
+        if self.windows.lower() in [
+                "yes",
+                "on",
+                "true",
+        ]:
+            executable = os.path.join(self.desmond_path, "run.exe")
+        else:
+            executable = os.path.join(self.desmond_path, "run")
         command = "schrod_script.py"
         arg1 = "-i"
         arg2 = "-get"
@@ -2499,7 +2524,14 @@ class ReadMaefile:
         return charge
 
     def get_atoms_number(self, file, asl):
-        executable = os.path.join(self.desmond_path, "run")
+        if self.windows.lower() in [
+                "yes",
+                "on",
+                "true",
+        ]:
+            executable = os.path.join(self.desmond_path, "run.exe")
+        else:
+            executable = os.path.join(self.desmond_path, "run")
         command = "schrod_script.py"
         arg1 = "-i"
         arg2 = "-get"
@@ -2515,7 +2547,8 @@ class ReadMaefile:
 
 def check_folder_analysis(folder_name: str):
     if path.isdir(folder_name):
-        raise ValueError(f"Folder '{folder_name}' exists, remove it before to continue")
+        raise ValueError(
+            f"Folder '{folder_name}' exists, remove it before to continue")
     else:
         os.makedirs(folder_name)
         os.chdir(folder_name)
@@ -2625,7 +2658,15 @@ class Builder:
     def write_preparation_sh(self) -> None:
         q = '"'
         self.suffix_prep = "_preparation"
-        executable = os.path.join(self.desmond_path, "utilities/multisim")
+        if self.options.windows.lower() in [
+                "yes",
+                "on",
+                "true",
+        ]:
+            executable = os.path.join(self.desmond_path,
+                                      "utilities/multisim.exe")
+        else:
+            executable = os.path.join(self.desmond_path, "utilities/multisim")
         path_preparation_sh = str(self.basename + f"{self.suffix_prep}.sh")
         path_preparation = str(self.basename + f"{self.suffix_prep}.msj")
         input_mae = self.options.file_path
@@ -2701,7 +2742,7 @@ def main(argv):
     check_folder_analysis(opts.workdir)
     file = file_path
     basename = os.path.basename(file).split(".")[0]
-    system = ReadMaefile(file, opts.desmond_path)
+    system = ReadMaefile(file, opts.desmond_path, opts.windows)
     write_schrod_script()
     charge = system.get_charge()
     if build_opts.ions_away.lower() in ["yes", "on", "true"]:
