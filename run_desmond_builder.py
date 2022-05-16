@@ -1956,24 +1956,24 @@ class Protocol:
                                     print(f"{inner_space} {'}'}", file=fd)
 
                         if self.p_opts.additional_stage_restraints_number_dist != 0:
-                            (
-                                atoms_dist,
-                                forces_dist,
-                                number_dist,
-                                constants_dist,
-                            ) = self.set_restraint_multi(
-                                "additional_stage",
-                                self.p_opts.additional_stage_restraints_number_dist,
-                                self.p_opts.additional_stage_restraints_atoms_dist,
-                                self.p_opts.additional_stage_restraints_forces_dist,
-                                "distance",
-                                self.p_opts.additional_stage_restraints_r0_dist,
+                            dist_object = self.set_restraint_multi(
+                                stage=stage,
+                                stage_name="additional_stage",
+                                stage_restraints_number=self.p_opts.
+                                additional_stage_restraints_number_dist,
+                                stage_restraints_atoms=self.p_opts.
+                                additional_stage_restraints_atoms_dist,
+                                stage_restraints_forces=self.p_opts.
+                                additional_stage_restraints_forces_dist,
+                                rest_type="distance",
+                                stage_restraints_constants=self.p_opts.
+                                additional_stage_restraints_r0_dist,
                             )
                             # Distance restraints variables
-                            long_dist = int(number_dist[stage])
-                            atoms_slice_dist = atoms_dist[0:long_dist]
-                            forces_slice_dist = forces_dist[0:long_dist]
-                            constants_slice_dist = constants_dist[0:long_dist]
+                            long_dist = int(dist_object.number)
+                            atoms_slice_dist = dist_object.atoms
+                            forces_slice_dist = dist_object.forces
+                            constants_slice_dist = dist_object.constants
                             if long_dist != 0:
                                 if header_rest:
                                     print(
@@ -2000,9 +2000,6 @@ class Protocol:
                                         file=fd,
                                     )
                                     print(f"{inner_space} {'}'}", file=fd)
-                                    del atoms_dist[0]
-                                    del forces_dist[0]
-                                    del constants_dist[0]
 
                         if self.p_opts.additional_stage_restraints_number_ang != 0:
                             (
