@@ -1,5 +1,5 @@
 """
-Version: 1.1
+Version: 1.0
 "If this script is useful for you, consider giving acknowledgments comments in the publication."
 Contact: 
 Mauricio Bedoya
