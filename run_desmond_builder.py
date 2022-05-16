@@ -2880,24 +2880,26 @@ def parse_args(argv):
     Mauricio Bedoya
     maurobedoyat@gmail.com"
     
-    """
-    )
+    """)
 
-    try:
-        if args.input:
-            config = configparser.ConfigParser()
-            config.read([args.input])
-            defaults.update(dict(config.items("settings")))
-            # defaults.update(dict(config.items("build_geometry")))
-    except:
-        raise ValueError("You must specify a configuration file")
+    # Check if file exists
+    if args.input:
+        if not os.path.isfile(args.input):
+            print(
+                f"Error: file '{args.input}' does not exist. Please check the -i option."
+            )
+            sys.exit(1)
+
+    if args.input:
+        config = configparser.ConfigParser()
+        config.read([args.input])
+        defaults.update(dict(config.items("settings")))
 
     # Parse rest of arguments
     # Don't suppress add_help here so it will handle -h
     parser = argparse.ArgumentParser(
         # Inherit options from config_parser
-        parents=[conf_parser]
-    )
+        parents=[conf_parser])
     parser.set_defaults(**defaults)
     args = parser.parse_args(remaining_argv)
     build_opts = {}
