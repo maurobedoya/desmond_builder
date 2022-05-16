@@ -3018,25 +3018,27 @@ class Builder:
             print(f"{outer_space}build_geometry {'{'}", file=fd)
             # add_counterions block
             outer_space, inner_space = identation(1)
-            if (
-                self.counterions.lower() in ["yes", "on", "true"]
-                and int(self.charge) != 0
-            ):
+            if (self.counterions.lower() in ["yes", "on", "true"]
+                    and int(self.charge) != 0):
                 print(f"{outer_space} {'add_counterion = {'}", file=fd)
                 if int(self.charge) < 0:
                     self.options.ion = self.options.counterions_positive_ion
                 elif int(self.charge) > 0:
                     self.options.ion = self.options.counterions_negative_ion
-                print(f"{inner_space} {'ion':<16}{eq}{self.options.ion}", file=fd)
-                print(f"{inner_space} {'number':<16}{eq}{self.options.number}", file=fd)
+                print(f"{inner_space} {'ion':<16}{eq}{self.options.ion}",
+                      file=fd)
+                print(f"{inner_space} {'number':<16}{eq}{self.options.number}",
+                      file=fd)
                 print(f"{outer_space} {'}'}", file=fd)
             # box block (mandatory)
             print(f"{outer_space} {'box = {'}", file=fd)
-            print(f"{inner_space} {'shape':<16}{eq}{self.options.shape}", file=fd)
-            print(f"{inner_space} {'size':<16}{eq}[{self.options.size}]", file=fd)
+            print(f"{inner_space} {'shape':<16}{eq}{self.options.shape}",
+                  file=fd)
+            print(f"{inner_space} {'size':<16}{eq}[{self.options.size}]",
+                  file=fd)
             print(
-                f"{inner_space} {'size_type':<16}{eq}{self.options.size_type}", file=fd
-            )
+                f"{inner_space} {'size_type':<16}{eq}{self.options.size_type}",
+                file=fd)
             print(f"{outer_space} {'}'}", file=fd)
             outer_space, inner_space = identation(0)
             # ions_away block
@@ -3078,7 +3080,8 @@ class Builder:
                 print(f"{outer_space} {'}'}", file=fd)
             # solvent block
             outer_space, inner_space = identation(0)
-            print(f"{inner_space} {'solvent':<20}{eq}{self.options.solvent}", file=fd)
+            print(f"{inner_space} {'solvent':<20}{eq}{self.options.solvent}",
+                  file=fd)
             print(f"{outer_space}{'}'}", file=fd)
             print(file=fd)
             # assign_forcefield block
@@ -3192,7 +3195,8 @@ def main(argv):
     # Run the preparation
     if str(protocol_opts.run_preparation).lower() in ["yes", "on", "true"]:
         builder.run_preparation()
-    output_name_builder = os.path.join(opts.workdir, basename + "_system-out.cms")
+    output_name_builder = os.path.join(opts.workdir,
+                                       basename + "_system-out.cms")
     # Simulation protocol
     protocol = Protocol(output_name_builder, build_opts, protocol_opts)
     protocol.write()
