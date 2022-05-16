@@ -1171,13 +1171,35 @@ class Protocol:
             if self.p_opts.stage3.lower() in ["yes", "on", "true"]:
                 outer_space, inner_space = identation(0)
                 print(f"{outer_space}{'simulate':<20}{'{'}", file=fd)
-                print(
-                    f"{inner_space} {'title':<16}{eq}{q}{self.p_opts.stage3_title}{q}",
-                    file=fd,
-                )
-                gpu_text = '[["==" "-gpu" "@*.*.jlaunch_opt[-1]"] \'ensemble.method = Langevin\']'
-                print(f"{inner_space} {'effect_if':<16}{eq}{gpu_text}", file=fd)
-                print(f"{inner_space} {'annealing':<16}{eq}{'off'}", file=fd)
+                if self.p_opts.stage3_ensemble != "NVT":
+                    print(
+                        f"{inner_space} {'title':<16}{eq}{q}{self.p_opts.stage3_title}{q}",
+                        file=fd,
+                    )
+                else:
+                    self.p_opts.stage3_title = f"{self.p_opts.stage3_method} {self.p_opts.stage3_ensemble}, {self.p_opts.stage3_time}ps"
+                    print(
+                        f"{inner_space} {'title':<16}{eq}{q}{self.p_opts.stage3_title}{q}",
+                        file=fd,
+                    )
+
+                if self.p_opts.stage3_ensemble != "NVT":
+                    gpu_text = '[["==" "-gpu" "@*.*.jlaunch_opt[-1]"] \'ensemble.method = Langevin\']'
+                    print(f"{inner_space} {'effect_if':<16}{eq}{gpu_text}",
+                          file=fd)
+                    print(f"{inner_space} {'annealing':<16}{eq}{'off'}",
+                          file=fd)
+                    print(
+                        f"{inner_space} {'temperature':<16}{eq}{self.p_opts.stage3_temp}",
+                        file=fd,
+                    )
+                else:
+                    gpu_text1 = '[["@*.*.annealing"] \'annealing = off temperature = "@*.*.temperature[0][0]"\''
+                    gpu_text2 = '["==" "-gpu" "@*.*.jlaunch_opt[-1]"] \'ensemble.method = Langevin\']'
+                    print(f"{inner_space} {'effect_if':<16}{eq}{gpu_text1}",
+                          file=fd)
+                    print(f"{inner_space} {' ':<19}{gpu_text2}", file=fd)
+
                 print(
                     f"{inner_space} {'time':<16}{eq}{self.p_opts.stage3_time}",
                     file=fd,
