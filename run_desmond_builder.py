@@ -2048,25 +2048,24 @@ class Protocol:
                                     print(f"{inner_space} {'}'}", file=fd)
 
                         if self.p_opts.additional_stage_restraints_number_imp != 0:
-                            (
-                                atoms_imp,
-                                forces_imp,
-                                number_imp,
-                                constants_imp,
-                            ) = self.set_restraint_multi(
-                                "additional_stage",
-                                self.p_opts.additional_stage_restraints_number_imp,
-                                self.p_opts.additional_stage_restraints_atoms_imp,
-                                self.p_opts.additional_stage_restraints_forces_imp,
-                                "improper",
-                                self.p_opts.additional_stage_restraints_phi0_imp,
+                            imp_object = self.set_restraint_multi(
+                                stage=stage,
+                                stage_name="additional_stage",
+                                stage_restraints_number=self.p_opts.
+                                additional_stage_restraints_number_imp,
+                                stage_restraints_atoms=self.p_opts.
+                                additional_stage_restraints_atoms_imp,
+                                stage_restraints_forces=self.p_opts.
+                                additional_stage_restraints_forces_imp,
+                                rest_type="improper",
+                                stage_restraints_constants=self.p_opts.
+                                additional_stage_restraints_phi0_imp,
                             )
-                            #                        Improper restraints variables
-                            long_imp = int(number_imp[stage])
-                            atoms_slice_imp = atoms_imp[0:long_imp]
-                            forces_slice_imp = forces_imp[0:long_imp]
-                            constants_slice_imp = constants_imp[0:long_imp]
-
+                            # Distance restraints variables
+                            long_imp = int(imp_object.number)
+                            atoms_slice_imp = imp_object.atoms
+                            forces_slice_imp = imp_object.forces
+                            constants_slice_imp = imp_object.constants
                             if long_imp != 0:
                                 if header_rest:
                                     print(
@@ -2093,9 +2092,7 @@ class Protocol:
                                         file=fd,
                                     )
                                     print(f"{inner_space} {'}'}", file=fd)
-                                    del atoms_imp[0]
-                                    del forces_imp[0]
-                                    del constants_imp[0]
+
                         if header_rest == False:
                             print(f"{outer_space} {']'}", file=fd)
                         #### Restraints block end ####
