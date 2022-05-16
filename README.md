@@ -26,27 +26,27 @@ python3 desmond_builder.py -i config.dat
 
 The [examples](examples/) folder contains a set of example files.
 
-1. The [NPT](examples/config_NPT_ter_nose_bar_MTK.dat) shows how to prepare a 
+1. The [config_NPT_ter_nose_bar_MTK.dat](examples/config_NPT_ter_nose_bar_MTK.dat) shows how to prepare a 
 system for MD simulation using the default NPT relaxation protocol from Maestro 
 with 5 stages using the Nose-Hoover thermostat and the Martyna Tobias Klein 
 barostat.
 
-2. The [NPT](examples/config_NPT_ter_langevin_bar_langevin.dat) shows how to
+2. The [config_NPT_ter_langevin_bar_langevin.dat](examples/config_NPT_ter_langevin_bar_langevin.dat) shows how to
 prepare a system for MD simulation using the default NPT relaxation protocol from
 Maestro with 5 stages using the Langevin thermostat/barostat.
 
-3. The [NPT](examples/config_NPT_ter_nose_bar_MTK_add_4stages.dat) shows how to
+3. The [config_NPT_ter_nose_bar_MTK_add_4stages.dat](examples/config_NPT_ter_nose_bar_MTK_add_4stages.dat) shows how to
 prepare a system for MD simulation using the default NPT relaxation protocol from
 Maestro with 5 stages using the Nose-Hoover thermostat and the Martyna Tobias
 Klein barostat. Then, 4 additional stages (100 ps each) are added to the default 
 protocol using positional restraints for the 1st, 2nd and 3rd stages with forces 
 of 25, 5.0 and 1.0 kJ/mol*A^2 on the protein.
 
-4. The [NPT](examples/config_NVT_ter_nose_bar_none.dat) shows how to prepare a
+4. The [config_NVT_ter_nose_bar_none.dat](examples/config_NVT_ter_nose_bar_none.dat) shows how to prepare a
 system for MD simulation using the default NVT protocol from Maestro with 3
 stages using the Nose-Hoover thermostat and no barostat.
 
-5. The [NPT](examples/config_NVT_ter_langevin_bar_none.dat) shows how to prepare
+5. The [config_NVT_ter_langevin_bar_none.dat](examples/config_NVT_ter_langevin_bar_none.dat) shows how to prepare
 a system for MD simulation using the default NVT protocol from Maestro with 3
 stages using the Langevin thermostat and no barostat.
 
