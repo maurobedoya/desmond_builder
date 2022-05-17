@@ -7,7 +7,11 @@ It allows to prepare a system for molecular dynamics simulation using the
 Desmond engine. The input file it should be a .mae file that contains proteins
 and/or molecules as ligands, cofactors, metals, etc.
 The script receives a configuration file with the options to consider to build 
-the system and to carry out the equilibration and MD protocols.
+the system and to carry out the equilibration and MD protocols. 
+
+**NOTE: The initial structures must be previously prepared, with added hydrogens, 
+correct bond orders and charges, and assignment of protonation states to the desired 
+pH. Verify that everything is correct in the initial .mae file.**
 
 ## Requirements
 
